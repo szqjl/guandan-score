@@ -1,0 +1,204 @@
+<view class="container cn-paper-bg">
+  <image class="cn-ornament left" src="../../images/左边框.svg" mode="heightFix"/>
+  <image class="cn-ornament right" src="../../images/右边框.svg" mode="heightFix"/>
+  
+  <!-- 自定义小提示 - 红方 -->
+  <view class="custom-toast red-toast" wx:if="{{showCustomToast && toastTeam === 'red'}}">
+    <text class="toast-text">{{toastMessage}}</text>
+  </view>
+  
+  <!-- 自定义小提示 - 蓝方 -->
+  <view class="custom-toast blue-toast" wx:if="{{showCustomToast && toastTeam === 'blue'}}">
+    <text class="toast-text">{{toastMessage}}</text>
+  </view>
+  <!-- 环境标识 -->
+  <view class="env-badge">
+    <text wx:if="{{isTrial}}" class="env-text trial">体验版</text>
+    <text wx:elif="{{isDevelop}}" class="env-text develop">开发版</text>
+  </view>
+  
+  <!-- 左侧导航按钮组 -->
+  <view class="left-nav-panel">
+    <button class="nav-btn" bindtap="onShowHistory">
+      <text class="nav-icon-text">📊</text>
+      <text class="nav-text">历史记录</text>
+    </button>
+    <button class="nav-btn" bindtap="onShowHelp">
+      <text class="nav-icon-text">❓</text>
+      <text class="nav-text">说明文档</text>
+    </button>
+    <button class="nav-btn" bindtap="onShowFeedback">
+      <text class="nav-icon-text">💬</text>
+      <text class="nav-text">反馈</text>
+    </button>
+  </view>
+  
+  <!-- 把数显示 - 移到体验版下方 -->
+  <view class="left-rounds-display">
+    <view class="rounds-clock">
+      <view class="rounds-number">
+        <text wx:if="{{rounds > 0}}" class="rounds-text-large">{{rounds}}</text>
+        <text wx:else class="rounds-text-small">把数</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 红方 & 蓝方 并排 -->
+  <view class="main-layout">
+    <!-- 红方 -->
+    <view class="team red-team">
+      <view class="team-layout">
+        <!-- 红方独立升级按钮组 - 放在左侧 -->
+        <view class="team-buttons left-buttons">
+          <view class="team-btn team-btn-double" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">双上</view>
+          <view class="team-btn team-btn-two" data-team="red" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游3游</view>
+          <view class="team-btn team-btn-one" data-team="red" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游末游</view>
+        </view>
+        <view class="score-container">
+          <text class="team-label">红方</text>
+          <view class="level-display">
+            <view class="level-display-content">
+              <text class="level-text">{{levelTexts.red}}</text>
+            </view>
+            <image wx:if="{{showRedIcon}}" src="../../images/victor.svg" class="score-icon"/>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 蓝方 -->
+    <view class="team blue-team">
+      <view class="team-layout">
+        <view class="score-container">
+          <text class="team-label">蓝方</text>
+          <view class="level-display">
+            <view class="level-display-content">
+              <text class="level-text">{{levelTexts.blue}}</text>
+            </view>
+            <image wx:if="{{showBlueIcon}}" src="../../images/victor.svg" class="score-icon"/>
+          </view>
+        </view>
+        <!-- 蓝方独立升级按钮组 - 放在右侧 -->
+        <view class="team-buttons right-buttons">
+          <view class="team-btn team-btn-double" data-team="blue" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">双上</view>
+          <view class="team-btn team-btn-two" data-team="blue" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游3游</view>
+          <view class="team-btn team-btn-one" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游末游</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 比分历史表格 - 优化版 -->
+  <view class="history-table-section">
+    <view class="history-header">
+  <text class="history-title">本局每把比分</text>
+  <view class="history-actions">
+    <button class="undo-btn" bindtap="undoLastStep" disabled="{{!canUndo}}">
+      <image src="../../images/CexiaoGrey.svg" class="undo-icon"></image>
+      <text class="undo-text">撤销上一把</text>
+    </button>
+    <button class="restore-btn" bindtap="restoreLastGame" disabled="{{!canRestore}}">
+      <text class="restore-text">恢复游戏</text>
+    </button>
+  </view>
+</view>
+    
+    <!-- 固定队伍列 -->
+    <view class="fixed-team-column">
+      <view class="fixed-team-cell header-cell">把数</view>
+      <view class="fixed-team-cell">红方</view>
+      <view class="fixed-team-cell">蓝方</view>
+    </view>
+    
+    <!-- 可滚动的表格内容 -->
+    <view class="scrollable-table-container">
+      <!-- 表格头部 -->
+      <view class="table-row header-row">
+        <view class="table-cell">一</view>
+        <view class="table-cell">二</view>
+        <view class="table-cell">三</view>
+        <view class="table-cell">四</view>
+        <view class="table-cell">五</view>
+        <view class="table-cell">六</view>
+        <view class="table-cell">七</view>
+        <view class="table-cell">八</view>
+        <view class="table-cell">九</view>
+        <view class="table-cell">十</view>
+        <view class="table-cell">十一</view>
+        <view class="table-cell">十二</view>
+        <view class="table-cell">十三</view>
+        <view class="table-cell">十四</view>
+        <view class="table-cell">十五</view>
+        <view class="table-cell">十六</view>
+        <view class="table-cell">十七</view>
+        <view class="table-cell">十八</view>
+      </view>
+      
+      <!-- 红方行 -->
+      <view class="table-row">
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="0">{{historyScores[0] && historyScores[0].red ? historyScores[0].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="1">{{historyScores[1] && historyScores[1].red ? historyScores[1].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="2">{{historyScores[2] && historyScores[2].red ? historyScores[2].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="3">{{historyScores[3] && historyScores[3].red ? historyScores[3].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="4">{{historyScores[4] && historyScores[4].red ? historyScores[4].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="5">{{historyScores[5] && historyScores[5].red ? historyScores[5].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="6">{{historyScores[6] && historyScores[6].red ? historyScores[6].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="7">{{historyScores[7] && historyScores[7].red ? historyScores[7].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="8">{{historyScores[8] && historyScores[8].red ? historyScores[8].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="9">{{historyScores[9] && historyScores[9].red ? historyScores[9].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="10">{{historyScores[10] && historyScores[10].red ? historyScores[10].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="11">{{historyScores[11] && historyScores[11].red ? historyScores[11].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="12">{{historyScores[12] && historyScores[12].red ? historyScores[12].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="13">{{historyScores[13] && historyScores[13].red ? historyScores[13].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="14">{{historyScores[14] && historyScores[14].red ? historyScores[14].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="15">{{historyScores[15] && historyScores[15].red ? historyScores[15].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="16">{{historyScores[16] && historyScores[16].red ? historyScores[16].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="17">{{historyScores[17] && historyScores[17].red ? historyScores[17].red : '-'}}</view>
+      </view>
+      
+      <!-- 蓝方行 -->
+      <view class="table-row">
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="0">{{historyScores[0] && historyScores[0].blue ? historyScores[0].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="1">{{historyScores[1] && historyScores[1].blue ? historyScores[1].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="2">{{historyScores[2] && historyScores[2].blue ? historyScores[2].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="3">{{historyScores[3] && historyScores[3].blue ? historyScores[3].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="4">{{historyScores[4] && historyScores[4].blue ? historyScores[4].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="5">{{historyScores[5] && historyScores[5].blue ? historyScores[5].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="6">{{historyScores[6] && historyScores[6].blue ? historyScores[6].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="7">{{historyScores[7] && historyScores[7].blue ? historyScores[7].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="8">{{historyScores[8] && historyScores[8].blue ? historyScores[8].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="9">{{historyScores[9] && historyScores[9].blue ? historyScores[9].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="10">{{historyScores[10] && historyScores[10].blue ? historyScores[10].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="11">{{historyScores[11] && historyScores[11].blue ? historyScores[11].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="12">{{historyScores[12] && historyScores[12].blue ? historyScores[12].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="13">{{historyScores[13] && historyScores[13].blue ? historyScores[13].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="14">{{historyScores[14] && historyScores[14].blue ? historyScores[14].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="15">{{historyScores[15] && historyScores[15].blue ? historyScores[15].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="16">{{historyScores[16] && historyScores[16].blue ? historyScores[16].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="17">{{historyScores[17] && historyScores[17].blue ? historyScores[17].blue : '-'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 右侧控制面板 -->
+  <view class="right-control-panel">
+    <!-- 规则选择 -->
+    <view class="rule-section">
+      <text>规则：</text>
+      <radio-group bindchange="onRuleChange">
+        <label><radio value="by-A" checked="{{rule === 'by-A'}}"/>过A</label>
+        <label>
+          <radio value="by-rounds" checked="{{rule === 'by-rounds'}}"/>把数
+          <view wx:if="{{rule === 'by-rounds'}}" class="rounds-selector">
+            <picker range="{{[5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]}}" value="{{maxRounds === 5 ? 0 : maxRounds === 6 ? 1 : maxRounds === 7 ? 2 : maxRounds === 8 ? 3 : maxRounds === 9 ? 4 : maxRounds === 10 ? 5 : maxRounds === 11 ? 6 : maxRounds === 12 ? 7 : maxRounds === 13 ? 8 : maxRounds === 14 ? 9 : 10}}" bindchange="onMaxRoundsChange">
+              <view class="picker">{{maxRounds}}</view>
+            </picker>
+          </view>
+        </label>
+      </radio-group>
+    </view>
+
+    <!-- 结束本局按钮 -->
+    <button class="end-btn" bindtap="onEndGame">结束</button>
+  </view>
+</view>
