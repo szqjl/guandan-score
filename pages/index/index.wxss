@@ -1043,24 +1043,6 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   border-color: #4488FF;
 }
 
-/* 按钮简约样式 */
-.team-btn { 
-  border: 1rpx solid #E0E0E0 !important; 
-  background-image: none !important;
-}
-.team-btn-double {
-  background-color: #FF4444 !important;
-  color: #fff !important;
-}
-.team-btn-two {
-  background-color: #4488FF !important;
-  color: #fff !important;
-}
-.team-btn-one {
-  background-color: #4CAF50 !important;
-  color: #fff !important;
-  opacity: 1 !important;
-}
 
 /* 把数圆盘简约风格 */
 .rounds-clock { 

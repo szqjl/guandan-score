@@ -41,7 +41,6 @@ Page({
         gameHistory: fixedHistory
       });
     } catch (error) {
-      console.error('加载历史记录失败:', error);
       wx.showToast({
         title: '加载失败',
         icon: 'none'
@@ -68,24 +67,6 @@ Page({
 
     const redWinRate = totalGames > 0 ? Math.round((redWins / totalGames) * 100) : 0;
 
-    console.log('统计数据计算:', {
-      totalGames,
-      redWins,
-      blueWins,
-      draws,
-      redWinRate
-    });
-    
-    // 详细输出每条记录
-    history.forEach((game, index) => {
-      console.log(`记录${index + 1}:`, {
-        winner: game.winner,
-        winnerType: typeof game.winner,
-        finalScoreRed: game.finalScore.red,
-        finalScoreBlue: game.finalScore.blue,
-        gameId: game.gameId
-      });
-    });
 
     this.setData({
       totalGames,
@@ -139,7 +120,6 @@ Page({
               icon: 'success'
             });
           } catch (error) {
-            console.error('删除记录失败:', error);
             wx.showToast({
               title: '删除失败',
               icon: 'none'
@@ -165,7 +145,6 @@ Page({
               icon: 'success'
             });
           } catch (error) {
-            console.error('清空记录失败:', error);
             wx.showToast({
               title: '清空失败',
               icon: 'none'

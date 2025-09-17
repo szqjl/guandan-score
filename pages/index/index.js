@@ -303,7 +303,6 @@ Page({
     });
 
     // 显示点击提示
-    console.log('Calling showClickToast with scoreIncrement:', scoreIncrement);
     this.showClickToast(scoreIncrement, selectedTeam);
     
     // 检查是否达到A（过A制）
@@ -1077,21 +1076,14 @@ Page({
   // 保存游戏到历史记录
   saveGameToHistory() {
     try {
-      console.log('尝试保存游戏到历史记录:', {
-        gameEnded: this.data.gameEnded,
-        gameSavedToHistory: this.data.gameSavedToHistory
-      });
-      
       // 防止重复保存：如果游戏已结束且已保存过，则不重复保存
       if (this.data.gameEnded && this.data.gameSavedToHistory) {
-        console.log('游戏已保存到历史记录，跳过重复保存');
         return;
       }
       
       // 检查游戏是否真正进行过：必须有历史记录或把数大于0
       const hasGameData = this.data.historyScores.length > 0 || this.data.rounds > 0;
       if (!hasGameData) {
-        console.log('游戏未进行，跳过保存到历史记录');
         return;
       }
       
@@ -1146,7 +1138,6 @@ Page({
       });
       
     } catch (error) {
-      console.error('保存历史记录失败:', error);
     }
   },
 
@@ -1174,17 +1165,13 @@ Page({
       const hasGameData = this.data.historyScores.length > 0 || this.data.rounds > 0;
       
       if (!hasGameData) {
-        console.log('没有游戏数据，跳过自动保存');
         return;
       }
 
       // 如果游戏已经结束，不需要重复保存
       if (this.data.gameEnded) {
-        console.log('游戏已结束，跳过自动保存');
         return;
       }
-
-      console.log('自动保存游戏状态...');
       
       // 保存当前游戏状态
       const gameData = {
@@ -1201,10 +1188,8 @@ Page({
       
       wx.setStorageSync('savedGameData', gameData);
       
-      console.log('游戏状态已自动保存');
-      
     } catch (error) {
-      console.error('自动保存游戏状态失败:', error);
+      // 自动保存失败，静默处理
     }
   },
 
@@ -1220,7 +1205,6 @@ Page({
                              (savedGameData.historyScores.length > 0 || savedGameData.rounds > 0);
       
       if (!needsUserChoice) {
-        console.log('不需要用户选择，跳过智能提示');
         return;
       }
 
@@ -1249,14 +1233,12 @@ Page({
       });
       
     } catch (error) {
-      console.error('智能提示检查失败:', error);
     }
   },
 
   // 结束上一局游戏
   endPreviousGame(savedGameData) {
     try {
-      console.log('用户选择结束上一局游戏');
       
       // 将上一局游戏保存到历史记录
       this.savePreviousGameToHistory(savedGameData);
@@ -1277,7 +1259,6 @@ Page({
       });
       
     } catch (error) {
-      console.error('结束上一局游戏失败:', error);
     }
   },
 
@@ -1326,10 +1307,8 @@ Page({
       
       wx.setStorageSync('gameHistory', existingHistory);
       
-      console.log('上一局游戏已保存到历史记录');
-      
     } catch (error) {
-      console.error('保存上一局游戏到历史记录失败:', error);
+      // 保存失败，静默处理
     }
   },
 
@@ -1344,8 +1323,6 @@ Page({
 
   // 显示点击提示
   showClickToast(scoreIncrement, team) {
-    console.log('showClickToast called with scoreIncrement:', scoreIncrement, 'team:', team);
-    
     let toastText = '';
     
     switch(scoreIncrement) {
@@ -1359,11 +1336,8 @@ Page({
         toastText = '升1级';
         break;
       default:
-        console.log('No toast for scoreIncrement:', scoreIncrement);
         return; // 不显示提示
     }
-    
-    console.log('Showing custom toast:', toastText, 'for team:', team);
     
     // 显示自定义小提示
     this.setData({

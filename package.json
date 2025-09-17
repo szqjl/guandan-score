@@ -1,15 +1,11 @@
 {
-  "name": "1.02",
+  "name": "guandan-score-miniprogram",
   "version": "1.0.0",
-  "description": "",
+  "description": "扑克双上计分小程序",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx miniprogram serve"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@wechat-miniprogram/miniprogram-cli": "^0.0.7"
   }
