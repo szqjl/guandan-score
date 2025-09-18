@@ -738,28 +738,30 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 
 .history-table-section {
   border-radius: 16rpx; /* 增加圆角 */
-  padding: 2rpx 4rpx 4rpx 4rpx;
+  padding: 2rpx 4rpx 4rpx 4rpx; /* 恢复底部内边距，为滚动条预留空间 */
   box-shadow: 0 1rpx 1rpx rgba(0, 0, 0, 0.1);
   border: 1rpx solid #ddd;
   background-color: #FFFFFF; /* 白色背景 */
   margin-top: 16rpx;
   margin-bottom: 0;
-  margin-left: 160rpx;
-  margin-right: 160rpx;
+  margin-left: 0; /* 移除左边距，让表格与按钮对齐 */
+  margin-right: 0; /* 移除右边距，让表格与按钮对齐 */
   position: relative;
-  height: 102rpx; /* 调整高度以适应增加的标题行 */
+  height: 112rpx; /* 调整高度：标题24rpx + 表头24rpx + 红方16rpx + 蓝方16rpx + 边距12rpx = 112rpx */
   overflow: visible;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 320rpx);
-  min-width: 360rpx;
-  /* 限制显示12列，加上固定队伍列的宽度 */
-  max-width: calc(360rpx + 36rpx);
+  width: calc(100% - 384rpx); /* 向左右各扩大8rpx：400rpx - 16rpx = 384rpx */
+  min-width: 416rpx; /* 向左右各扩大8rpx：400rpx + 16rpx = 416rpx */
+  max-width: 516rpx; /* 向左右各扩大8rpx：500rpx + 16rpx = 516rpx */
   /* 确保表格区域不会超出指定宽度 */
   overflow: hidden;
   /* 确保表格区域完全填充父元素 */
   box-sizing: border-box;
   z-index: 4;
+  /* 居中显示 */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* 固定队伍列 - 横屏模式优化 */
@@ -770,7 +772,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   width: 28rpx;
   background-color: white;
   z-index: 10; /* 提高层级，确保不被表头遮住 */
-  height: 48rpx; /* 缩小高度：16rpx × 3行 */
+  height: 56rpx; /* 调整高度：表头24rpx + 红方16rpx + 蓝方16rpx = 56rpx */
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -818,26 +820,29 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 }
 
 .scrollable-table-container {
-  height: 48rpx; /* 缩小高度：16rpx × 3行 */
+  height: 56rpx; /* 调整高度：表头24rpx + 红方16rpx + 蓝方16rpx = 56rpx */
   position: absolute;
   left: 36rpx;
   top: 26rpx;
   display: flex;
   flex-direction: column;
-  width: 360rpx; /* 保持容器宽度为360rpx，允许滚动 */
-  min-width: 360rpx; /* 保持容器最小宽度为360rpx */
-  max-width: 360rpx; /* 保持容器最大宽度为360rpx */
+  width: calc(100% - 44rpx); /* 调整容器宽度：100% - 28rpx(固定列) - 16rpx(边距) */
+  min-width: 376rpx; /* 向左右各扩大8rpx：360rpx + 16rpx = 376rpx */
+  max-width: 476rpx; /* 向左右各扩大8rpx：460rpx + 16rpx = 476rpx */
   background-color: white;
   border: none;
   box-shadow: none;
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
+  padding: 0 0 2rpx 0; /* 添加底部内边距，为滚动条预留空间 */
   transform: none;
-  /* 确保内容可以滚动 */
+  /* 确保内容可以滚动，滚动条出现在底部 */
   overflow-x: auto !important;
+  overflow-y: hidden !important;
   -webkit-overflow-scrolling: touch;
   z-index: 5;
+  /* 确保滚动条有适当间距 */
+  border-bottom: none;
 }
 
 .table-row {
@@ -853,6 +858,11 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   margin: 0;
   padding: 0;
   align-items: stretch;
+}
+
+/* 最后一行（蓝方行）的底部边框，确保滚动条紧贴底部 */
+.table-row:last-child {
+  border-bottom: 1rpx solid #E0E0E0;
 }
 
 .header-row {
@@ -904,7 +914,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   white-space: normal;
   word-wrap: break-word;
   word-break: break-all;
-  height: 24rpx;
+  height: 16rpx; /* 与表格行高度保持一致 */
   display: flex;
   align-items: center;
   justify-content: center;

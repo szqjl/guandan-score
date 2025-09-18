@@ -1,14 +1,26 @@
-# Windows
-[Dd]esktop.ini
-Thumbs.db
-$RECYCLE.BIN/
-
-# macOS
+# 微信小程序相关
 .DS_Store
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-
-# Node.js
 node_modules/
+npm-debug.log
+yarn-error.log
+
+# 微信开发者工具生成的文件
+project.private.config.json
+
+# 系统文件
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE相关
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.temp
