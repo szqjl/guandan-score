@@ -751,9 +751,9 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   overflow: visible;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 384rpx); /* 向左右各扩大8rpx：400rpx - 16rpx = 384rpx */
-  min-width: 416rpx; /* 向左右各扩大8rpx：400rpx + 16rpx = 416rpx */
-  max-width: 516rpx; /* 向左右各扩大8rpx：500rpx + 16rpx = 516rpx */
+  width: calc(100% - 378rpx); /* 再向左右各扩大3rpx：384rpx - 6rpx = 378rpx */
+  min-width: 422rpx; /* 再向左右各扩大3rpx：416rpx + 6rpx = 422rpx */
+  max-width: 522rpx; /* 再向左右各扩大3rpx：516rpx + 6rpx = 522rpx */
   /* 确保表格区域不会超出指定宽度 */
   overflow: hidden;
   /* 确保表格区域完全填充父元素 */
@@ -827,8 +827,8 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   display: flex;
   flex-direction: column;
   width: calc(100% - 44rpx); /* 调整容器宽度：100% - 28rpx(固定列) - 16rpx(边距) */
-  min-width: 376rpx; /* 向左右各扩大8rpx：360rpx + 16rpx = 376rpx */
-  max-width: 476rpx; /* 向左右各扩大8rpx：460rpx + 16rpx = 476rpx */
+  min-width: 382rpx; /* 再向左右各扩大3rpx：376rpx + 6rpx = 382rpx */
+  max-width: 482rpx; /* 再向左右各扩大3rpx：476rpx + 6rpx = 482rpx */
   background-color: white;
   border: none;
   box-shadow: none;
