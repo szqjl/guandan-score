@@ -575,8 +575,8 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   margin: 4rpx 0;
   padding: 12rpx 0;
   box-shadow: 0 3rpx 8rpx rgba(0, 0, 0, 0.15);
-  width: 80%;
-  margin-left: 13rpx;
+  width: 100%;
+  margin-left: 0;
 }
 
 /* 规则选择 - 简约风格 */
