@@ -1,6 +1,14 @@
 <view class="container cn-paper-bg">
-  <image class="cn-ornament left" src="../../images/左边框.svg" mode="heightFix"/>
-  <image class="cn-ornament right" src="../../images/右边框.svg" mode="heightFix"/>
+  <image class="cn-ornament left" 
+         src="{{leftBorderImage}}" 
+         mode="heightFix" 
+         lazy-load="{{true}}"
+         binderror="onImageError"/>
+  <image class="cn-ornament right" 
+         src="{{rightBorderImage}}" 
+         mode="heightFix" 
+         lazy-load="{{true}}"
+         binderror="onImageError"/>
   
   <!-- 自定义小提示 - 红方 -->
   <view class="custom-toast red-toast" wx:if="{{showCustomToast && toastTeam === 'red'}}">

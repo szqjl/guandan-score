@@ -12,6 +12,7 @@ const UIManager = require('../../utils/uiManager.js');
 const EnvManager = require('../../utils/envManager.js');
 const Helpers = require('../../utils/helpers.js');
 const GameConfig = require('../../data/gameConfig.js');
+const ImageOptimizer = require('../../utils/imageOptimizer.js');
 
 Page({
   data: {
@@ -45,7 +46,11 @@ Page({
     
     // 队伍信息
     redPlayers: GameConfig.teams.red.players,
-    bluePlayers: GameConfig.teams.blue.players
+    bluePlayers: GameConfig.teams.blue.players,
+    
+    // 图片资源
+    leftBorderImage: '',
+    rightBorderImage: ''
   },
 
   onLoad() {
@@ -64,6 +69,7 @@ Page({
     this.storageManager = new StorageManager();
     this.uiManager = new UIManager();
     this.envManager = new EnvManager();
+    this.imageOptimizer = new ImageOptimizer();
     
     // 将模块实例添加到页面数据中，供其他方法使用
     this.setData({
@@ -74,6 +80,42 @@ Page({
     
     // 初始化UI管理器
     this.uiManager.init(this);
+    
+    // 初始化图片资源
+    this.initializeImages();
+  },
+
+  /**
+   * 初始化图片资源
+   */
+  initializeImages() {
+    const imageList = [
+      '../../images/左边框.svg',
+      '../../images/右边框.svg',
+      '../../images/victor.svg',
+      '../../images/CexiaoGrey.svg'
+    ];
+
+    // 预加载关键图片
+    this.imageOptimizer.preloadImages(imageList.slice(0, 2), 2).then(() => {
+      // 设置边框图片
+      this.setData({
+        leftBorderImage: '../../images/左边框.svg',
+        rightBorderImage: '../../images/右边框.svg'
+      });
+    });
+
+    // 预加载其他图片
+    this.imageOptimizer.preloadImages(imageList.slice(2), 1);
+  },
+
+  /**
+   * 图片加载错误处理
+   * @param {Object} e - 错误事件对象
+   */
+  onImageError(e) {
+    console.warn('图片加载失败:', e.detail);
+    // 可以设置默认图片或隐藏图片
   },
 
   /**
