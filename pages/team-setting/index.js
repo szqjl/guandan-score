@@ -1,8 +1,8 @@
 // pages/team-setting/index.js
 Page({
   data: {
-    redPlayers: ['红队1号', '红队2号'],
-    bluePlayers: ['蓝队1号', '蓝队2号']
+    redPlayers: ['东西方1号', '东西方2号'],
+    bluePlayers: ['南北方1号', '南北方2号']
   },
 
   onLoad() {
@@ -102,8 +102,8 @@ Page({
       success: (res) => {
         if (res.confirm) {
           this.setData({
-            redPlayers: ['红队1号', '红队2号'],
-            bluePlayers: ['蓝队1号', '蓝队2号']
+              redPlayers: ['东西方1号', '东西方2号'],
+              bluePlayers: ['南北方1号', '南北方2号']
           });
           // 同时清除本地存储的保存设置
           wx.removeStorageSync('teamSettings');

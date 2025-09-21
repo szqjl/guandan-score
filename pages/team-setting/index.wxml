@@ -5,7 +5,7 @@
   <view class="teams-container">
     <!-- 红队 -->
     <view class="red-team">
-      <text class="team-name">红方</text>
+      <text class="team-name">东西方</text>
       
       <!-- 红队队员1 -->
       <view class="player-input-group">
@@ -47,7 +47,7 @@
 
     <!-- 蓝队 -->
     <view class="blue-team">
-      <text class="team-name">蓝方</text>
+      <text class="team-name">南北方</text>
       
       <!-- 蓝队队员1 -->
       <view class="player-input-group">
