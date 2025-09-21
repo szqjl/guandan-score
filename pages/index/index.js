@@ -105,9 +105,6 @@ Page({
       }
       return 14;
     }
-    if (text.toLowerCase() === 'e') {
-      return 14; // E也视为14级，但会在UI上特殊显示
-    }
     if (text === 'J') return 11;
     else if (text === 'Q') return 12;
     else if (text === 'K') return 13;
@@ -374,16 +371,45 @@ Page({
       // 这个逻辑已移除，因为根据规则，A阶段被对方点击升级按钮不会升级到A1
       // 处理A阶段（aAttempts === 0）的升级逻辑
       else if (this.data.aAttempts[currentTeam] === 0 && currentLevel === 14) {
-        // 处于A阶段，根据操作升级到A1
-        if (scoreIncrement === 1) {
-          // 1游末游，A升A1
-          displayText = this.getFormattedAAttempt(1);
-          this.setData({
-            [`aAttempts.${currentTeam}`]: 1
+        // 处于A阶段，根据操作处理
+        if (scoreIncrement >= 2) {
+          // 双上(+3)或1游3游(+2)，过A成功
+          wx.showModal({
+            title: '本局结束',
+            content: `${currentTeam === 'red' ? '恭喜红方首轮过A成功' : '恭喜蓝方首轮过A成功'}\n本局结束`,
+            showCancel: false,
+            success: (res) => {
+              if (res.confirm) {
+                // 胜利后回到2继续，适用于红方和蓝方
+                // 1. 先创建历史记录副本
+                const updatedHistory = [...this.data.historyScores];
+                // 2. 更新最后一条历史记录中的分数为'2'
+                if (updatedHistory.length > 0) {
+                  updatedHistory[updatedHistory.length - 1] = {
+                    ...updatedHistory[updatedHistory.length - 1],
+                    [currentTeam]: '2'
+                  };
+                }
+                // 3. 同时更新当前显示的分数、尝试次数和历史记录
+                this.setData({
+                  [`levelTexts.${currentTeam}`]: '2',
+                  [`aAttempts.${currentTeam}`]: 0,
+                  historyScores: updatedHistory,
+                  gameEnded: true // 标记游戏已结束
+                });
+                
+                // 保存到历史记录
+                this.saveGameToHistory();
+              }
+            }
           });
-        } else if (scoreIncrement > 1) {
-          // 被对方点了升级按钮（双上或1游3游），A阶段不升级，保持A状态
-          displayText = 'A';
+        } else if (scoreIncrement === 1) {
+          // 1游末游，A升A2（第二次尝试）
+          displayText = this.getFormattedAAttempt(2);
+          this.setData({
+            [`aAttempts.${currentTeam}`]: 2,
+            [`levelTexts.${currentTeam}`]: displayText
+          });
         } else {
           // 其他情况，保持A状态
           displayText = 'A';
@@ -396,9 +422,21 @@ Page({
         // 判断本轮结果
         if (scoreIncrement >= 2) {
           // 双上(+3)或1游3游(+2)，过A成功
-            wx.showModal({
-              title: '本局结束',
-              content: `${currentTeam === 'red' ? '恭喜红方首轮过A成功' : '恭喜蓝方首轮过A成功'}\n本局结束`,
+          let successMessage = '';
+          if (attempt === 0) {
+            // A阶段（第一次尝试）成功
+            successMessage = `${currentTeam === 'red' ? '恭喜红方首轮过A成功' : '恭喜蓝方首轮过A成功'}`;
+          } else if (attempt === 1) {
+            // A2阶段（第二次尝试）成功
+            successMessage = `${currentTeam === 'red' ? '恭喜红方第二轮过A成功' : '恭喜蓝方第二轮过A成功'}`;
+          } else if (attempt === 2) {
+            // A3阶段（第三次尝试）成功
+            successMessage = `${currentTeam === 'red' ? '恭喜红方第三轮过A成功' : '恭喜蓝方第三轮过A成功'}`;
+          }
+          
+          wx.showModal({
+            title: '本局结束',
+            content: `${successMessage}\n本局结束`,
               showCancel: false,
               success: (res) => {
                 if (res.confirm) {
@@ -432,65 +470,48 @@ Page({
             const nextAttempt = attempt + 1;
             displayText = this.getFormattedAAttempt(nextAttempt);
             this.setData({
-              [`aAttempts.${currentTeam}`]: nextAttempt
+              [`aAttempts.${currentTeam}`]: nextAttempt,
+              [`levelTexts.${currentTeam}`]: displayText
             });
           } else {
-            // 已经是A3，第三次未过A，达到E
-              wx.showModal({
-                title: '本局结束',
-                content: `${currentTeam === 'red' ? '红方' : '蓝方'}3A未过，遗憾失去冠军\n本局结束`,
-                showCancel: false,
-                success: (res) => {
-                  if (res.confirm) {
-                    // 保存历史数据
-                    const gameData = {
-                      historyScores: this.data.historyScores,
-                      rounds: this.data.rounds,
-                      levelTexts: this.data.levelTexts,
-                      rule: this.data.rule,
-                      maxRounds: this.data.maxRounds,
-                      aAttempts: this.data.aAttempts,
-                      teams: {
-                        red: '红方',
-                        blue: '蓝方'
-                      },
-                      timestamp: new Date().toLocaleString()
-                    };
-                    wx.setStorageSync('savedGameData', gameData);
-                    
-                    // 标记游戏已结束
-                    this.setData({
-                      gameEnded: true
-                    });
-                    
-                    // 保存到历史记录
-                    this.saveGameToHistory();
-                    
-                    wx.showToast({
-                      title: '比赛记录已保存',
-                      icon: 'success'
-                    });
-                    
-                    // 设置为E状态但不隐藏历史记录
-                    // 1. 先创建历史记录副本
-                    const updatedHistory = [...this.data.historyScores];
-                    // 2. 更新最后一条历史记录中的分数为'E'
-                    if (updatedHistory.length > 0) {
-                      updatedHistory[updatedHistory.length - 1] = {
-                        ...updatedHistory[updatedHistory.length - 1],
-                        [currentTeam]: 'E'
-                      };
-                    }
-                    // 3. 同时更新当前显示的分数、尝试次数和历史记录
-                    this.setData({
-                      [`levelTexts.${currentTeam}`]: 'E',
-                      [`aAttempts.${currentTeam}`]: 4,
-                      historyScores: updatedHistory,
-                      gameEnded: true // 标记游戏已结束
-                    });
-                  }
+            // 已经是A3，第三次未过A，游戏结束
+            wx.showModal({
+              title: '本局结束',
+              content: `非常遗憾，${currentTeam === 'red' ? '红方' : '蓝方'}3次过A未成功，游戏结束`,
+              showCancel: false,
+              success: (res) => {
+                if (res.confirm) {
+                  // 保存历史数据
+                  const gameData = {
+                    historyScores: this.data.historyScores,
+                    rounds: this.data.rounds,
+                    levelTexts: this.data.levelTexts,
+                    rule: this.data.rule,
+                    maxRounds: this.data.maxRounds,
+                    aAttempts: this.data.aAttempts,
+                    teams: {
+                      red: '红方',
+                      blue: '蓝方'
+                    },
+                    timestamp: new Date().toLocaleString()
+                  };
+                  wx.setStorageSync('savedGameData', gameData);
+                  
+                  // 标记游戏已结束
+                  this.setData({
+                    gameEnded: true
+                  });
+                  
+                  // 保存到历史记录
+                  this.saveGameToHistory();
+                  
+                  wx.showToast({
+                    title: '比赛记录已保存',
+                    icon: 'success'
+                  });
                 }
-              });
+              }
+            });
           }
         } else if (scoreIncrement > 1) {
           // 被对方点了升级按钮（双上或1游3游），A1/A2/A3升级
@@ -499,13 +520,47 @@ Page({
             const nextAttempt = attempt + 1;
             displayText = this.getFormattedAAttempt(nextAttempt);
             this.setData({
-              [`aAttempts.${currentTeam}`]: nextAttempt
+              [`aAttempts.${currentTeam}`]: nextAttempt,
+              [`levelTexts.${currentTeam}`]: displayText
             });
           } else {
-            // 已经是A3，被对方点击升级按钮，达到E
-            displayText = 'E';
-            this.setData({
-              [`aAttempts.${currentTeam}`]: 4
+            // 已经是A3，被对方点击升级按钮，游戏结束
+            wx.showModal({
+              title: '本局结束',
+              content: `非常遗憾，${currentTeam === 'red' ? '红方' : '蓝方'}3次过A未成功，游戏结束`,
+              showCancel: false,
+              success: (res) => {
+                if (res.confirm) {
+                  // 保存历史数据
+                  const gameData = {
+                    historyScores: this.data.historyScores,
+                    rounds: this.data.rounds,
+                    levelTexts: this.data.levelTexts,
+                    rule: this.data.rule,
+                    maxRounds: this.data.maxRounds,
+                    aAttempts: this.data.aAttempts,
+                    teams: {
+                      red: '红方',
+                      blue: '蓝方'
+                    },
+                    timestamp: new Date().toLocaleString()
+                  };
+                  wx.setStorageSync('savedGameData', gameData);
+                  
+                  // 标记游戏已结束
+                  this.setData({
+                    gameEnded: true
+                  });
+                  
+                  // 保存到历史记录
+                  this.saveGameToHistory();
+                  
+                  wx.showToast({
+                    title: '比赛记录已保存',
+                    icon: 'success'
+                  });
+                }
+              }
             });
           }
         } else {
@@ -514,14 +569,27 @@ Page({
         }
       }
       
-      // 处理对方队伍在A1/A2/A3阶段的升级逻辑（被对方点击升级按钮）
-      // 当对方处于A1/A2/A3阶段且当前方点击升级按钮时，对方升级
-      if (this.data.aAttempts[otherTeam] > 0 && 
-          this.data.aAttempts[otherTeam] < 4 && 
+      // 处理对方队伍在A阶段的升级逻辑（被对方点击升级按钮）
+      // 当对方处于A阶段且当前方点击任何升级按钮时，对方升级到A2
+      if (this.data.aAttempts[otherTeam] === 0 && 
+          this.data.levelTexts[otherTeam] === 'A' && 
+          scoreIncrement > 0) {
+        // 对方从A阶段升级到A2
+        this.setData({
+          [`aAttempts.${otherTeam}`]: 2,
+          [`levelTexts.${otherTeam}`]: this.getFormattedAAttempt(2)
+        });
+        // 更新历史记录
+        this.updateHistoryWithA1(otherTeam, this.getFormattedAAttempt(2));
+      }
+      // 处理对方队伍在A1/A2阶段的升级逻辑（被对方点击升级按钮）
+      // 当对方处于A1/A2阶段且当前方点击升级按钮时，对方升级
+      else if (this.data.aAttempts[otherTeam] > 0 && 
+          this.data.aAttempts[otherTeam] < 3 && 
           scoreIncrement > 1) {
         const otherAttempt = this.data.aAttempts[otherTeam];
         const nextAttempt = otherAttempt + 1;
-        if (nextAttempt < 4) {
+        if (nextAttempt <= 3) {
           // 对方升级到下一个尝试阶段
           this.setData({
             [`aAttempts.${otherTeam}`]: nextAttempt,
@@ -530,14 +598,89 @@ Page({
           // 更新历史记录
           this.updateHistoryWithA1(otherTeam, this.getFormattedAAttempt(nextAttempt));
         } else {
-          // 对方已经是A3，被点击升级按钮，达到E
-          this.setData({
-            [`aAttempts.${otherTeam}`]: 4,
-            [`levelTexts.${otherTeam}`]: 'E'
+          // 对方已经是A3，被点击升级按钮，游戏结束
+          wx.showModal({
+            title: '本局结束',
+            content: `非常遗憾，${otherTeam === 'red' ? '红方' : '蓝方'}3次过A未成功，游戏结束`,
+            showCancel: false,
+            success: (res) => {
+              if (res.confirm) {
+                // 保存历史数据
+                const gameData = {
+                  historyScores: this.data.historyScores,
+                  rounds: this.data.rounds,
+                  levelTexts: this.data.levelTexts,
+                  rule: this.data.rule,
+                  maxRounds: this.data.maxRounds,
+                  aAttempts: this.data.aAttempts,
+                  teams: {
+                    red: '红方',
+                    blue: '蓝方'
+                  },
+                  timestamp: new Date().toLocaleString()
+                };
+                wx.setStorageSync('savedGameData', gameData);
+                
+                // 标记游戏已结束
+                this.setData({
+                  gameEnded: true
+                });
+                
+                // 保存到历史记录
+                this.saveGameToHistory();
+                
+                wx.showToast({
+                  title: '比赛记录已保存',
+                  icon: 'success'
+                });
+              }
+            }
           });
-          // 更新历史记录
-          this.updateHistoryWithA1(otherTeam, 'E');
         }
+      }
+      
+      // 处理对方队伍在A3阶段的升级逻辑（被对方点击升级按钮）
+      // 当对方处于A3阶段且当前方点击任何升级按钮时，游戏结束
+      else if (this.data.aAttempts[otherTeam] === 3 && 
+          scoreIncrement > 0) {
+        // 对方已经是A3，被点击升级按钮，游戏结束
+        wx.showModal({
+          title: '本局结束',
+          content: `非常遗憾，${otherTeam === 'red' ? '红方' : '蓝方'}3次过A未成功，游戏结束`,
+          showCancel: false,
+          success: (res) => {
+            if (res.confirm) {
+              // 保存历史数据
+              const gameData = {
+                historyScores: this.data.historyScores,
+                rounds: this.data.rounds,
+                levelTexts: this.data.levelTexts,
+                rule: this.data.rule,
+                maxRounds: this.data.maxRounds,
+                aAttempts: this.data.aAttempts,
+                teams: {
+                  red: '红方',
+                  blue: '蓝方'
+                },
+                timestamp: new Date().toLocaleString()
+              };
+              wx.setStorageSync('savedGameData', gameData);
+              
+              // 标记游戏已结束
+              this.setData({
+                gameEnded: true
+              });
+              
+              // 保存到历史记录
+              this.saveGameToHistory();
+              
+              wx.showToast({
+                title: '比赛记录已保存',
+                icon: 'success'
+              });
+            }
+          }
+        });
       }
       
       // 检查是否双方都到了A3
@@ -765,7 +908,7 @@ Page({
   
   // 验证分数是否有效
   isValidScore(score) {
-    const validScores = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', 'E'];
+    const validScores = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
     // 也接受A加上标数字的格式
     return validScores.includes(score) || /^A\d+$/.test(score);
   },
@@ -819,10 +962,6 @@ Page({
     if (level === 14) {
       // 在过A制下的处理逻辑
       if (team && this.data.aAttempts[team] > 0) {
-        // 特殊处理E状态
-        if (this.data.aAttempts[team] === 4) {
-          return 'E';
-        }
         return this.getFormattedAAttempt(this.data.aAttempts[team]);
       }
       return 'A';
@@ -1008,8 +1147,8 @@ Page({
 
   // 撤销上一步操作
   undoLastStep() {
-    // 检查是否已达到结束条件（E状态或游戏已结束），如果是则不允许撤销
-    if (this.data.levelTexts.red === 'E' || this.data.levelTexts.blue === 'E' || this.data.gameEnded) {
+    // 检查是否已达到结束条件（游戏已结束），如果是则不允许撤销
+    if (this.data.gameEnded) {
       wx.showToast({
         title: '游戏已结束，不允许撤销',
         icon: 'none'
@@ -1051,9 +1190,7 @@ Page({
   
   // 从分数文本中提取尝试次数
   getAttemptFromScoreText(scoreText) {
-    if (scoreText === 'E') {
-      return 4; // E状态对应尝试次数4
-    } else if (scoreText.startsWith('A') && scoreText.length > 1) {
+    if (scoreText.startsWith('A') && scoreText.length > 1) {
       // 尝试提取A后面的数字
       const attemptMatch = scoreText.match(/A(\d+)/);
       if (attemptMatch) {
@@ -1084,9 +1221,8 @@ Page({
               maxRounds: savedGameData.maxRounds || 10,
               aAttempts: savedGameData.aAttempts || { red: 0, blue: 0 },
               canUndo: (savedGameData.historyScores || []).length > 0,
-              // 如果恢复的游戏包含E状态，标记为游戏已结束
-              gameEnded: savedGameData.levelTexts && 
-                        (savedGameData.levelTexts.red === 'E' || savedGameData.levelTexts.blue === 'E')
+              // 如果恢复的游戏已结束，标记为游戏已结束
+              gameEnded: savedGameData.gameEnded || false
             });
             wx.showToast({
               title: '游戏已恢复',
