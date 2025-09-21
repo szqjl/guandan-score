@@ -10,15 +10,6 @@
          lazy-load="{{true}}"
          binderror="onImageError"/>
   
-  <!-- 自定义小提示 - 红方 -->
-  <view class="custom-toast red-toast" wx:if="{{showCustomToast && toastTeam === 'red'}}">
-    <text class="toast-text">{{toastMessage}}</text>
-  </view>
-  
-  <!-- 自定义小提示 - 蓝方 -->
-  <view class="custom-toast blue-toast" wx:if="{{showCustomToast && toastTeam === 'blue'}}">
-    <text class="toast-text">{{toastMessage}}</text>
-  </view>
   <!-- 环境标识 -->
   <view class="env-badge">
     <text wx:if="{{isTrial}}" class="env-text trial">体验版</text>
@@ -62,21 +53,21 @@
       <view class="team-layout">
         <!-- 红方独立升级按钮组 - 放在左侧 -->
         <view class="team-buttons left-buttons">
-          <view class="team-btn team-btn-double" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-double {{buttonDisabledStates.red.double ? 'btn-disabled' : ''}}" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">3</text>
           </view>
-          <view class="team-btn team-btn-two" data-team="red" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-two {{buttonDisabledStates.red.two ? 'btn-disabled' : ''}}" data-team="red" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">2</text>
           </view>
-          <view class="team-btn team-btn-one" data-team="red" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-one {{buttonDisabledStates.red.one ? 'btn-disabled' : ''}}" data-team="red" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">1</text>
           </view>
         </view>
         <view class="score-container">
-          <text class="team-label">红方</text>
+          <text class="team-label">东西方</text>
           <view class="level-display">
             <view class="level-display-content">
               <text class="level-text">{{levelTexts.red}}</text>
@@ -91,7 +82,7 @@
     <view class="team blue-team">
       <view class="team-layout">
         <view class="score-container">
-          <text class="team-label">蓝方</text>
+          <text class="team-label">南北方</text>
           <view class="level-display">
             <view class="level-display-content">
               <text class="level-text">{{levelTexts.blue}}</text>
@@ -101,15 +92,15 @@
         </view>
         <!-- 蓝方独立升级按钮组 - 放在右侧 -->
         <view class="team-buttons right-buttons">
-          <view class="team-btn team-btn-double" data-team="blue" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-double {{buttonDisabledStates.blue.double ? 'btn-disabled' : ''}}" data-team="blue" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">3</text>
           </view>
-          <view class="team-btn team-btn-two" data-team="blue" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-two {{buttonDisabledStates.blue.two ? 'btn-disabled' : ''}}" data-team="blue" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">2</text>
           </view>
-          <view class="team-btn team-btn-one" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-one {{buttonDisabledStates.blue.one ? 'btn-disabled' : ''}}" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">1</text>
           </view>
