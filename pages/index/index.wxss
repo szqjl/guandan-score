@@ -784,7 +784,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   margin-left: 0; /* 移除左边距，让表格与按钮对齐 */
   margin-right: 0; /* 移除右边距，让表格与按钮对齐 */
   position: relative;
-  height: 112rpx; /* 调整高度：标�?4rpx + 表头24rpx + 红方16rpx + 蓝方16rpx + 边距12rpx = 112rpx */
+  height: 88rpx; /* 调整高度：标�?4rpx + 表头24rpx + 红方16rpx + 蓝方16rpx + 边距12rpx = 112rpx */
   overflow: visible;
   display: flex;
   flex-direction: column;
