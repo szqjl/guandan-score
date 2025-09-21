@@ -411,7 +411,6 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   border-radius: 50% !important;
   padding: 0 !important;
   border: none !important;
-  box-shadow: 0 4rpx 8rpx rgba(231, 76, 60, 0.3) !important;
   position: relative !important;
   font-size: 20rpx !important;
   font-weight: bold !important;
@@ -420,6 +419,13 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   flex-direction: row !important;
   align-items: center !important;
   justify-content: center !important;
+  color: white !important;
+}
+
+/* 双上按钮 - 红色 */
+.team-btn-double {
+  background-color: #e74c3c !important;
+  box-shadow: 0 4rpx 8rpx rgba(231, 76, 60, 0.3) !important;
 }
 
 
@@ -446,13 +452,11 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 
 .team-btn-two {
   background-color: #2196F3 !important;
-  color: white !important;
   box-shadow: 0 4rpx 8rpx rgba(33, 150, 243, 0.3) !important;
 }
 
 .team-btn-one {
   background-color: #4CAF50 !important;
-  color: white !important;
   box-shadow: 0 4rpx 8rpx rgba(76, 175, 80, 0.3) !important;
 }
 
