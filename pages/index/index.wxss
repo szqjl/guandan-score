@@ -58,7 +58,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   }
 }
 
-/* 蓝方提示的动画 */
+/* 蓝方提示的动�?*/
 .blue-toast {
   animation: fadeInOutBlue 1.5s ease-in-out;
 }
@@ -88,7 +88,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 10rpx;
+  padding: 10rpx 10rpx 5rpx 10rpx;
   width: 100vw;
   box-sizing: border-box;
   overflow-y: auto;
@@ -179,7 +179,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   background-image: linear-gradient(135deg, #9c27b0, #673ab7);
 }
 
-/* 把数显示 - 左侧体验版下方 */
+/* 把数显示 - 左侧体验版下�?*/
 .left-rounds-display {
   position: fixed;
   top: 62rpx;
@@ -212,7 +212,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   height: auto;
 }
 
-/* 页面标题 - 简约风格 */
+/* 页面标题 - 简约风�?*/
 .page-title {
   font-size: 48rpx;
   font-weight: 600;
@@ -280,7 +280,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   padding-right: 30rpx;
 }
 
-/* 分数容器 - 用于包裹队伍标签和分数显示 */
+/* 分数容器 - 用于包裹队伍标签和分数显�?*/
 .score-container {
   display: flex;
   flex-direction: column;
@@ -290,26 +290,30 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   padding: 10rpx 0;
 }
 
-/* 红方按钮在右侧 */
+/* 红方按钮在右�?- 圆形按钮垂直居中排列 */
 .left-buttons {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   margin-right: 10rpx;
   align-self: center;
-  width: 350rpx;
+  width: 80rpx;
+  height: 150rpx;
 }
 
-/* 蓝方按钮在右侧 */
+/* 蓝方按钮在右�?- 圆形按钮垂直居中排列 */
 .right-buttons {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   margin-left: 10rpx;
   position: relative;
   left: 0rpx;
   align-self: center;
-  width: 350rpx;
+  width: 80rpx;
+  height: 150rpx;
 }
 
 .team-label {
@@ -329,7 +333,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   top: -3rpx;
 }
 
-/* 等级显示 - 用于控制内部显示区域的高度 */
+/* 等级显示 - 用于控制内部显示区域的高�?*/
 .level-display {
   position: relative;
   display: flex;
@@ -340,7 +344,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   margin-top: 5rpx;
 }
 
-/* 等级显示容器，确保内容居中显示 */
+/* 等级显示容器，确保内容居中显�?*/
 .level-display-content {
   display: flex;
   align-items: center;
@@ -358,7 +362,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   z-index: 999;
 }
 
-/* 队伍按钮 - 简约风格 */
+/* 队伍按钮 - 简约风�?*/
 .team-buttons {
   position: relative;
   width: 350rpx;
@@ -398,47 +402,80 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   margin: 0 !important;
 }
 
-/* 双上按钮保持原有尺寸 */
+/* 圆形按钮样式 - 垂直排列 */
 .team-btn-double {
   background-color: #e74c3c !important;
   color: white !important;
-  top: 0rpx !important;
-  left: 0rpx !important;
+  border-radius: 50% !important;
+  width: 60rpx !important;
+  height: 60rpx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 20rpx !important;
+  font-weight: bold !important;
+  margin-bottom: 15rpx !important;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: initial !important;
+  letter-spacing: normal !important;
+  padding: 0 !important;
   min-width: 0 !important;
-  letter-spacing: 8rpx !important;
-  text-align: center !important;
-  padding-left: 8rpx !important;
-  width: 55rpx !important;
-  height: 25rpx !important;
+  opacity: 1 !important;
+  box-shadow: 0 4rpx 8rpx rgba(231, 76, 60, 0.3) !important;
 }
 
 .team-btn-two {
   background-color: #2196F3 !important;
   color: white !important;
-  top: 35rpx !important;
-  left: 0rpx !important;
-  width: 20rpx !important;
-  height: 50rpx !important;
-  writing-mode: vertical-rl !important;
-  text-orientation: upright !important;
-  letter-spacing: 0 !important;
+  border-radius: 50% !important;
+  width: 60rpx !important;
+  height: 60rpx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18rpx !important;
+  font-weight: bold !important;
+  margin-bottom: 15rpx !important;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: initial !important;
+  letter-spacing: normal !important;
   padding: 0 !important;
   min-width: 0 !important;
+  opacity: 1 !important;
+  box-shadow: 0 4rpx 8rpx rgba(33, 150, 243, 0.3) !important;
 }
 
 .team-btn-one {
   background-color: #4CAF50 !important;
   color: white !important;
-  top: 35rpx !important;
-  right: 0rpx !important;
-  width: 20rpx !important;
-  height: 50rpx !important;
-  writing-mode: vertical-rl !important;
-  text-orientation: upright !important;
-  letter-spacing: 0 !important;
+  border-radius: 50% !important;
+  width: 60rpx !important;
+  height: 60rpx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18rpx !important;
+  font-weight: bold !important;
+  margin-bottom: 0 !important;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: initial !important;
+  letter-spacing: normal !important;
   padding: 0 !important;
   min-width: 0 !important;
   opacity: 1 !important;
+  box-shadow: 0 4rpx 8rpx rgba(76, 175, 80, 0.3) !important;
 }
 
 .team-btn:active {
@@ -579,7 +616,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   margin-left: 13rpx;
 }
 
-/* 规则选择 - 简约风格 */
+/* 规则选择 - 简约风�?*/
   .rule-section {
     background-color: #F8F8F8;
     padding: 12rpx 16rpx;
@@ -643,7 +680,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
     border: 1rpx solid #E0E0E0;
   }
 
-  /* 结束按钮 - 简约风格 */
+  /* 结束按钮 - 简约风�?*/
   .end-btn {
     background-color: #4488FF;
     color: white;
@@ -658,20 +695,20 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
     border: 1rpx solid #4488FF;
   }
 
-/* 比分历史表格样式优化 - 缩小文字和所占空间 */
+/* 比分历史表格样式优化 - 缩小文字和所占空�?*/
 .history-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 24rpx;
   position: relative; /* 确保标题和按钮不滚动 */
-  z-index: 10; /* 确保标题和按钮在滚动层之上 */
+  z-index: 10; /* 确保标题和按钮在滚动层之�?*/
   background-color: #FFFFFF;
   padding: 4rpx 8rpx;
   border-radius: 4rpx;
   margin-bottom: 4rpx;
-  margin-left: 8rpx; /* 与固定队伍列（把数列）对齐 */
-  width: calc(100% - 16rpx); /* 从把数列开始到表格结束的宽度 */
+  margin-left: 8rpx; /* 与固定队伍列（把数列）对�?*/
+  width: calc(100% - 16rpx); /* 从把数列开始到表格结束的宽�?*/
 }
 
 .history-actions {
@@ -738,7 +775,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 
 .history-table-section {
   border-radius: 16rpx; /* 增加圆角 */
-  padding: 2rpx 4rpx 4rpx 4rpx; /* 恢复底部内边距，为滚动条预留空间 */
+  padding: 2rpx 4rpx 2rpx 4rpx; /* 减少底部内边距，为滚动条预留空间 */
   box-shadow: 0 1rpx 1rpx rgba(0, 0, 0, 0.1);
   border: 1rpx solid #ddd;
   background-color: #FFFFFF; /* 白色背景 */
@@ -747,16 +784,16 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   margin-left: 0; /* 移除左边距，让表格与按钮对齐 */
   margin-right: 0; /* 移除右边距，让表格与按钮对齐 */
   position: relative;
-  height: 112rpx; /* 调整高度：标题24rpx + 表头24rpx + 红方16rpx + 蓝方16rpx + 边距12rpx = 112rpx */
+  height: 112rpx; /* 调整高度：标�?4rpx + 表头24rpx + 红方16rpx + 蓝方16rpx + 边距12rpx = 112rpx */
   overflow: visible;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 384rpx); /* 向左右各扩大8rpx：400rpx - 16rpx = 384rpx */
-  min-width: 416rpx; /* 向左右各扩大8rpx：400rpx + 16rpx = 416rpx */
-  max-width: 516rpx; /* 向左右各扩大8rpx：500rpx + 16rpx = 516rpx */
+  width: calc(100% - 384rpx); /* 向左右各扩大8rpx�?00rpx - 16rpx = 384rpx */
+  min-width: 416rpx; /* 向左右各扩大8rpx�?00rpx + 16rpx = 416rpx */
+  max-width: 516rpx; /* 向左右各扩大8rpx�?00rpx + 16rpx = 516rpx */
   /* 确保表格区域不会超出指定宽度 */
   overflow: hidden;
-  /* 确保表格区域完全填充父元素 */
+  /* 确保表格区域完全填充父元�?*/
   box-sizing: border-box;
   z-index: 4;
   /* 居中显示 */
@@ -764,15 +801,15 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   margin-right: auto;
 }
 
-/* 固定队伍列 - 横屏模式优化 */
+/* 固定队伍�?- 横屏模式优化 */
 .fixed-team-column {
   position: absolute;
   left: 8rpx;
   top: 26rpx;
   width: 28rpx;
   background-color: white;
-  z-index: 10; /* 提高层级，确保不被表头遮住 */
-  height: 56rpx; /* 调整高度：表头24rpx + 红方16rpx + 蓝方16rpx = 56rpx */
+  z-index: 10; /* 提高层级，确保不被表头遮�?*/
+  height: 56rpx; /* 调整高度：表�?4rpx + 红方16rpx + 蓝方16rpx = 56rpx */
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -820,15 +857,15 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 }
 
 .scrollable-table-container {
-  height: 56rpx; /* 调整高度：表头24rpx + 红方16rpx + 蓝方16rpx = 56rpx */
+  height: 56rpx; /* 调整高度：表�?4rpx + 红方16rpx + 蓝方16rpx = 56rpx */
   position: absolute;
   left: 36rpx;
   top: 26rpx;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 44rpx); /* 调整容器宽度：100% - 28rpx(固定列) - 16rpx(边距) */
-  min-width: 376rpx; /* 向左右各扩大8rpx：360rpx + 16rpx = 376rpx */
-  max-width: 476rpx; /* 向左右各扩大8rpx：460rpx + 16rpx = 476rpx */
+  width: calc(100% - 44rpx); /* 调整容器宽度�?00% - 28rpx(固定�? - 16rpx(边距) */
+  min-width: 376rpx; /* 向左右各扩大8rpx�?60rpx + 16rpx = 376rpx */
+  max-width: 476rpx; /* 向左右各扩大8rpx�?60rpx + 16rpx = 476rpx */
   background-color: white;
   border: none;
   box-shadow: none;
@@ -836,7 +873,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   margin: 0;
   padding: 0 0 2rpx 0; /* 添加底部内边距，为滚动条预留空间 */
   transform: none;
-  /* 确保内容可以滚动，滚动条出现在底部 */
+  /* 确保内容可以滚动，滚动条出现在底�?*/
   overflow-x: auto !important;
   overflow-y: hidden !important;
   -webkit-overflow-scrolling: touch;
@@ -860,7 +897,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   align-items: stretch;
 }
 
-/* 最后一行（蓝方行）的底部边框，确保滚动条紧贴底部 */
+/* 最后一行（蓝方行）的底部边框，确保滚动条紧贴底�?*/
 .table-row:last-child {
   border-bottom: 1rpx solid #E0E0E0;
 }
@@ -884,7 +921,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   align-items: stretch;
 }
 
-/* 表头单元格样式 - 简约风格 */
+/* 表头单元格样�?- 简约风�?*/
 .header-row .table-cell {
   background-color: transparent !important;
   color: white !important;
@@ -914,7 +951,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   white-space: normal;
   word-wrap: break-word;
   word-break: break-all;
-  height: 16rpx; /* 与表格行高度保持一致 */
+  height: 16rpx; /* 与表格行高度保持一�?*/
   display: flex;
   align-items: center;
   justify-content: center;
@@ -929,7 +966,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   line-height: 1.2;
 }
 
-/* 最后一列单元格移除右边框 */
+/* 最后一列单元格移除右边�?*/
 .table-cell:last-child {
   border-right: none;
   /* 确保最后一列紧贴右边缘 */
@@ -970,7 +1007,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   padding: 0;
 }
 
-/* 实时比分显示 - 简约风格 */
+/* 实时比分显示 - 简约风�?*/
 .level-display {
   position: relative;
   width: 90rpx !important;
@@ -999,9 +1036,9 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   font-weight: 500;
 }
 
-/* ===================== 简约风格主题 ===================== */
-/* 简约主题配色
-   主背景: #FFFFFF
+/* ===================== 简约风格主�?===================== */
+/* 简约主题配�?
+   主背�? #FFFFFF
    红方: #FF4444
    蓝方: #4488FF
    表头: #666666
@@ -1018,7 +1055,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   display: none; /* 隐藏装饰元素 */
 }
 
-/* 环境徽标简约配色 */
+/* 环境徽标简约配�?*/
 .env-text.trial {
   background-color: #FF9800;
   background-image: none;
@@ -1032,11 +1069,11 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 /* 容器深蓝背景 */
 .container { background-color: #0B1557; }
 
-/* 标签简约配色 */
+/* 标签简约配�?*/
 .red-team .team-label { color: #FF4444; }
 .blue-team .team-label { color: #4488FF; }
 
-/* 分数显示简约风格 */
+/* 分数显示简约风�?*/
 .level-display { 
   border: 2rpx solid #E0E0E0; 
   color: #333; 
@@ -1054,13 +1091,13 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 }
 
 
-/* 把数圆盘简约风格 */
+/* 把数圆盘简约风�?*/
 .rounds-clock { 
   background-color: #F8F8F8; 
   border: 2rpx solid #E0E0E0; 
 }
 
-/* 右侧控制面板简约风格 */
+/* 右侧控制面板简约风�?*/
 .rule-section { 
   background-color: #F8F8F8; 
   border: 1rpx solid #E0E0E0; 
@@ -1077,7 +1114,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   box-shadow: none;
 }
 
-/* 表格简约风格 */
+/* 表格简约风�?*/
 .history-table-section { border: 1rpx solid #E0E0E0; }
 .fixed-team-column { background-color: #F8F8F8; }
 .fixed-team-cell { background-color: #F8F8F8; }
@@ -1091,7 +1128,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 .red-score { color: #FF4444 !important; background-color: #FFFFFF !important; }
 .blue-score { color: #4488FF !important; background-color: #FFFFFF !important; }
 
-/* 简约风格分数显示文字 */
+/* 简约风格分数显示文�?*/
 .level-display .level-display-content .level-text {
   font-size: 46rpx !important;
   line-height: 1;
@@ -1100,156 +1137,3 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   font-weight: 600;
   text-shadow: none;
 }
- 
- / *   ��n9_�z7h_  -   �W�NF i g m a ����ĉ�  * / 
- . s e t t i n g s - m o d a l   { 
-     p o s i t i o n :   f i x e d ; 
-     t o p :   0 ; 
-     l e f t :   0 ; 
-     w i d t h :   1 0 0 % ; 
-     h e i g h t :   1 0 0 % ; 
-     z - i n d e x :   9 9 9 9 ; 
-     d i s p l a y :   f l e x ; 
-     a l i g n - i t e m s :   c e n t e r ; 
-     j u s t i f y - c o n t e n t :   c e n t e r ; 
- } 
- 
- . s e t t i n g s - o v e r l a y   { 
-     p o s i t i o n :   a b s o l u t e ; 
-     t o p :   0 ; 
-     l e f t :   0 ; 
-     w i d t h :   1 0 0 % ; 
-     h e i g h t :   1 0 0 % ; 
-     b a c k g r o u n d - c o l o r :   r g b a ( 0 ,   0 ,   0 ,   0 . 5 ) ; 
- } 
- 
- . s e t t i n g s - c o n t e n t   { 
-     p o s i t i o n :   r e l a t i v e ; 
-     w i d t h :   9 0 % ; 
-     m a x - w i d t h :   6 0 0 r p x ; 
-     m a x - h e i g h t :   8 0 % ; 
-     b a c k g r o u n d - c o l o r :   # f 5 f 5 f 5 ; 
-     b o r d e r - r a d i u s :   2 4 r p x ; 
-     o v e r f l o w :   h i d d e n ; 
-     b o x - s h a d o w :   0   2 0 r p x   4 0 r p x   r g b a ( 0 ,   0 ,   0 ,   0 . 2 ) ; 
- } 
- 
- . s e t t i n g s - h e a d e r   { 
-     d i s p l a y :   f l e x ; 
-     j u s t i f y - c o n t e n t :   s p a c e - b e t w e e n ; 
-     a l i g n - i t e m s :   c e n t e r ; 
-     p a d d i n g :   4 0 r p x   4 0 r p x   2 0 r p x ; 
-     b a c k g r o u n d - c o l o r :   w h i t e ; 
-     b o r d e r - b o t t o m :   2 r p x   s o l i d   # e 0 e 0 e 0 ; 
- } 
- 
- . s e t t i n g s - t i t l e   { 
-     f o n t - s i z e :   3 6 r p x ; 
-     f o n t - w e i g h t :   b o l d ; 
-     c o l o r :   # 3 3 3 ; 
- } 
- 
- . c l o s e - b t n   { 
-     w i d t h :   6 0 r p x ; 
-     h e i g h t :   6 0 r p x ; 
-     d i s p l a y :   f l e x ; 
-     a l i g n - i t e m s :   c e n t e r ; 
-     j u s t i f y - c o n t e n t :   c e n t e r ; 
-     b o r d e r - r a d i u s :   5 0 % ; 
-     b a c k g r o u n d - c o l o r :   # f 0 f 0 f 0 ; 
- } 
- 
- . c l o s e - i c o n   { 
-     f o n t - s i z e :   4 0 r p x ; 
-     c o l o r :   # 6 6 6 ; 
- } 
- 
- . s e t t i n g s - o p t i o n s   { 
-     p a d d i n g :   2 0 r p x   0 ; 
-     m a x - h e i g h t :   6 0 0 r p x ; 
-     o v e r f l o w - y :   a u t o ; 
- } 
- 
- . s e t t i n g s - s e c t i o n   { 
-     m a r g i n - b o t t o m :   4 0 r p x ; 
- } 
- 
- . s e c t i o n - t i t l e   { 
-     d i s p l a y :   b l o c k ; 
-     f o n t - s i z e :   2 8 r p x ; 
-     f o n t - w e i g h t :   b o l d ; 
-     c o l o r :   # 3 3 3 ; 
-     p a d d i n g :   0   4 0 r p x   2 0 r p x ; 
-     b o r d e r - b o t t o m :   2 r p x   s o l i d   # e 0 e 0 e 0 ; 
-     m a r g i n - b o t t o m :   2 0 r p x ; 
- } 
- 
- . o p t i o n - i t e m   { 
-     d i s p l a y :   f l e x ; 
-     j u s t i f y - c o n t e n t :   s p a c e - b e t w e e n ; 
-     a l i g n - i t e m s :   c e n t e r ; 
-     p a d d i n g :   3 0 r p x   4 0 r p x ; 
-     b a c k g r o u n d - c o l o r :   w h i t e ; 
-     m a r g i n - b o t t o m :   2 r p x ; 
- } 
- 
- . o p t i o n - l a b e l   { 
-     f o n t - s i z e :   3 0 r p x ; 
-     c o l o r :   # 3 3 3 ; 
-     f l e x :   1 ; 
- } 
- 
- . o p t i o n - v a l u e   { 
-     d i s p l a y :   f l e x ; 
-     a l i g n - i t e m s :   c e n t e r ; 
- } 
- 
- . p i c k e r - t e x t   { 
-     f o n t - s i z e :   2 8 r p x ; 
-     c o l o r :   # E E 1 9 6 7 ; 
-     p a d d i n g :   1 0 r p x   2 0 r p x ; 
-     b a c k g r o u n d - c o l o r :   # f 8 f 8 f 8 ; 
-     b o r d e r - r a d i u s :   8 r p x ; 
-     b o r d e r :   2 r p x   s o l i d   # E E 1 9 6 7 ; 
- } 
- 
- . c l e a r - b t n   { 
-     f o n t - s i z e :   2 4 r p x ; 
-     c o l o r :   w h i t e ; 
-     b a c k g r o u n d - c o l o r :   # E E 1 9 6 7 ; 
-     b o r d e r :   n o n e ; 
-     p a d d i n g :   1 6 r p x   3 2 r p x ; 
-     b o r d e r - r a d i u s :   8 r p x ; 
- } 
- 
- . s e t t i n g s - f o o t e r   { 
-     d i s p l a y :   f l e x ; 
-     p a d d i n g :   3 0 r p x   4 0 r p x ; 
-     b a c k g r o u n d - c o l o r :   w h i t e ; 
-     b o r d e r - t o p :   2 r p x   s o l i d   # e 0 e 0 e 0 ; 
-     g a p :   2 0 r p x ; 
- } 
- 
- . s e t t i n g s - b t n   { 
-     f l e x :   1 ; 
-     h e i g h t :   8 0 r p x ; 
-     b o r d e r - r a d i u s :   1 2 r p x ; 
-     f o n t - s i z e :   3 0 r p x ; 
-     b o r d e r :   n o n e ; 
- } 
- 
- . c a n c e l - b t n   { 
-     b a c k g r o u n d - c o l o r :   # d 9 d 9 d 9 ; 
-     c o l o r :   # 6 6 6 ; 
- } 
- 
- . c o n f i r m - b t n   { 
-     b a c k g r o u n d - c o l o r :   # E E 1 9 6 7 ; 
-     c o l o r :   w h i t e ; 
- } 
- 
- / *    _sQ7h_�te  * / 
- s w i t c h   { 
-     t r a n s f o r m :   s c a l e ( 0 . 8 ) ; 
- }  
- 
