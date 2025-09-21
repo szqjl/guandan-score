@@ -359,12 +359,29 @@ Page({
       
       // 检查是否刚刚达到A
       if (currentLevel < 14 && newLevel === 14 && currentAttempt === 0) {
-        // 第一次达到A，设置为A1
+        // 第一次达到A，显示为A，不设置尝试次数
         this.setData({
-          [`aAttempts.${currentTeam}`]: 1,
-          [`levelTexts.${currentTeam}`]: this.getFormattedAAttempt(1)
+          [`aAttempts.${currentTeam}`]: 0,
+          [`levelTexts.${currentTeam}`]: 'A'
         });
       } 
+      // 处理A阶段（aAttempts === 0）的升级逻辑
+      else if (this.data.aAttempts[currentTeam] === 0 && currentLevel === 14) {
+        // 处于A阶段，根据操作升级到A1
+        if (scoreIncrement === 1) {
+          // 1游末游，A升A1
+          this.setData({
+            [`aAttempts.${currentTeam}`]: 1,
+            [`levelTexts.${currentTeam}`]: this.getFormattedAAttempt(1)
+          });
+        } else if (scoreIncrement > 1) {
+          // 被对方点了升级按钮（双上或1游3游），A升A1
+          this.setData({
+            [`aAttempts.${currentTeam}`]: 1,
+            [`levelTexts.${currentTeam}`]: this.getFormattedAAttempt(1)
+          });
+        }
+      }
       // 处理已经在尝试过A的情况
       else if (this.data.aAttempts[currentTeam] > 0) {
         const attempt = this.data.aAttempts[currentTeam];
