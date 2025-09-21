@@ -410,6 +410,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   width: 60rpx !important;
   height: 60rpx !important;
   display: flex !important;
+  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   font-size: 20rpx !important;
@@ -426,6 +427,22 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   min-width: 0 !important;
   opacity: 1 !important;
   box-shadow: 0 4rpx 8rpx rgba(231, 76, 60, 0.3) !important;
+}
+
+/* 按钮图标样式 */
+.btn-icon {
+  width: 16rpx !important;
+  height: 16rpx !important;
+  margin-bottom: 2rpx !important;
+  filter: brightness(0) invert(1) !important; /* 将图标变为白色 */
+}
+
+/* 按钮数字样式 */
+.btn-number {
+  font-size: 14rpx !important;
+  font-weight: bold !important;
+  color: white !important;
+  line-height: 1 !important;
 }
 
 .team-btn-two {
