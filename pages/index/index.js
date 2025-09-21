@@ -29,8 +29,8 @@ Page({
     isDevelop: false,
     envVersion: 'unknown',
     // 队友信息
-    redPlayers: ['东西方1号', '东西方2号'],
-    bluePlayers: ['南北方1号', '南北方2号'],
+    redPlayers: ['东西方队1号', '东西方队2号'],
+    bluePlayers: ['南北方队1号', '南北方队2号'],
     // 按钮禁用状态
     buttonDisabledStates: {
       red: { double: false, two: false, one: false },
@@ -44,8 +44,8 @@ Page({
     
     // 从本地存储加载队员设置
     const savedSettings = wx.getStorageSync('teamSettings');
-    let redPlayers = ['东西方1号', '东西方2号'];
-    let bluePlayers = ['南北方1号', '南北方2号'];
+    let redPlayers = ['东西方队1号', '东西方队2号'];
+    let bluePlayers = ['南北方队1号', '南北方队2号'];
     
     if (savedSettings && savedSettings.redPlayers && savedSettings.bluePlayers) {
       redPlayers = [...savedSettings.redPlayers];
@@ -1166,8 +1166,8 @@ Page({
         rule: this.data.rule,
         rounds: this.data.rounds,
         aAttempts: { ...this.data.aAttempts },
-        redPlayers: this.data.redPlayers || ['东西方1号', '东西方2号'],
-        bluePlayers: this.data.bluePlayers || ['南北方1号', '南北方2号']
+        redPlayers: this.data.redPlayers || ['东西方队1号', '东西方队2号'],
+        bluePlayers: this.data.bluePlayers || ['南北方队1号', '南北方队2号']
       };
       
       // 添加到历史记录
@@ -1341,8 +1341,8 @@ Page({
         rule: gameData.rule,
         rounds: gameData.rounds,
         aAttempts: gameData.aAttempts || { red: 0, blue: 0 },
-        redPlayers: gameData.redPlayers || ['东西方1号', '东西方2号'],
-        bluePlayers: gameData.bluePlayers || ['南北方1号', '南北方2号']
+        redPlayers: gameData.redPlayers || ['东西方队1号', '东西方队2号'],
+        bluePlayers: gameData.bluePlayers || ['南北方队1号', '南北方队2号']
       };
 
       // 保存到历史记录
