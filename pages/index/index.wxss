@@ -402,34 +402,26 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   margin: 0 !important;
 }
 
-    /* 圆形按钮样式 - 数字居中，箭头偏左 */
-    .team-btn-double,
-    .team-btn-two,
-    .team-btn-one {
-      background-color: #e74c3c !important;
-      color: white !important;
-      border-radius: 50% !important;
-      width: 62rpx !important;
-      height: 78rpx !important;
-      display: flex !important;
-      flex-direction: row !important;
-      align-items: center !important;
-      justify-content: center !important;
-      font-size: 20rpx !important;
-      font-weight: bold !important;
-      margin-bottom: 8rpx !important;
-      position: relative !important;
-      top: auto !important;
-      left: auto !important;
-      right: auto !important;
-      writing-mode: horizontal-tb !important;
-      text-orientation: initial !important;
-      letter-spacing: normal !important;
-      padding: 0 !important;
-      min-width: 0 !important;
-      opacity: 1 !important;
-      box-shadow: 0 4rpx 8rpx rgba(231, 76, 60, 0.3) !important;
-    }
+/* 确保特定按钮样式不被通用样式覆盖 */
+.team-btn-double,
+.team-btn-two,
+.team-btn-one {
+  width: 62rpx !important;
+  height: 78rpx !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: 0 4rpx 8rpx rgba(231, 76, 60, 0.3) !important;
+  position: relative !important;
+  font-size: 20rpx !important;
+  font-weight: bold !important;
+  margin-bottom: 8rpx !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
 
 /* 按钮图标样式 - 偏左 */
 .btn-icon {
@@ -455,50 +447,12 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 .team-btn-two {
   background-color: #2196F3 !important;
   color: white !important;
-  border-radius: 50% !important;
-  width: 62rpx !important;
-  height: 78rpx !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 18rpx !important;
-  font-weight: bold !important;
-  margin-bottom: 8rpx !important;
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
-  writing-mode: horizontal-tb !important;
-  text-orientation: initial !important;
-  letter-spacing: normal !important;
-  padding: 0 !important;
-  min-width: 0 !important;
-  opacity: 1 !important;
   box-shadow: 0 4rpx 8rpx rgba(33, 150, 243, 0.3) !important;
 }
 
 .team-btn-one {
   background-color: #4CAF50 !important;
   color: white !important;
-  border-radius: 50% !important;
-  width: 62rpx !important;
-  height: 78rpx !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 18rpx !important;
-  font-weight: bold !important;
-  margin-bottom: 8rpx !important;
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
-  writing-mode: horizontal-tb !important;
-  text-orientation: initial !important;
-  letter-spacing: normal !important;
-  padding: 0 !important;
-  min-width: 0 !important;
-  opacity: 1 !important;
   box-shadow: 0 4rpx 8rpx rgba(76, 175, 80, 0.3) !important;
 }
 
