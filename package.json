@@ -1,6 +1,6 @@
 {
   "name": "guandan-score-miniprogram",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "扑克双上计分小程序",
   "main": "app.js",
   "scripts": {

@@ -1,0 +1,13 @@
+{
+  "version": "v1.2.0",
+  "createdAt": "2025-09-21T15:11:45.869Z",
+  "author": "Jennifer",
+  "description": "过A制规则完善版本",
+  "features": [],
+  "dependencies": {
+    "微信小程序": ">= 8.0.0"
+  },
+  "changelog": [],
+  "status": "dev",
+  "rollbackSupported": true
+}
