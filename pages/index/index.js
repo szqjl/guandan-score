@@ -31,10 +31,11 @@ Page({
     // 队友信息
     redPlayers: ['红队1号', '红队2号'],
     bluePlayers: ['蓝队1号', '蓝队2号'],
-    // 自定义提示
-    showCustomToast: false,
-    toastMessage: '',
-    toastTeam: ''
+    // 按钮禁用状态
+    buttonDisabledStates: {
+      red: { double: false, two: false, one: false },
+      blue: { double: false, two: false, one: false }
+    }
   },
 
   onLoad() {
@@ -146,6 +147,12 @@ Page({
   // 防抖处理变量
   lastClickTime: 0,
   debounceDelay: 500,
+  
+  // 按钮禁用状态
+  buttonDisabledStates: {
+    red: { double: false, two: false, one: false },
+    blue: { double: false, two: false, one: false }
+  },
 
   // 处理等级升级
   onLevelUpgrade(e = {}) {
@@ -154,6 +161,16 @@ Page({
       return; // 防抖：忽略短时间内的重复点击
     }
     this.lastClickTime = now;
+
+    // 获取按钮信息
+    const team = e.currentTarget.dataset.team;
+    const value = parseInt(e.currentTarget.dataset.value);
+    const buttonType = value === 3 ? 'double' : value === 2 ? 'two' : 'one';
+    
+    // 检查按钮是否已被禁用
+    if (this.buttonDisabledStates[team][buttonType]) {
+      return; // 如果按钮已禁用，直接返回
+    }
     let newLevel = 0; // 在函数顶部声明并初始化
     const originalTeam = e?.currentTarget?.dataset?.team;
     const originalValue = parseInt(e?.currentTarget?.dataset?.value);
@@ -273,6 +290,21 @@ Page({
       hasUserClicked: true // 标记用户已点击按钮
     });
     
+    // 设置按钮为禁用状态
+    this.buttonDisabledStates[team][buttonType] = true;
+    this.setData({
+      [`buttonDisabledStates.${team}.${buttonType}`]: true
+    });
+    
+    // 5秒后恢复按钮状态
+    setTimeout(() => {
+      this.buttonDisabledStates[team][buttonType] = false;
+      // 更新页面数据以触发重新渲染
+      this.setData({
+        [`buttonDisabledStates.${team}.${buttonType}`]: false
+      });
+    }, 5000);
+    
     // 将更新后的比分添加到历史记录中
     const updatedScores = {
       red: selectedTeam === 'red' ? displayText : this.data.levelTexts.red,
@@ -314,8 +346,7 @@ Page({
       canUndo: currentHistory.length > 0
     });
 
-    // 显示点击提示
-    this.showClickToast(scoreIncrement, selectedTeam);
+    // 不再显示点击提示，使用按钮反馈效果代替
     
     // 检查是否达到A（过A制）
     if (this.data.rule === 'by-A') {
@@ -1339,38 +1370,4 @@ Page({
     return '25分钟';
   },
 
-  // 显示点击提示
-  showClickToast(scoreIncrement, team) {
-    let toastText = '';
-    
-    switch(scoreIncrement) {
-      case 3:
-        toastText = '升3级';
-        break;
-      case 2:
-        toastText = '升2级';
-        break;
-      case 1:
-        toastText = '升1级';
-        break;
-      default:
-        return; // 不显示提示
-    }
-    
-    // 显示自定义小提示
-    this.setData({
-      showCustomToast: true,
-      toastMessage: toastText,
-      toastTeam: team
-    });
-    
-    // 1.5秒后自动隐藏
-    setTimeout(() => {
-      this.setData({
-        showCustomToast: false,
-        toastMessage: '',
-        toastTeam: ''
-      });
-    }, 1500);
-  }
 });

@@ -5,58 +5,8 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   box-sizing: border-box;
 }
 
-/* 自定义小提示样式 */
-.custom-toast {
-  position: fixed;
-  background-color: rgba(76, 175, 80, 0.8);
-  color: white;
-  padding: 6rpx 12rpx;
-  border-radius: 6rpx;
-  font-size: 20rpx;
-  font-weight: 500;
-  z-index: 10000;
-  pointer-events: none;
-  animation: fadeInOut 1.5s ease-in-out;
-}
 
-/* 红方提示位置 */
-.red-toast {
-  top: 45%;
-  left: 25%;
-  transform: translate(-50%, -50%);
-}
 
-/* 蓝方提示位置 */
-.blue-toast {
-  top: 45%;
-  right: 25%;
-  transform: translate(50%, -50%);
-}
-
-.toast-text {
-  color: white;
-  font-size: 20rpx;
-  font-weight: 500;
-}
-
-@keyframes fadeInOut {
-  0% { 
-    opacity: 0; 
-    transform: translate(-50%, -50%) scale(0.8) translateY(20rpx); 
-  }
-  20% { 
-    opacity: 1; 
-    transform: translate(-50%, -50%) scale(1) translateY(0); 
-  }
-  80% { 
-    opacity: 1; 
-    transform: translate(-50%, -50%) scale(1) translateY(0); 
-  }
-  100% { 
-    opacity: 0; 
-    transform: translate(-50%, -50%) scale(0.8) translateY(-30rpx); 
-  }
-}
 
 /* 蓝方提示的动�?*/
 .blue-toast {
@@ -317,20 +267,30 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 }
 
 .team-label {
-  font-size: 20rpx;
+  font-size: 23rpx; /* 调整字体大小 */
   font-weight: bold;
   margin-bottom: 0rpx;
+  background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+  padding: 4rpx 8rpx; /* 调整内边距以适配35rpx总高度 */
+  border-radius: 8rpx; /* 圆角 */
+  margin-bottom: 2rpx; /* 与实时比分保持2rpx间距 */
+  display: inline-block; /* 让背景只包围文字 */
+  line-height: 1; /* 保持行高一致 */
+  width: 90rpx; /* 与实时比分宽度一致 */
+  text-align: center; /* 文字居中 */
+  box-sizing: border-box; /* 包含内边距在宽度内 */
 }
 
 .red-team .team-label {
-  color: #e74c3c;
-  margin-bottom: 3rpx;
+  color: white; /* 白色文字在红色背景上更清晰 */
+  background-color: #e74c3c; /* 红色背景 */
+  margin-bottom: 2rpx; /* 统一间距 */
 }
 
 .blue-team .team-label {
-  color: #3498db;
-  position: relative;
-  top: -3rpx;
+  color: white; /* 白色文字在蓝色背景上更清晰 */
+  background-color: #3498db; /* 蓝色背景 */
+  margin-bottom: 2rpx; /* 统一间距 */
 }
 
 /* 等级显示 - 用于控制内部显示区域的高�?*/
@@ -339,7 +299,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100rpx;
+  height: 115rpx;
   width: 100%;
   margin-top: 5rpx;
 }
@@ -370,14 +330,16 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   height: 85rpx;
 }
 
-/* 红方按钮 - 向左移动9rpx */
+/* 红方按钮 - 向左移动9rpx，下移6rpx */
 .left-buttons {
   left: -9rpx;
+  top: 6rpx;
 }
 
-/* 蓝方按钮 - 向右移动4rpx */
+/* 蓝方按钮 - 向右移动4rpx，下移6rpx */
 .right-buttons {
   left: 4rpx;
+  top: 6rpx;
 }
 
 .team-btn {
@@ -406,20 +368,66 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 .team-btn-double,
 .team-btn-two,
 .team-btn-one {
-  width: 62rpx !important;
-  height: 78rpx !important;
+  width: 70rpx !important;
+  height: 30rpx !important;
   border-radius: 50% !important;
   padding: 0 !important;
   border: none !important;
   position: relative !important;
-  font-size: 20rpx !important;
+  font-size: 16rpx !important;
   font-weight: bold !important;
-  margin-bottom: 8rpx !important;
+  margin-bottom: 15rpx !important;
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
   justify-content: center !important;
   color: white !important;
+  min-height: 30rpx !important;
+  max-height: 30rpx !important;
+  transition: all 0.2s ease !important; /* 添加过渡动画 */
+  cursor: pointer !important;
+}
+
+/* 按钮点击时的反馈效果 */
+.team-btn-double:active,
+.team-btn-two:active,
+.team-btn-one:active {
+  transform: scale(0.9) !important; /* 点击时缩小到90% */
+  opacity: 0.8 !important; /* 点击时透明度降低 */
+}
+
+/* 按钮点击成功后的反馈效果 */
+.team-btn-double.btn-clicked,
+.team-btn-two.btn-clicked,
+.team-btn-one.btn-clicked {
+  transform: scale(1.1) !important; /* 点击后放大到110% */
+  box-shadow: 0 0 20rpx rgba(0, 255, 0, 0.6) !important; /* 绿色发光效果 */
+  animation: btnSuccess 0.6s ease-out !important;
+}
+
+/* 按钮灰色禁用效果 */
+.team-btn-double.btn-disabled,
+.team-btn-two.btn-disabled,
+.team-btn-one.btn-disabled {
+  background-color: #999999 !important; /* 灰色背景 */
+  opacity: 0.6 !important; /* 降低透明度 */
+  cursor: not-allowed !important; /* 禁用光标 */
+}
+
+/* 按钮成功点击动画 */
+@keyframes btnSuccess {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4rpx 8rpx rgba(231, 76, 60, 0.3);
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 0 25rpx rgba(0, 255, 0, 0.8);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4rpx 8rpx rgba(231, 76, 60, 0.3);
+  }
 }
 
 /* 双上按钮 - 红色 */
@@ -431,23 +439,25 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 
 /* 按钮图标样式 - 偏左 */
 .btn-icon {
-  width: 12rpx !important;
-  height: 12rpx !important;
+  width: 20rpx !important;
+  height: 20rpx !important;
   margin-right: 1rpx !important;
   filter: brightness(0) invert(1) !important; /* 将图标变为白色 */
   position: absolute !important;
-  left: 8rpx !important;
+  left: 10rpx !important;
 }
 
-/* 按钮数字样式 - 居中 */
+/* 按钮数字样式 - 居中，与实时比分区分 */
 .btn-number {
   font-size: 16rpx !important;
-  font-weight: bold !important;
+  font-weight: 900 !important; /* 更粗的字体 */
   color: white !important;
   line-height: 1 !important;
   position: absolute !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.3) !important; /* 添加阴影效果 */
+  letter-spacing: 0.5rpx !important; /* 增加字母间距 */
 }
 
 .team-btn-two {
@@ -725,6 +735,9 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   background-color: #FFFFFF;
   padding: 4rpx 8rpx;
   border-radius: 4rpx;
+  display: flex;
+  align-items: center; /* 确保文本垂直居中 */
+  justify-content: center; /* 确保文本水平居中 */
 }
 
 .undo-btn {
@@ -993,7 +1006,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 .level-display {
   position: relative;
   width: 90rpx !important;
-  height: 100rpx !important;
+  height: 115rpx !important;
   border-radius: 8rpx;
   display: flex;
   align-items: center;
@@ -1052,8 +1065,8 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 .container { background-color: #0B1557; }
 
 /* 标签简约配�?*/
-.red-team .team-label { color: #FF4444; }
-.blue-team .team-label { color: #4488FF; }
+.red-team .team-label { color: white; }
+.blue-team .team-label { color: white; }
 
 /* 分数显示简约风�?*/
 .level-display { 
@@ -1075,8 +1088,8 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 
 /* 把数圆盘简约风�?*/
 .rounds-clock { 
-  background-color: #F8F8F8; 
-  border: 2rpx solid #E0E0E0; 
+  background-color: #E8F4FD; /* 浅蓝色背景，与整体界面协调 */
+  border: 2rpx solid #B3D9FF; /* 蓝色边框 */
 }
 
 /* 右侧控制面板简约风�?*/
@@ -1112,7 +1125,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 
 /* 简约风格分数显示文�?*/
 .level-display .level-display-content .level-text {
-  font-size: 46rpx !important;
+  font-size: 60rpx !important;
   line-height: 1;
   letter-spacing: 0;
   color: #FFFFFF !important;
