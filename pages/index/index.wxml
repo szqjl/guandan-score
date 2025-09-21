@@ -66,8 +66,14 @@
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">3</text>
           </view>
-          <view class="team-btn team-btn-two" data-team="red" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游3游</view>
-          <view class="team-btn team-btn-one" data-team="red" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游末游</view>
+          <view class="team-btn team-btn-two" data-team="red" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+            <image src="../../images/arrow_up.svg" class="btn-icon"></image>
+            <text class="btn-number">2</text>
+          </view>
+          <view class="team-btn team-btn-one" data-team="red" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+            <image src="../../images/arrow_up.svg" class="btn-icon"></image>
+            <text class="btn-number">1</text>
+          </view>
         </view>
         <view class="score-container">
           <text class="team-label">红方</text>
@@ -99,8 +105,14 @@
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">3</text>
           </view>
-          <view class="team-btn team-btn-two" data-team="blue" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游3游</view>
-          <view class="team-btn team-btn-one" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游末游</view>
+          <view class="team-btn team-btn-two" data-team="blue" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+            <image src="../../images/arrow_up.svg" class="btn-icon"></image>
+            <text class="btn-number">2</text>
+          </view>
+          <view class="team-btn team-btn-one" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+            <image src="../../images/arrow_up.svg" class="btn-icon"></image>
+            <text class="btn-number">1</text>
+          </view>
         </view>
       </view>
     </view>
