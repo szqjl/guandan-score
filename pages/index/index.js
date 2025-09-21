@@ -290,6 +290,11 @@ Page({
       hasUserClicked: true // 标记用户已点击按钮
     });
     
+    // 如果是过A制且升级到A1/A2/A3，更新历史记录
+    if (this.data.rule === 'by-A' && displayText.startsWith('A') && displayText !== 'A') {
+      this.updateHistoryWithA1(selectedTeam, displayText);
+    }
+    
     // 设置按钮为禁用状态
     this.buttonDisabledStates[team][buttonType] = true;
     this.setData({
@@ -365,21 +370,23 @@ Page({
           [`levelTexts.${currentTeam}`]: 'A'
         });
       } 
+      // 注意：A升A1时，只有本方点击1游末游才能升级，对方点击升级按钮不能升级
+      // 这个逻辑已移除，因为根据规则，A阶段被对方点击升级按钮不会升级到A1
       // 处理A阶段（aAttempts === 0）的升级逻辑
       else if (this.data.aAttempts[currentTeam] === 0 && currentLevel === 14) {
         // 处于A阶段，根据操作升级到A1
         if (scoreIncrement === 1) {
           // 1游末游，A升A1
+          displayText = this.getFormattedAAttempt(1);
           this.setData({
-            [`aAttempts.${currentTeam}`]: 1,
-            [`levelTexts.${currentTeam}`]: this.getFormattedAAttempt(1)
+            [`aAttempts.${currentTeam}`]: 1
           });
         } else if (scoreIncrement > 1) {
-          // 被对方点了升级按钮（双上或1游3游），A升A1
-          this.setData({
-            [`aAttempts.${currentTeam}`]: 1,
-            [`levelTexts.${currentTeam}`]: this.getFormattedAAttempt(1)
-          });
+          // 被对方点了升级按钮（双上或1游3游），A阶段不升级，保持A状态
+          displayText = 'A';
+        } else {
+          // 其他情况，保持A状态
+          displayText = 'A';
         }
       }
       // 处理已经在尝试过A的情况
@@ -423,9 +430,9 @@ Page({
           if (attempt < 3) {
             // 升级到下一个尝试阶段
             const nextAttempt = attempt + 1;
+            displayText = this.getFormattedAAttempt(nextAttempt);
             this.setData({
-              [`aAttempts.${currentTeam}`]: nextAttempt,
-              [`levelTexts.${currentTeam}`]: this.getFormattedAAttempt(nextAttempt)
+              [`aAttempts.${currentTeam}`]: nextAttempt
             });
           } else {
             // 已经是A3，第三次未过A，达到E
@@ -485,6 +492,51 @@ Page({
                 }
               });
           }
+        } else if (scoreIncrement > 1) {
+          // 被对方点了升级按钮（双上或1游3游），A1/A2/A3升级
+          if (attempt < 3) {
+            // 升级到下一个尝试阶段
+            const nextAttempt = attempt + 1;
+            displayText = this.getFormattedAAttempt(nextAttempt);
+            this.setData({
+              [`aAttempts.${currentTeam}`]: nextAttempt
+            });
+          } else {
+            // 已经是A3，被对方点击升级按钮，达到E
+            displayText = 'E';
+            this.setData({
+              [`aAttempts.${currentTeam}`]: 4
+            });
+          }
+        } else {
+          // 其他情况，保持当前状态
+          displayText = this.getFormattedAAttempt(attempt);
+        }
+      }
+      
+      // 处理对方队伍在A1/A2/A3阶段的升级逻辑（被对方点击升级按钮）
+      // 当对方处于A1/A2/A3阶段且当前方点击升级按钮时，对方升级
+      if (this.data.aAttempts[otherTeam] > 0 && 
+          this.data.aAttempts[otherTeam] < 4 && 
+          scoreIncrement > 1) {
+        const otherAttempt = this.data.aAttempts[otherTeam];
+        const nextAttempt = otherAttempt + 1;
+        if (nextAttempt < 4) {
+          // 对方升级到下一个尝试阶段
+          this.setData({
+            [`aAttempts.${otherTeam}`]: nextAttempt,
+            [`levelTexts.${otherTeam}`]: this.getFormattedAAttempt(nextAttempt)
+          });
+          // 更新历史记录
+          this.updateHistoryWithA1(otherTeam, this.getFormattedAAttempt(nextAttempt));
+        } else {
+          // 对方已经是A3，被点击升级按钮，达到E
+          this.setData({
+            [`aAttempts.${otherTeam}`]: 4,
+            [`levelTexts.${otherTeam}`]: 'E'
+          });
+          // 更新历史记录
+          this.updateHistoryWithA1(otherTeam, 'E');
         }
       }
       
@@ -722,6 +774,33 @@ Page({
   getFormattedAAttempt(attempt) {
     // 在WXML中会被渲染为上标
     return `A${attempt}`;
+  },
+
+  // 更新历史记录中的A1/A2/A3显示
+  updateHistoryWithA1(team, aText) {
+    const currentHistory = [...this.data.historyScores];
+    const index = this.data.rounds;
+    
+    // 如果当前把数已有记录，更新它
+    if (index < currentHistory.length) {
+      currentHistory[index] = {
+        ...currentHistory[index],
+        [team]: aText
+      };
+    } else {
+      // 如果是新把数，添加新记录
+      const updatedScores = {
+        red: team === 'red' ? aText : this.data.levelTexts.red,
+        blue: team === 'blue' ? aText : this.data.levelTexts.blue
+      };
+      currentHistory.push(updatedScores);
+    }
+    
+    // 更新历史记录
+    this.setData({
+      historyScores: currentHistory,
+      canUndo: currentHistory.length > 0
+    });
   },
   
   // 将等级数字转换为显示文本
