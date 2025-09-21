@@ -779,7 +779,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   box-shadow: 0 1rpx 1rpx rgba(0, 0, 0, 0.1);
   border: 1rpx solid #ddd;
   background-color: #FFFFFF; /* 白色背景 */
-  margin-top: 16rpx;
+  margin-top: 24rpx;
   margin-bottom: 0;
   margin-left: 0; /* 移除左边距，让表格与按钮对齐 */
   margin-right: 0; /* 移除右边距，让表格与按钮对齐 */
