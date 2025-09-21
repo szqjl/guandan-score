@@ -1,0 +1,25 @@
+{
+  "version": "v1.0.0-stable",
+  "createdAt": "2024-09-21T10:00:00Z",
+  "author": "Jennifer",
+  "description": "基础核心功能版",
+  "features": [
+    "游戏计分功能",
+    "历史记录管理", 
+    "队伍设置页面",
+    "导航按钮系统"
+  ],
+  "dependencies": {
+    "微信小程序": ">= 8.0.0"
+  },
+  "changelog": [
+    "新增队伍设置页面",
+    "完善导航按钮系统",
+    "优化页面布局，压缩高度和间距",
+    "实现队员信息本地存储功能",
+    "支持队员姓名自定义",
+    "添加重置功能"
+  ],
+  "status": "stable",
+  "rollbackSupported": true
+}
