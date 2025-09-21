@@ -9,8 +9,8 @@ Page({
     rule: 'by-rounds',
     maxRounds: 10,
     rounds: 0,
-    canUndo: false,
-    hasUserClicked: false,
+  canUndo: false,
+  hasUserClicked: false,
     showRedIcon: false,
     showBlueIcon: false,
     // 新增过A制相关状态
@@ -41,23 +41,11 @@ Page({
     // 快速初始化 - 减少复杂处理和日志输出，提高启动速度
     const forceShowTrialBadge = true; // 当前设置为true，强制显示体验版标识用于测试
     
-    // 从本地存储加载队员设置
-    const savedSettings = wx.getStorageSync('teamSettings');
-    let redPlayers = ['红队1号', '红队2号'];
-    let bluePlayers = ['蓝队1号', '蓝队2号'];
-    
-    if (savedSettings && savedSettings.redPlayers && savedSettings.bluePlayers) {
-      redPlayers = [...savedSettings.redPlayers];
-      bluePlayers = [...savedSettings.bluePlayers];
-    }
-    
     // 直接设置默认值，避免复杂的应用实例获取和try-catch处理
     this.setData({
       isTrial: forceShowTrialBadge,
       isDevelop: false,
-      envVersion: 'unknown',
-      redPlayers: redPlayers,
-      bluePlayers: bluePlayers
+      envVersion: 'unknown'
     });
     
     // 页面加载时检查是否有保存的游戏数据
@@ -541,10 +529,10 @@ Page({
             }
           }
         });
-    } else {
+      } else {
         // 未达到最大把数时，检查是否追不上了
         const uncatchableResult = this.checkUncatchable();
-      if (uncatchableResult.isUncatchable) {
+        if (uncatchableResult.isUncatchable) {
           wx.showModal({
             title: '追不上了',
             content: `${uncatchableResult.leadingTeam === 'red' ? '红方' : '蓝方'}领先优势过大，即使剩余把数全胜也无法追上！`,
@@ -1085,12 +1073,6 @@ Page({
     });
   },
 
-  onShowSettings() {
-    wx.navigateTo({
-      url: '/pages/team-setting/index'
-    });
-  },
-
   // 保存游戏到历史记录
   saveGameToHistory() {
     try {
@@ -1246,10 +1228,10 @@ Page({
           } else {
             // 用户选择结束上一局
             this.endPreviousGame(savedGameData);
-    }
-  }
-});
-
+          }
+        }
+      });
+      
     } catch (error) {
     }
   },

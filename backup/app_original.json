@@ -1,8 +1,7 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/history/index",
-    "pages/team-setting/index"
+    "pages/history/index"
   ],
   "window": {
     "navigationBarTitleText": "扑克双上计分",
