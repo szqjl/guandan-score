@@ -62,7 +62,7 @@
       <view class="team-layout">
         <!-- 红方独立升级按钮组 - 放在左侧 -->
         <view class="team-buttons left-buttons">
-          <view class="team-btn team-btn-double" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">双上</view>
+          <view class="team-btn team-btn-double" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">↑ 3</view>
           <view class="team-btn team-btn-two" data-team="red" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游3游</view>
           <view class="team-btn team-btn-one" data-team="red" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游末游</view>
         </view>
@@ -92,7 +92,7 @@
         </view>
         <!-- 蓝方独立升级按钮组 - 放在右侧 -->
         <view class="team-buttons right-buttons">
-          <view class="team-btn team-btn-double" data-team="blue" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">双上</view>
+          <view class="team-btn team-btn-double" data-team="blue" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">↑ 3</view>
           <view class="team-btn team-btn-two" data-team="blue" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游3游</view>
           <view class="team-btn team-btn-one" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">1游末游</view>
         </view>
