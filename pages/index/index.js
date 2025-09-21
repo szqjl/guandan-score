@@ -38,7 +38,31 @@ Page({
     }
   },
 
+  onShow() {
+    // 每次显示页面时确保屏幕常亮
+    wx.setKeepScreenOn({
+      keepScreenOn: true,
+      success: () => {
+        console.log('屏幕常亮设置成功');
+      },
+      fail: (err) => {
+        console.error('屏幕常亮设置失败:', err);
+      }
+    });
+  },
+
   onLoad() {
+    // 保持屏幕常亮，防止游戏过程中熄屏
+    wx.setKeepScreenOn({
+      keepScreenOn: true,
+      success: () => {
+        console.log('屏幕常亮设置成功');
+      },
+      fail: (err) => {
+        console.error('屏幕常亮设置失败:', err);
+      }
+    });
+
     // 快速初始化 - 减少复杂处理和日志输出，提高启动速度
     const forceShowTrialBadge = true; // 当前设置为true，强制显示体验版标识用于测试
     
