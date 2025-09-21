@@ -1,0 +1,477 @@
+/* 历史记录页面样式 */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20rpx;
+}
+
+/* 统计概览区 */
+.stats-section {
+  background: white;
+  border-radius: 12rpx;
+  padding: 15rpx 20rpx;
+  margin-bottom: 15rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.stats-header {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.stats-title {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  flex: 1;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-number {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #0B1557;
+  margin-bottom: 4rpx;
+}
+
+.stat-label {
+  font-size: 20rpx;
+  color: #666;
+}
+
+/* 历史局列表 */
+.history-section {
+  background: white;
+  border-radius: 12rpx;
+  padding: 15rpx 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.history-title {
+  font-size: 20rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.clear-btn {
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 3rpx;
+  padding: 4rpx 8rpx;
+  font-size: 16rpx;
+  height: 24rpx;
+  line-height: 24rpx;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  padding: 6rpx 12rpx;
+  background: #f8f9fa;
+  border-radius: 4rpx;
+  border-left: 2rpx solid #0B1557;
+}
+
+.game-info {
+  flex: 0 0 auto;
+  margin-right: 12rpx;
+  width: 80rpx;
+}
+
+.game-date {
+  font-size: 16rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0rpx;
+  line-height: 1.2;
+}
+
+.game-time {
+  font-size: 14rpx;
+  font-weight: 400;
+  color: #666;
+  margin-top: 0rpx;
+  line-height: 1.2;
+}
+
+.team-info {
+  flex: 1;
+  margin-right: 10rpx;
+  display: flex;
+  gap: 8rpx;
+}
+
+.team-red, .team-blue {
+  flex: 1;
+  text-align: left;
+}
+
+.team-container {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.team-label {
+  font-size: 12rpx;
+  font-weight: 500;
+  line-height: 1.1;
+  margin: 0rpx;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.team-red .team-label {
+  color: #d32f2f;
+}
+
+.team-blue .team-label {
+  color: #1976d2;
+}
+
+.team-players {
+  display: flex;
+  flex-direction: column;
+  gap: 0rpx;
+  flex: 1;
+}
+
+.player-name {
+  font-size: 12rpx;
+  font-weight: 400;
+  color: #666;
+  line-height: 1.1;
+  margin: 0rpx;
+}
+
+
+.game-result {
+  flex: 1;
+  text-align: center;
+  margin-right: 10rpx;
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+}
+
+.score-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score {
+  font-size: 18rpx;
+  font-weight: bold;
+  padding: 2rpx 8rpx;
+  border-radius: 3rpx;
+  margin: 0 4rpx;
+}
+
+.score.red {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.score.blue {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.vs {
+  font-size: 18rpx;
+  color: #666;
+  margin: 0 6rpx;
+}
+
+.winner {
+  font-size: 16rpx;
+  font-weight: 500;
+  padding: 1rpx 6rpx;
+  border-radius: 2rpx;
+  white-space: nowrap;
+}
+
+.winner.red {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.winner.blue {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.view-detail {
+  padding: 6rpx 12rpx;
+  background-color: #0B1557;
+  color: white;
+  border-radius: 4rpx;
+  font-size: 18rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 60rpx 20rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.empty-desc {
+  font-size: 24rpx;
+  color: #ccc;
+}
+
+/* 详情弹窗 */
+.detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10rpx;
+}
+
+.detail-content {
+  background: white;
+  border-radius: 8rpx;
+  width: 100%;
+  max-height: 95vh;
+  overflow-y: auto;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5rpx 10rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.detail-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.close-btn {
+  font-size: 40rpx;
+  color: #999;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.detail-scores {
+  padding: 5rpx 10rpx;
+}
+
+.scores-title {
+  font-size: 16rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5rpx;
+}
+
+.scores-table {
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+/* 行标题列样式 */
+.row-header-column {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  width: 35rpx;
+  background-color: #4CAF50;
+}
+
+.row-header-cell {
+  padding: 2rpx;
+  text-align: center;
+  font-size: 15rpx;
+  font-weight: bold;
+  color: #fff;
+  background-color: #4CAF50;
+  border-bottom: 1rpx solid #45a049;
+  border-right: 1rpx solid #45a049;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30rpx;
+  width: 35rpx;
+  box-sizing: border-box;
+}
+
+/* 把数行标题 - 绿色 */
+.row-header-cell:first-child {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+/* 红方行标题 - 红色 */
+.row-header-cell:nth-child(2) {
+  background-color: #f44336;
+  color: #fff;
+  border-bottom: 1rpx solid #d32f2f;
+  border-right: 1rpx solid #d32f2f;
+}
+
+/* 蓝方行标题 - 蓝色 */
+.row-header-cell:nth-child(3) {
+  background-color: #2196F3;
+  color: #fff;
+  border-bottom: 1rpx solid #1976d2;
+  border-right: 1rpx solid #1976d2;
+}
+
+.row-header-cell:last-child {
+  border-bottom: none;
+}
+
+.header-cell {
+  flex: 0 0 auto;
+  padding: 2rpx;
+  text-align: center;
+  font-size: 15rpx;
+  font-weight: bold;
+  color: #fff;
+  background-color: #4CAF50;
+  border-right: 1rpx solid #45a049;
+  width: 35rpx;
+  height: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1rpx solid #ddd;
+}
+
+.table-data-container {
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+  flex: 1;
+  background-color: white;
+  max-width: calc(100vw - 200rpx);
+}
+
+.table-data-container .table-row {
+  display: flex;
+  min-width: max-content;
+  background-color: white;
+  height: 30rpx;
+  box-sizing: border-box;
+  border-bottom: 1rpx solid #ddd;
+}
+
+/* 把数行样式 - 绿色 */
+.table-data-container .table-row:first-child {
+  background-color: #e8f5e8;
+}
+
+/* 红方行样式 - 红色 */
+.table-data-container .table-row:nth-child(2) {
+  background-color: #ffeaea;
+}
+
+/* 蓝方行样式 - 蓝色 */
+.table-data-container .table-row:nth-child(3) {
+  background-color: #eaf2ff;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-cell {
+  flex: 0 0 auto;
+  padding: 2rpx;
+  text-align: center;
+  font-size: 12rpx;
+  color: #333;
+  border-right: 1rpx solid #ddd;
+  width: 35rpx;
+  height: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* 把数数据项加粗 */
+.table-data-container .table-row:first-child .table-cell {
+  font-weight: bold;
+}
+
+
+
+.table-cell:last-child {
+  border-right: 1rpx solid #ddd;
+}
+
+.table-cell.red {
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+.table-cell.blue {
+  color: #1976d2;
+  font-weight: 500;
+}
