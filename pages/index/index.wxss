@@ -560,12 +560,12 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 
 /* 适配小尺寸控制面板的内部元素样式 */
 .right-control-panel .rule-section {
-  padding: 8rpx 12rpx;
+  padding: 6rpx 10rpx;
   width: 100%;
   min-width: 0;
-  border-radius: 8rpx;
-  margin: 6rpx 0;
-  box-shadow: 0 3rpx 8rpx rgba(0, 0, 0, 0.15);
+  border-radius: 6rpx;
+  margin: 4rpx 0 8rpx 0;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
   position: relative;
   left: 0rpx;
   font-family: 'Microsoft YaHei', '微软雅黑', 'Segoe UI', 'Noto Sans SC', Arial, sans-serif;
@@ -578,8 +578,8 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 .right-control-panel .radio-group {
   display: flex;
   flex-wrap: nowrap;
-  margin: 3rpx 0;
-  gap: 2rpx;
+  margin: 2rpx 0;
+  gap: 1rpx;
   align-items: center;
 }
 
@@ -599,21 +599,49 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   text-align: center;
 }
 
+.right-control-panel .start-btn {
+  background-color: #6BBF6B;
+  color: #fff;
+  border: none;
+  border-radius: 4rpx;
+  padding: 8rpx 12rpx;
+  font-size: 14rpx;
+  margin: -9rpx 0 8rpx 0;
+  width: 100%;
+  margin-left: 0rpx;
+  display: block;
+  box-shadow: none !important;
+  transform: none !important;
+  outline: none;
+  position: relative;
+  z-index: 1;
+}
+
+.right-control-panel .start-btn[disabled] {
+  background-color: #9E9E9E;
+  color: #fff;
+}
+
 .right-control-panel .end-btn {
-  font-size: 15rpx;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 4rpx;
+  padding: 8rpx 12rpx;
+  font-size: 14rpx;
   margin: 4rpx 0;
-  padding: 12rpx 0;
-  box-shadow: 0 3rpx 8rpx rgba(0, 0, 0, 0.15);
-  width: 80%;
-  margin-left: 13rpx;
+  width: 100%;
+  margin-left: 0rpx;
+  box-shadow: 0 2rpx 4rpx rgba(76, 175, 80, 0.2);
+  display: block;
 }
 
 /* 规则选择 - 简约风�?*/
   .rule-section {
     background-color: #F8F8F8;
-    padding: 12rpx 16rpx;
-    border-radius: 8rpx;
-    margin: 15rpx 0;
+    padding: 8rpx 12rpx;
+    border-radius: 6rpx;
+    margin: 8rpx 0;
     box-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.1);
     width: 100%;
     min-width: 0;
@@ -622,7 +650,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   }
 
   .rule-section text {
-    font-size: 20rpx;
+    font-size: 18rpx;
     font-weight: 500;
     color: #333;
   }
@@ -630,14 +658,14 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   .rule-section radio-group {
     display: flex;
     flex-direction: column;
-    margin: 10rpx 0;
-    gap: 6rpx;
+    margin: 6rpx 0;
+    gap: 4rpx;
   }
 
   .rule-section label {
     display: flex;
     align-items: center;
-    font-size: 16rpx;
+    font-size: 14rpx;
     color: #333;
     margin-right: 0;
   }
@@ -649,12 +677,41 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 }
 
   .rule-section .picker {
-    padding: 6rpx 10rpx;
+    padding: 4rpx 8rpx;
     border: 1rpx solid #E0E0E0;
-    border-radius: 4rpx;
-    font-size: 14rpx;
+    border-radius: 3rpx;
+    font-size: 12rpx;
     color: #333;
     background-color: #ffffff;
+  }
+
+  /* 规则锁定状态样式 */
+  .rule-section[disabled] {
+    opacity: 0.6;
+    background-color: #F0F0F0;
+    border-color: #D0D0D0;
+  }
+
+  .rule-section[disabled] radio-group {
+    pointer-events: none;
+  }
+
+  .rule-section[disabled] label {
+    color: #999;
+  }
+
+  .rule-section[disabled] .picker {
+    background-color: #F5F5F5;
+    color: #999;
+    border-color: #D0D0D0;
+  }
+
+  .rule-locked-tip {
+    font-size: 12rpx;
+    color: #FF6B6B;
+    margin-top: 5rpx;
+    display: block;
+    text-align: center;
   }
 
   .rounds-selector text {
@@ -673,19 +730,6 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   }
 
   /* 结束按钮 - 简约风�?*/
-  .end-btn {
-    background-color: #4488FF;
-    color: white;
-    font-size: 18rpx;
-    font-weight: 500;
-    margin: 12rpx 0;
-    padding: 12rpx 0;
-    border-radius: 6rpx;
-    width: 100%;
-    align-self: stretch;
-    box-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.1);
-    border: 1rpx solid #4488FF;
-  }
 
 /* 比分历史表格样式优化 - 缩小文字和所占空�?*/
 .history-header {
@@ -1096,17 +1140,6 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 .rule-section { 
   background-color: #F8F8F8; 
   border: 1rpx solid #E0E0E0; 
-}
-.end-btn {
-  background-color: #4488FF;
-  color: #fff;
-  border: 1rpx solid #4488FF;
-  border-radius: 4rpx;
-  padding: 8rpx 12rpx;
-  font-size: 14rpx;
-  font-weight: normal;
-  margin: 6rpx 0;
-  box-shadow: none;
 }
 
 /* 表格简约风�?*/

@@ -53,15 +53,15 @@
       <view class="team-layout">
         <!-- 红方独立升级按钮组 - 放在左侧 -->
         <view class="team-buttons left-buttons">
-          <view class="team-btn team-btn-double {{buttonDisabledStates.red.double ? 'btn-disabled' : ''}}" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-double {{buttonDisabledStates.red.double ? 'btn-disabled' : ''}}" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">3</text>
           </view>
-          <view class="team-btn team-btn-two {{buttonDisabledStates.red.two ? 'btn-disabled' : ''}}" data-team="red" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-two {{buttonDisabledStates.red.two ? 'btn-disabled' : ''}}" data-team="red" data-value="2" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">2</text>
           </view>
-          <view class="team-btn team-btn-one {{buttonDisabledStates.red.one ? 'btn-disabled' : ''}}" data-team="red" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-one {{buttonDisabledStates.red.one ? 'btn-disabled' : ''}}" data-team="red" data-value="1" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">1</text>
           </view>
@@ -92,15 +92,15 @@
         </view>
         <!-- 蓝方独立升级按钮组 - 放在右侧 -->
         <view class="team-buttons right-buttons">
-          <view class="team-btn team-btn-double {{buttonDisabledStates.blue.double ? 'btn-disabled' : ''}}" data-team="blue" data-value="3" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-double {{buttonDisabledStates.blue.double ? 'btn-disabled' : ''}}" data-team="blue" data-value="3" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">3</text>
           </view>
-          <view class="team-btn team-btn-two {{buttonDisabledStates.blue.two ? 'btn-disabled' : ''}}" data-team="blue" data-value="2" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-two {{buttonDisabledStates.blue.two ? 'btn-disabled' : ''}}" data-team="blue" data-value="2" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">2</text>
           </view>
-          <view class="team-btn team-btn-one {{buttonDisabledStates.blue.one ? 'btn-disabled' : ''}}" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{gameEnded}}">
+          <view class="team-btn team-btn-one {{buttonDisabledStates.blue.one ? 'btn-disabled' : ''}}" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">1</text>
           </view>
@@ -203,15 +203,20 @@
 
   <!-- 右侧控制面板 -->
   <view class="right-control-panel">
+    <!-- 开始游戏按钮 -->
+    <button class="start-btn" bindtap="onStartGame" disabled="{{gameStarted || gameEnded}}">
+      {{gameStarted ? '游戏进行中' : '开始游戏'}}
+    </button>
+
     <!-- 规则选择 -->
     <view class="rule-section">
       <text>规则：</text>
-      <radio-group bindchange="onRuleChange">
-        <label><radio value="by-A" checked="{{rule === 'by-A'}}"/>过A</label>
+      <radio-group bindchange="onRuleChange" disabled="{{gameStarted || gameEnded}}">
+        <label><radio value="by-A" checked="{{rule === 'by-A'}}" disabled="{{gameStarted || gameEnded}}"/>过A</label>
         <label>
-          <radio value="by-rounds" checked="{{rule === 'by-rounds'}}"/>把数
+          <radio value="by-rounds" checked="{{rule === 'by-rounds'}}" disabled="{{gameStarted || gameEnded}}"/>把数
           <view wx:if="{{rule === 'by-rounds'}}" class="rounds-selector">
-            <picker range="{{[5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]}}" value="{{maxRounds === 5 ? 0 : maxRounds === 6 ? 1 : maxRounds === 7 ? 2 : maxRounds === 8 ? 3 : maxRounds === 9 ? 4 : maxRounds === 10 ? 5 : maxRounds === 11 ? 6 : maxRounds === 12 ? 7 : maxRounds === 13 ? 8 : maxRounds === 14 ? 9 : 10}}" bindchange="onMaxRoundsChange">
+            <picker range="{{[5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]}}" value="{{maxRounds === 5 ? 0 : maxRounds === 6 ? 1 : maxRounds === 7 ? 2 : maxRounds === 8 ? 3 : maxRounds === 9 ? 4 : maxRounds === 10 ? 5 : maxRounds === 11 ? 6 : maxRounds === 12 ? 7 : maxRounds === 13 ? 8 : maxRounds === 14 ? 9 : 10}}" bindchange="onMaxRoundsChange" disabled="{{gameStarted || gameEnded}}">
               <view class="picker">{{maxRounds}}</view>
             </picker>
           </view>

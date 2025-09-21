@@ -20,6 +20,8 @@ Page({
     },
     // 游戏是否已结束
     gameEnded: false,
+    // 游戏是否已开始
+    gameStarted: false,
     // 游戏是否已保存到历史记录
     gameSavedToHistory: false,
     // 是否可以恢复游戏
@@ -177,6 +179,16 @@ Page({
 
   // 处理等级升级
   onLevelUpgrade(e = {}) {
+    // 如果游戏还没开始，禁止点击升级按钮
+    if (!this.data.gameStarted) {
+      wx.showToast({
+        title: '请先点击开始游戏',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+
     const now = Date.now();
     if (now - this.lastClickTime < this.debounceDelay) {
       return; // 防抖：忽略短时间内的重复点击
@@ -192,31 +204,27 @@ Page({
     if (this.buttonDisabledStates[team][buttonType]) {
       return; // 如果按钮已禁用，直接返回
     }
-    let newLevel = 0; // 在函数顶部声明并初始化
-    const originalTeam = e?.currentTarget?.dataset?.team;
-    const originalValue = parseInt(e?.currentTarget?.dataset?.value);
 
     // 控制图标显示状态
-    if (originalTeam === 'red') {
+    if (team === 'red') {
       // 添加新记录后更新撤销按钮状态
       this.setData({
         showRedIcon: true,
         showBlueIcon: false
       });
-    } else if (originalTeam === 'blue') {
+    } else if (team === 'blue') {
       this.setData({
         showBlueIcon: true,
         showRedIcon: false
       });
     }
-    const { team: selectedTeam = 'red', value: levelValue = 'increase' } = e?.currentTarget?.dataset || {};
     let currentLevel = 0;
-    const currentText = this.data.levelTexts[selectedTeam] || '2'; // 设置默认文本
+    const currentText = this.data.levelTexts[team] || '2'; // 设置默认文本
     currentLevel = this.textToLevel(currentText);
     if (isNaN(currentLevel)) currentLevel = 2; // 确保currentLevel为有效数字
-    newLevel = currentLevel;
+    let newLevel = currentLevel;
     // 使用按钮传递的数值增加分数
-    const scoreIncrement = parseInt(levelValue) || 0;
+    const scoreIncrement = parseInt(value) || 0;
     newLevel = currentLevel + scoreIncrement;
     // 确保等级不低于2
     if (newLevel < 2) newLevel = 2;
@@ -260,7 +268,7 @@ Page({
             } else if (scoreIncrement > 1) {
               // 2. 被对方点了升级按钮（双上或1游3游），且当前处于A/A1/A2阶段
               // 检查对方是否处于A阶段
-              const otherTeam = selectedTeam === 'red' ? 'blue' : 'red';
+              const otherTeam = team === 'red' ? 'blue' : 'red';
               const otherLevel = this.textToLevel(this.data.levelTexts[otherTeam]);
               const otherText = this.data.levelTexts[otherTeam];
               
@@ -306,14 +314,9 @@ Page({
           }
         }
     
-    this.setData({
-      [`levelTexts.${selectedTeam}`]: displayText,
-      hasUserClicked: true // 标记用户已点击按钮
-    });
-    
     // 如果是过A制且升级到A1/A2/A3，更新历史记录
     if (this.data.rule === 'by-A' && displayText.startsWith('A') && displayText !== 'A') {
-      this.updateHistoryWithA1(selectedTeam, displayText);
+      this.updateHistoryWithA1(team, displayText);
     }
     
     // 设置按钮为禁用状态
@@ -333,8 +336,8 @@ Page({
     
     // 将更新后的比分添加到历史记录中
     const updatedScores = {
-      red: selectedTeam === 'red' ? displayText : this.data.levelTexts.red,
-      blue: selectedTeam === 'blue' ? displayText : this.data.levelTexts.blue
+      red: team === 'red' ? displayText : this.data.levelTexts.red,
+      blue: team === 'blue' ? displayText : this.data.levelTexts.blue
     };
     
     // 获取当前历史记录数组
@@ -377,11 +380,11 @@ Page({
     // 检查是否达到A（过A制）
     if (this.data.rule === 'by-A') {
       // 处理过A制的核心逻辑
-      const currentTeam = selectedTeam;
+      const currentTeam = team;
       const otherTeam = currentTeam === 'red' ? 'blue' : 'red';
       const currentAttempt = this.data.aAttempts[currentTeam];
       const otherAttempt = this.data.aAttempts[otherTeam];
-      const scoreIncrement = parseInt(levelValue) || 0;
+      const scoreIncrement = parseInt(value) || 0;
       
       // 检查是否刚刚达到A
       if (currentLevel < 14 && newLevel === 14 && currentAttempt === 0) {
@@ -835,10 +838,42 @@ Page({
         }
       }
     }
+    
+    // 最后更新实时比分
+    this.setData({
+      [`levelTexts.${team}`]: displayText
+    });
+  },
+
+  // 开始游戏
+  onStartGame() {
+    if (this.data.gameStarted || this.data.gameEnded) {
+      return;
+    }
+    
+    this.setData({
+      gameStarted: true
+    });
+    
+    wx.showToast({
+      title: '游戏开始！',
+      icon: 'success',
+      duration: 1500
+    });
   },
 
   // 处理规则选择
   onRuleChange(e) {
+    // 如果游戏已经开始（游戏已开始或游戏已结束），禁止更改规则
+    if (this.data.gameStarted || this.data.gameEnded) {
+      wx.showToast({
+        title: '请先点击开始游戏',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+    
     const newRule = e.detail.value;
     // 保存当前的分数文本
     const currentRedText = this.data.levelTexts.red;
@@ -1316,7 +1351,8 @@ Page({
                 red: 0,
                 blue: 0
               },
-              // 重置游戏结束状态
+              // 重置游戏状态
+              gameStarted: false,
               gameEnded: false,
               gameSavedToHistory: false,
               canUndo: false,
