@@ -591,41 +591,31 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   white-space: nowrap;
 }
 
-/* 把数选择器按钮样式 */
-.rounds-picker-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4rpx 8rpx;
-  background-color: #f5f5f5;
-  border: 1rpx solid #ddd;
-  border-radius: 4rpx;
-  margin-top: 4rpx;
-  min-width: 50rpx;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.rounds-picker-btn:active {
-  background-color: #e0e0e0;
-  transform: scale(0.98);
-}
-
-.rounds-picker-text {
-  font-size: 10rpx;
+/* 把数显示文本样式 */
+.rounds-display-text {
+  font-size: 9rpx;
   color: #333;
   font-weight: 500;
+  margin-top: 2rpx;
+  margin-left: 3rpx;
+  display: inline-block;
+  cursor: pointer;
+  padding: 2rpx 6rpx;
+  border: 1rpx solid;
+  border-color: #bbb #fff #fff #bbb;
+  border-radius: 3rpx;
+  background-color: #fff;
+  transition: all 0.2s ease;
+  min-width: 18rpx;
+  text-align: center;
+  box-shadow: inset 1rpx 1rpx 1rpx rgba(0, 0, 0, 0.1);
 }
 
-.rounds-picker-arrow {
-  font-size: 8rpx;
-  color: #666;
-  margin-left: 4rpx;
-  transition: transform 0.2s ease;
-}
-
-.rounds-picker-btn:active .rounds-picker-arrow {
-  transform: rotate(180deg);
+.rounds-display-text:active {
+  background-color: #f0f0f0;
+  border-color: #999 #ccc #ccc #999;
+  transform: scale(0.98);
+  box-shadow: inset 2rpx 2rpx 3rpx rgba(0, 0, 0, 0.15);
 }
 
 /* 把数选择弹窗样式 */
@@ -635,7 +625,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1000;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -647,8 +637,8 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4rpx);
+  background-color: #000;
+  backdrop-filter: none;
 }
 
 .rounds-picker-content {
@@ -660,6 +650,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   max-height: 80%;
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
   animation: roundsPickerSlideIn 0.3s ease-out;
+  z-index: 10000;
 }
 
 @keyframes roundsPickerSlideIn {
@@ -676,15 +667,16 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 .rounds-picker-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 24rpx 32rpx 16rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  justify-content: center;
+  padding: 16rpx 24rpx 12rpx;
+  background-color: #1e40af;
+  border-radius: 16rpx 16rpx 0 0;
 }
 
 .rounds-picker-title {
-  font-size: 32rpx;
+  font-size: 24rpx;
   font-weight: 600;
-  color: #333;
+  color: #fff;
 }
 
 .rounds-picker-close {
@@ -712,20 +704,22 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 
 .rounds-picker-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16rpx;
-  padding: 24rpx 32rpx;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16rpx 12rpx;
+  padding: 12rpx 16rpx;
+  background-color: #e9ecef;
 }
 
 .rounds-picker-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 80rpx;
+  height: 30rpx;
+  width: 60rpx;
   background-color: #f8f9fa;
-  border: 2rpx solid #e9ecef;
-  border-radius: 12rpx;
-  font-size: 28rpx;
+  border: none;
+  border-radius: 4rpx;
+  font-size: 16rpx;
   font-weight: 500;
   color: #495057;
   cursor: pointer;
@@ -739,38 +733,41 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 
 .rounds-picker-item.selected {
   background-color: #007bff;
-  border-color: #007bff;
   color: #fff;
   box-shadow: 0 4rpx 12rpx rgba(0, 123, 255, 0.3);
 }
 
 .rounds-picker-item:hover {
   background-color: #e9ecef;
-  border-color: #dee2e6;
 }
 
 .rounds-picker-item.selected:hover {
   background-color: #0056b3;
-  border-color: #0056b3;
 }
 
 .rounds-picker-footer {
   display: flex;
-  gap: 16rpx;
-  padding: 16rpx 32rpx 24rpx;
+  gap: 12rpx;
+  padding: 12rpx 24rpx 16rpx;
   border-top: 1rpx solid #f0f0f0;
+  background-color: #fff;
+  border-radius: 0 0 16rpx 16rpx;
 }
 
 .rounds-picker-confirm,
 .rounds-picker-cancel {
   flex: 1;
-  height: 72rpx;
-  border-radius: 12rpx;
-  font-size: 28rpx;
+  height: 56rpx;
+  border-radius: 8rpx;
+  font-size: 20rpx;
   font-weight: 500;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .rounds-picker-confirm {

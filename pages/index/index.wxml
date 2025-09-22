@@ -216,10 +216,7 @@
         <label>
           <radio value="by-rounds" checked="{{rule === 'by-rounds'}}" disabled="{{gameStarted}}"/>把数
           <view wx:if="{{rule === 'by-rounds'}}" class="rounds-selector">
-            <view class="rounds-picker-btn" bindtap="onShowRoundsPicker" disabled="{{gameStarted}}">
-              <text class="rounds-picker-text">{{maxRounds}}把</text>
-              <text class="rounds-picker-arrow">▼</text>
-            </view>
+            <text class="rounds-display-text" bindtap="onShowRoundsPicker">{{maxRounds}}</text>
           </view>
         </label>
       </radio-group>
@@ -235,32 +232,25 @@
     <view class="rounds-picker-content">
       <view class="rounds-picker-header">
         <text class="rounds-picker-title">选择最大把数</text>
-        <view class="rounds-picker-close" bindtap="onCloseRoundsPicker">
-          <text class="close-icon">×</text>
-        </view>
       </view>
       <view class="rounds-picker-grid">
-        <view class="rounds-picker-item {{maxRounds === 5 ? 'selected' : ''}}" 
-              data-value="5" bindtap="onSelectRounds">5把</view>
-        <view class="rounds-picker-item {{maxRounds === 6 ? 'selected' : ''}}" 
-              data-value="6" bindtap="onSelectRounds">6把</view>
-        <view class="rounds-picker-item {{maxRounds === 7 ? 'selected' : ''}}" 
+        <view class="rounds-picker-item {{tempMaxRounds === 7 ? 'selected' : ''}}" 
               data-value="7" bindtap="onSelectRounds">7把</view>
-        <view class="rounds-picker-item {{maxRounds === 8 ? 'selected' : ''}}" 
+        <view class="rounds-picker-item {{tempMaxRounds === 8 ? 'selected' : ''}}" 
               data-value="8" bindtap="onSelectRounds">8把</view>
-        <view class="rounds-picker-item {{maxRounds === 9 ? 'selected' : ''}}" 
+        <view class="rounds-picker-item {{tempMaxRounds === 9 ? 'selected' : ''}}" 
               data-value="9" bindtap="onSelectRounds">9把</view>
-        <view class="rounds-picker-item {{maxRounds === 10 ? 'selected' : ''}}" 
+        <view class="rounds-picker-item {{tempMaxRounds === 10 ? 'selected' : ''}}" 
               data-value="10" bindtap="onSelectRounds">10把</view>
-        <view class="rounds-picker-item {{maxRounds === 11 ? 'selected' : ''}}" 
+        <view class="rounds-picker-item {{tempMaxRounds === 11 ? 'selected' : ''}}" 
               data-value="11" bindtap="onSelectRounds">11把</view>
-        <view class="rounds-picker-item {{maxRounds === 12 ? 'selected' : ''}}" 
+        <view class="rounds-picker-item {{tempMaxRounds === 12 ? 'selected' : ''}}" 
               data-value="12" bindtap="onSelectRounds">12把</view>
-        <view class="rounds-picker-item {{maxRounds === 13 ? 'selected' : ''}}" 
+        <view class="rounds-picker-item {{tempMaxRounds === 13 ? 'selected' : ''}}" 
               data-value="13" bindtap="onSelectRounds">13把</view>
-        <view class="rounds-picker-item {{maxRounds === 14 ? 'selected' : ''}}" 
+        <view class="rounds-picker-item {{tempMaxRounds === 14 ? 'selected' : ''}}" 
               data-value="14" bindtap="onSelectRounds">14把</view>
-        <view class="rounds-picker-item {{maxRounds === 15 ? 'selected' : ''}}" 
+        <view class="rounds-picker-item {{tempMaxRounds === 15 ? 'selected' : ''}}" 
               data-value="15" bindtap="onSelectRounds">15把</view>
       </view>
       <view class="rounds-picker-footer">
