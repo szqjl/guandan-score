@@ -1,5 +1,5 @@
 {
-  "version": "v1.2.2",
+  "version": "v2.0.1",
   "createdAt": "2024-12-19T00:00:00.000Z",
   "author": "Jennifer",
   "description": "把数选择功能优化版本",
@@ -31,7 +31,7 @@
   "status": "stable",
   "buildInfo": {
     "buildDate": "2024-12-19",
-    "buildNumber": "v1.2.2-stable",
+    "buildNumber": "v2.0.1-stable",
     "environment": "production"
   }
 }
