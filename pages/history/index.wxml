@@ -1,5 +1,5 @@
 <view class="container">
-  <!-- 统计概览区 -->
+  <!-- 统计概览区 - 移动到顶部 -->
   <view class="stats-section">
     <view class="stats-header">
       <text class="stats-title">游戏统计</text>
@@ -8,34 +8,44 @@
           <text class="stat-number">{{totalGames}}</text>
           <text class="stat-label">总局数</text>
         </view>
-      <view class="stat-item">
-        <text class="stat-number">{{redWins}}</text>
-        <text class="stat-label">红方胜</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-number">{{blueWins}}</text>
-        <text class="stat-label">蓝方胜</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-number">{{draws}}</text>
-        <text class="stat-label">平局</text>
-      </view>
+        <view class="stat-item">
+          <text class="stat-number">{{redWins}}</text>
+          <text class="stat-label">东西方队胜</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{blueWins}}</text>
+          <text class="stat-label">南北方队胜</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{draws}}</text>
+          <text class="stat-label">平局</text>
+        </view>
         <view class="stat-item">
           <text class="stat-number">{{redWinRate}}%</text>
-          <text class="stat-label">红方胜率</text>
+          <text class="stat-label">东西方队胜率</text>
+        </view>
+        <view class="stat-item" wx:if="{{averageDuration > 0}}">
+          <text class="stat-number">{{averageDuration}}分</text>
+          <text class="stat-label">平均时长</text>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 历史局列表 -->
+  <!-- 历史局列表 - 移动到统计下面 -->
   <view class="history-section">
     <view class="history-header">
-      <text class="history-title">历史对局</text>
-      <button class="clear-btn" bindtap="onClearAll" wx:if="{{gameHistory.length > 0}}">清空记录</button>
+      <text class="history-title"></text>
     </view>
-    <view class="history-list" wx:if="{{gameHistory.length > 0}}">
-      <view class="history-item" wx:for="{{gameHistory}}" wx:key="gameId" bindtap="onViewDetail" data-index="{{index}}">
+    
+    <!-- 加载状态 -->
+    <view class="loading-state" wx:if="{{isLoading}}">
+      <text class="loading-text">加载中...</text>
+    </view>
+    
+    <!-- 历史记录列表 -->
+    <view class="history-list" wx:elif="{{filteredHistory.length > 0}}">
+      <view class="history-item" wx:for="{{filteredHistory}}" wx:key="gameId" bindtap="onViewDetail" data-index="{{index}}">
         <view class="game-info">
           <view class="game-date">{{item.date}}</view>
           <view class="game-time">{{item.time}}</view>
@@ -43,19 +53,19 @@
         <view class="team-info">
           <view class="team-red">
             <view class="team-container">
-              <view class="team-label">红队</view>
+              <view class="team-label">东西\n方队</view>
               <view class="team-players">
-                <view class="player-name">{{item.redPlayers ? item.redPlayers[0] : '红队1号'}}</view>
-                <view class="player-name">{{item.redPlayers ? item.redPlayers[1] : '红队2号'}}</view>
+                <view class="player-name">{{item.redPlayers ? item.redPlayers[0] : '东西方队1号'}}</view>
+                <view class="player-name">{{item.redPlayers ? item.redPlayers[1] : '东西方队2号'}}</view>
               </view>
             </view>
           </view>
           <view class="team-blue">
             <view class="team-container">
-              <view class="team-label">蓝队</view>
+              <view class="team-label">南北\n方队</view>
               <view class="team-players">
-                <view class="player-name">{{item.bluePlayers ? item.bluePlayers[0] : '蓝队1号'}}</view>
-                <view class="player-name">{{item.bluePlayers ? item.bluePlayers[1] : '蓝队2号'}}</view>
+                <view class="player-name">{{item.bluePlayers ? item.bluePlayers[0] : '南北方队1号'}}</view>
+                <view class="player-name">{{item.bluePlayers ? item.bluePlayers[1] : '南北方队2号'}}</view>
               </view>
             </view>
           </view>
@@ -64,22 +74,106 @@
           <view class="result-row">
             <view class="score-display">
               <text class="score red">{{item.finalScore.red}}</text>
-              <text class="vs">VS</text>
+              <text class="vs">  :  </text>
               <text class="score blue">{{item.finalScore.blue}}</text>
             </view>
             <view class="winner {{item.winner}}">
-              {{item.winner === 'red' ? '红方胜' : item.winner === 'blue' ? '蓝方胜' : '平局'}}
+              {{item.winner === 'red' ? '东西方队胜' : item.winner === 'blue' ? '南北方队胜' : '平局'}}
             </view>
           </view>
         </view>
-        <view class="view-detail">
-          <text>查看详情</text>
+        <view class="action-buttons">
+          <button class="detail-btn" bindtap="onViewDetail" data-index="{{index}}">
+            <text>详情</text>
+          </button>
+          <button class="share-btn" bindtap="onShareGame" data-index="{{index}}">
+            <text>分享</text>
+          </button>
+          <button class="delete-btn" bindtap="onDeleteGame" data-index="{{index}}">
+            <text>删除</text>
+          </button>
         </view>
       </view>
     </view>
+    <!-- 空状态 -->
     <view class="empty-state" wx:else>
-      <text class="empty-text">暂无历史记录</text>
-      <text class="empty-desc">开始游戏后记录将显示在这里</text>
+      <text class="empty-text" wx:if="{{gameHistory.length === 0}}">暂无历史记录</text>
+      <text class="empty-text" wx:else>没有找到匹配的记录</text>
+      <text class="empty-desc" wx:if="{{gameHistory.length === 0}}">开始游戏后记录将显示在这里</text>
+      <text class="empty-desc" wx:else>尝试调整搜索条件或筛选器</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮区 - 移动到屏幕底部 -->
+  <view class="action-section">
+    <view class="action-bar">
+      <button class="clear-btn" bindtap="onClearAll" wx:if="{{gameHistory.length > 0}}">
+        <text class="clear-icon">🗑️</text>
+        <text class="clear-text">清空记录</text>
+      </button>
+      <button class="filter-btn {{showFilter ? 'active' : ''}}" 
+              bindtap="onToggleFilter">
+        <text class="filter-icon">⚙️</text>
+        <text class="filter-text">筛选</text>
+      </button>
+    </view>
+    
+    <!-- 筛选面板 -->
+    <view class="filter-panel {{showFilter ? 'show' : ''}}">
+      <view class="filter-group">
+        <text class="filter-label">🎯 胜负筛选</text>
+        <view class="filter-options">
+          <button class="filter-option {{filterType === 'all' ? 'active' : ''}}" 
+                  data-type="all" bindtap="onFilterChange">
+            <text class="option-text">全部</text>
+            <text class="option-count">({{gameHistory.length}})</text>
+          </button>
+          <button class="filter-option {{filterType === 'red' ? 'active' : ''}}" 
+                  data-type="red" bindtap="onFilterChange">
+            <text class="option-text">东西方队胜</text>
+            <text class="option-count">({{redWins}})</text>
+          </button>
+          <button class="filter-option {{filterType === 'blue' ? 'active' : ''}}" 
+                  data-type="blue" bindtap="onFilterChange">
+            <text class="option-text">南北方队胜</text>
+            <text class="option-count">({{blueWins}})</text>
+          </button>
+          <button class="filter-option {{filterType === 'draw' ? 'active' : ''}}" 
+                  data-type="draw" bindtap="onFilterChange">
+            <text class="option-text">平局</text>
+            <text class="option-count">({{draws}})</text>
+          </button>
+        </view>
+      </view>
+      
+      <view class="filter-group">
+        <text class="filter-label">📊 排序方式</text>
+        <view class="sort-options">
+          <button class="sort-option {{sortType === 'time' ? 'active' : ''}}" 
+                  data-type="time" bindtap="onSortChange">
+            <text class="sort-icon">🕒</text>
+            <text class="sort-text">时间</text>
+            <text class="sort-arrow">{{sortType === 'time' ? (sortOrder === 'desc' ? '↓' : '↑') : ''}}</text>
+          </button>
+          <button class="sort-option {{sortType === 'score' ? 'active' : ''}}" 
+                  data-type="score" bindtap="onSortChange">
+            <text class="sort-icon">🎯</text>
+            <text class="sort-text">总分</text>
+            <text class="sort-arrow">{{sortType === 'score' ? (sortOrder === 'desc' ? '↓' : '↑') : ''}}</text>
+          </button>
+          <button class="sort-option {{sortType === 'duration' ? 'active' : ''}}" 
+                  data-type="duration" bindtap="onSortChange">
+            <text class="sort-icon">⏱️</text>
+            <text class="sort-text">时长</text>
+            <text class="sort-arrow">{{sortType === 'duration' ? (sortOrder === 'desc' ? '↓' : '↑') : ''}}</text>
+          </button>
+        </view>
+      </view>
+      
+      <view class="filter-actions">
+        <button class="reset-btn" bindtap="onResetFilters">重置筛选</button>
+        <button class="close-filter-btn" bindtap="onToggleFilter">关闭</button>
+      </view>
     </view>
   </view>
 
