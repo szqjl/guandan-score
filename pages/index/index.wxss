@@ -267,7 +267,7 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
 }
 
 .team-label {
-  font-size: 23rpx; /* 调整字体大小 */
+  font-size: 21rpx; /* 调整字体大小 */
   font-weight: bold;
   margin-bottom: 0rpx;
   background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
