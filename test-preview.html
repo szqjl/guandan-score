@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扑克计分小程序 - 预览测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .game-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .game-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .teams-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .team {
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            background: #f8f9fa;
+        }
+
+        .team.red {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+        }
+
+        .team.blue {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+        }
+
+        .team-label {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .team-score {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .team-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.2);
+            color: inherit;
+        }
+
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .start-btn:active {
+            transform: translateY(0);
+        }
+
+        .rules-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .rules-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .rule-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .teams-container {
+                flex-direction: column;
+            }
+            
+            .game-container {
+                padding: 20px;
+            }
+            
+            .team-score {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">扑克双上计分</h1>
+            <p class="game-subtitle">实时预览测试 - 现代化界面设计</p>
+        </div>
+
+        <div class="teams-container">
+            <div class="team red">
+                <div class="team-label">东西方</div>
+                <div class="team-score">A</div>
+                <div class="team-buttons">
+                    <button class="btn">3</button>
+                    <button class="btn">2</button>
+                    <button class="btn">1</button>
+                </div>
+            </div>
+
+            <div class="team blue">
+                <div class="team-label">南北方</div>
+                <div class="team-score">K</div>
+                <div class="team-buttons">
+                    <button class="btn">3</button>
+                    <button class="btn">2</button>
+                    <button class="btn">1</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="start-btn">开始游戏</button>
+        </div>
+
+        <div class="rules-section">
+            <div class="rules-title">游戏规则</div>
+            <div class="rule-item">
+                <span class="rule-icon">🎯</span>
+                <span>双上(+3)：头游+二游</span>
+            </div>
+            <div class="rule-item">
+                <span class="rule-icon">🎯</span>
+                <span>1游3游(+2)：头游+三游</span>
+            </div>
+            <div class="rule-item">
+                <span class="rule-icon">🎯</span>
+                <span>1游末游(+1)：头游+末游</span>
+            </div>
+            <div class="rule-item">
+                <span class="rule-icon">🎯</span>
+                <span>过A制：A必打，最多3次机会</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 简单的交互效果
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+
+        document.querySelector('.start-btn').addEventListener('click', function() {
+            this.textContent = '游戏进行中...';
+            this.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+        });
+    </script>
+</body>
+</html>
+
+

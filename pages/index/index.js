@@ -40,7 +40,10 @@ Page({
     },
     // 把数选择弹窗状态
     showRoundsPicker: false,
-    tempMaxRounds: 10 // 临时存储选择的把数
+    tempMaxRounds: 10, // 临时存储选择的把数
+    // 边框图片路径
+    leftBorderImage: '../../images/左边框.svg',
+    rightBorderImage: '../../images/右边框.svg'
   },
 
   onShow() {
@@ -1497,8 +1500,8 @@ Page({
       const now = new Date();
       const gameRecord = {
         gameId: `game_${now.getTime()}`,
-        date: now.toLocaleDateString('zh-CN'),
-        time: now.toLocaleTimeString('zh-CN', { hour12: false }),
+        date: this.formatDate(now),
+        time: this.formatTime(now),
         duration: this.calculateGameDuration(),
         finalScore: {
           red: this.data.levelTexts.red,
@@ -1672,8 +1675,8 @@ Page({
       const now = new Date();
       const gameRecord = {
         gameId: `game_${now.getTime()}`,
-        date: now.toLocaleDateString('zh-CN'),
-        time: now.toLocaleTimeString('zh-CN', { hour12: false }),
+        date: this.formatDate(now),
+        time: this.formatTime(now),
         duration: this.calculateGameDurationFromRounds(gameData.rounds),
         finalScore: {
           red: gameData.levelTexts.red,
@@ -1711,6 +1714,21 @@ Page({
     if (rounds <= 15) return '15分钟';
     if (rounds <= 20) return '20分钟';
     return '25分钟';
+  },
+
+  // 格式化日期 - 统一使用YYYY-MM-DD格式
+  formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  },
+
+  // 格式化时间 - 统一使用24小时制HH:MM格式
+  formatTime(date) {
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
   },
 
 });
