@@ -591,12 +591,208 @@ view, text, button, input, image, scroll-view, swiper, picker, radio, checkbox {
   white-space: nowrap;
 }
 
-.right-control-panel .rule-section .picker {
-  padding: 2rpx 4rpx;
+/* 把数选择器按钮样式 */
+.rounds-picker-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4rpx 8rpx;
+  background-color: #f5f5f5;
+  border: 1rpx solid #ddd;
+  border-radius: 4rpx;
+  margin-top: 4rpx;
+  min-width: 50rpx;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rounds-picker-btn:active {
+  background-color: #e0e0e0;
+  transform: scale(0.98);
+}
+
+.rounds-picker-text {
   font-size: 10rpx;
-  min-width: 30rpx;
-  display: inline-block;
-  text-align: center;
+  color: #333;
+  font-weight: 500;
+}
+
+.rounds-picker-arrow {
+  font-size: 8rpx;
+  color: #666;
+  margin-left: 4rpx;
+  transition: transform 0.2s ease;
+}
+
+.rounds-picker-btn:active .rounds-picker-arrow {
+  transform: rotate(180deg);
+}
+
+/* 把数选择弹窗样式 */
+.rounds-picker-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rounds-picker-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4rpx);
+}
+
+.rounds-picker-content {
+  position: relative;
+  background-color: #fff;
+  border-radius: 16rpx;
+  width: 80%;
+  max-width: 600rpx;
+  max-height: 80%;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+  animation: roundsPickerSlideIn 0.3s ease-out;
+}
+
+@keyframes roundsPickerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(50rpx) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.rounds-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 32rpx 16rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.rounds-picker-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.rounds-picker-close {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rounds-picker-close:active {
+  background-color: #e0e0e0;
+  transform: scale(0.9);
+}
+
+.rounds-picker-close .close-icon {
+  font-size: 24rpx;
+  color: #666;
+  font-weight: bold;
+}
+
+.rounds-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+  padding: 24rpx 32rpx;
+}
+
+.rounds-picker-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80rpx;
+  background-color: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.rounds-picker-item:active {
+  transform: scale(0.95);
+}
+
+.rounds-picker-item.selected {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+  box-shadow: 0 4rpx 12rpx rgba(0, 123, 255, 0.3);
+}
+
+.rounds-picker-item:hover {
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+.rounds-picker-item.selected:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.rounds-picker-footer {
+  display: flex;
+  gap: 16rpx;
+  padding: 16rpx 32rpx 24rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.rounds-picker-confirm,
+.rounds-picker-cancel {
+  flex: 1;
+  height: 72rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rounds-picker-confirm {
+  background-color: #007bff;
+  color: #fff;
+  box-shadow: 0 4rpx 12rpx rgba(0, 123, 255, 0.3);
+}
+
+.rounds-picker-confirm:active {
+  background-color: #0056b3;
+  transform: scale(0.98);
+}
+
+.rounds-picker-cancel {
+  background-color: #6c757d;
+  color: #fff;
+  box-shadow: 0 4rpx 12rpx rgba(108, 117, 125, 0.3);
+}
+
+.rounds-picker-cancel:active {
+  background-color: #545b62;
+  transform: scale(0.98);
 }
 
 .right-control-panel .start-btn {

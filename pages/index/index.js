@@ -37,7 +37,10 @@ Page({
     buttonDisabledStates: {
       red: { double: false, two: false, one: false },
       blue: { double: false, two: false, one: false }
-    }
+    },
+    // 把数选择弹窗状态
+    showRoundsPicker: false,
+    tempMaxRounds: 10 // 临时存储选择的把数
   },
 
   onShow() {
@@ -864,10 +867,10 @@ Page({
 
   // 处理规则选择
   onRuleChange(e) {
-    // 如果游戏已经开始（游戏已开始或游戏已结束），禁止更改规则
-    if (this.data.gameStarted || this.data.gameEnded) {
+    // 如果游戏已经开始，禁止更改规则
+    if (this.data.gameStarted) {
       wx.showToast({
-        title: '请先点击开始游戏',
+        title: '游戏进行中，无法修改规则',
         icon: 'none',
         duration: 2000
       });
@@ -913,7 +916,55 @@ Page({
     }
   },
 
-  // 处理最大把数变化
+  // 显示把数选择弹窗
+  onShowRoundsPicker() {
+    // 如果游戏已经开始，禁止修改
+    if (this.data.gameStarted) {
+      wx.showToast({
+        title: '游戏进行中，无法修改把数',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+    
+    this.setData({
+      showRoundsPicker: true,
+      tempMaxRounds: this.data.maxRounds
+    });
+  },
+
+  // 关闭把数选择弹窗
+  onCloseRoundsPicker() {
+    this.setData({
+      showRoundsPicker: false,
+      tempMaxRounds: this.data.maxRounds // 恢复原值
+    });
+  },
+
+  // 选择把数
+  onSelectRounds(e) {
+    const value = parseInt(e.currentTarget.dataset.value);
+    this.setData({
+      tempMaxRounds: value
+    });
+  },
+
+  // 确认选择把数
+  onConfirmRounds() {
+    this.setData({
+      maxRounds: this.data.tempMaxRounds,
+      showRoundsPicker: false
+    });
+    
+    wx.showToast({
+      title: `已设置为${this.data.tempMaxRounds}把`,
+      icon: 'success',
+      duration: 1500
+    });
+  },
+
+  // 处理最大把数变化（保留原函数以兼容其他代码）
   onMaxRoundsChange(e) {
     const maxRounds = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15][e.detail.value];
     this.setData({
