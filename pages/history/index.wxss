@@ -59,7 +59,7 @@
 
 .filter-btn {
   flex: 1;
-  height: 40rpx;
+  height: 50rpx;
   padding: 0 15rpx;
   background-color: #1565C0;
   color: white;
@@ -68,9 +68,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6rpx;
+  gap: 8rpx;
   transition: all 0.3s ease;
-  font-size: 20rpx;
+  font-size: 24rpx;
 }
 
 .filter-btn.active {
@@ -92,7 +92,7 @@
   right: 20rpx;
   background: rgba(0, 0, 0, 0.95); /* 深色背景 */
   border-radius: 8rpx;
-  padding: 20rpx;
+  padding: 25rpx;
   box-shadow: 0 -4rpx 12rpx rgba(0, 0, 0, 0.3);
   max-height: 0;
   overflow: hidden;
@@ -102,12 +102,12 @@
 }
 
 .filter-panel.show {
-  max-height: 500rpx;
+  max-height: 600rpx;
   opacity: 1;
 }
 
 .filter-group {
-  margin-bottom: 15rpx;
+  margin-bottom: 20rpx;
 }
 
 .filter-label {
@@ -125,13 +125,14 @@
 }
 
 .filter-option, .sort-option {
-  padding: 8rpx 16rpx;
+  padding: 12rpx 20rpx;
   border: 1rpx solid #4caf50; /* 绿色边框 */
-  border-radius: 4rpx;
+  border-radius: 6rpx;
   background-color: rgba(255, 255, 255, 0.1); /* 半透明白色背景 */
-  font-size: 24rpx;
+  font-size: 26rpx;
   color: white; /* 白色文字 */
   transition: all 0.3s ease;
+  min-height: 50rpx;
 }
 
 .filter-option.active, .sort-option.active {

@@ -120,59 +120,105 @@
     
     <!-- 筛选面板 -->
     <view class="filter-panel {{showFilter ? 'show' : ''}}">
+      <!-- 时间筛选 -->
       <view class="filter-group">
-        <text class="filter-label">🎯 胜负筛选</text>
+        <view class="filter-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10rpx;">
+          <text>📅 时间筛选</text>
+          <view class="action-buttons" style="display: flex; gap: 6rpx;">
+            <button class="action-btn" style="padding: 6rpx 12rpx; background: #6c757d; color: white; border: none; border-radius: 4rpx; font-size: 16rpx;" bindtap="onResetFilters">重置</button>
+            <button class="action-btn close-btn" style="padding: 6rpx 12rpx; background: #1565C0; color: white; border: none; border-radius: 4rpx; font-size: 16rpx;" bindtap="onToggleFilter">关闭</button>
+          </view>
+        </view>
         <view class="filter-options">
-          <button class="filter-option {{filterType === 'all' ? 'active' : ''}}" 
-                  data-type="all" bindtap="onFilterChange">
-            <text class="option-text">全部</text>
-            <text class="option-count">({{gameHistory.length}})</text>
+          <button class="filter-option {{timeFilter === 'all' ? 'active' : ''}}" 
+                  data-time="all" bindtap="onTimeFilterChange">
+            <text class="option-text">全部时间</text>
           </button>
-          <button class="filter-option {{filterType === 'red' ? 'active' : ''}}" 
-                  data-type="red" bindtap="onFilterChange">
-            <text class="option-text">东西方队胜</text>
-            <text class="option-count">({{redWins}})</text>
+          <button class="filter-option {{timeFilter === 'week' ? 'active' : ''}}" 
+                  data-time="week" bindtap="onTimeFilterChange">
+            <text class="option-text">本周</text>
           </button>
-          <button class="filter-option {{filterType === 'blue' ? 'active' : ''}}" 
-                  data-type="blue" bindtap="onFilterChange">
-            <text class="option-text">南北方队胜</text>
-            <text class="option-count">({{blueWins}})</text>
+          <button class="filter-option {{timeFilter === 'lastWeek' ? 'active' : ''}}" 
+                  data-time="lastWeek" bindtap="onTimeFilterChange">
+            <text class="option-text">上周</text>
           </button>
-          <button class="filter-option {{filterType === 'draw' ? 'active' : ''}}" 
-                  data-type="draw" bindtap="onFilterChange">
-            <text class="option-text">平局</text>
-            <text class="option-count">({{draws}})</text>
+          <button class="filter-option {{timeFilter === 'month' ? 'active' : ''}}" 
+                  data-time="month" bindtap="onTimeFilterChange">
+            <text class="option-text">本月</text>
+          </button>
+          <button class="filter-option {{timeFilter === 'lastMonth' ? 'active' : ''}}" 
+                  data-time="lastMonth" bindtap="onTimeFilterChange">
+            <text class="option-text">上月</text>
+          </button>
+          <button class="filter-option {{timeFilter === 'custom' ? 'active' : ''}}" 
+                  data-time="custom" bindtap="onTimeFilterChange">
+            <text class="option-text">自定义时间</text>
+          </button>
+        </view>
+        <!-- 自定义时间选择器 -->
+        <view class="custom-time-picker" wx:if="{{showCustomTimePicker}}" style="margin-top: 10rpx; padding: 10rpx; border: 1rpx solid #e9ecef; border-radius: 4rpx; background: #f8f9fa;">
+          <view style="margin-bottom: 8rpx;">
+            <text style="font-size: 14rpx; color: #2c3e50;">开始时间：</text>
+            <picker mode="date" value="{{customStartDate}}" bindchange="onCustomStartDateChange" style="display: inline-block; margin-left: 8rpx;">
+              <text style="padding: 4rpx 8rpx; border: 1rpx solid #ddd; border-radius: 4rpx; font-size: 14rpx;">{{customStartDate || '选择日期'}}</text>
+            </picker>
+          </view>
+          <view style="margin-bottom: 8rpx;">
+            <text style="font-size: 14rpx; color: #2c3e50;">结束时间：</text>
+            <picker mode="date" value="{{customEndDate}}" bindchange="onCustomEndDateChange" style="display: inline-block; margin-left: 8rpx;">
+              <text style="padding: 4rpx 8rpx; border: 1rpx solid #ddd; border-radius: 4rpx; font-size: 14rpx;">{{customEndDate || '选择日期'}}</text>
+            </picker>
+          </view>
+          <button style="padding: 6rpx 12rpx; background: #4CAF50; color: white; border: none; border-radius: 4rpx; font-size: 14rpx;" bindtap="onApplyCustomTime">应用筛选</button>
+        </view>
+      </view>
+      
+      <!-- 队友筛选 (v2.1.0) -->
+      <view class="filter-group" wx:if="{{allTeammates.length > 0}}" style="opacity: 0.4;">
+        <text class="filter-label">👥 队友筛选 (v2.1.0)</text>
+        <view class="filter-options">
+          <button class="filter-option {{teammateFilter === 'all' ? 'active' : ''}}" 
+                  data-teammate="all" bindtap="onTeammateFilterChange">
+            <text class="option-text">全部队友</text>
+          </button>
+          <button class="filter-option {{teammateFilter === 'mostActive' ? 'active' : ''}}" 
+                  data-teammate="mostActive" bindtap="onTeammateFilterChange">
+            <text class="option-text">最活跃队友</text>
+          </button>
+          <button class="filter-option {{teammateFilter === 'recent' ? 'active' : ''}}" 
+                  data-teammate="recent" bindtap="onTeammateFilterChange">
+            <text class="option-text">最近参与</text>
+          </button>
+          <button class="filter-option {{teammateFilter === 'alphabetical' ? 'active' : ''}}" 
+                  data-teammate="alphabetical" bindtap="onTeammateFilterChange">
+            <text class="option-text">按字母排序</text>
           </button>
         </view>
       </view>
       
-      <view class="filter-group">
-        <text class="filter-label">📊 排序方式</text>
-        <view class="sort-options">
-          <button class="sort-option {{sortType === 'time' ? 'active' : ''}}" 
-                  data-type="time" bindtap="onSortChange">
-            <text class="sort-icon">🕒</text>
-            <text class="sort-text">时间</text>
-            <text class="sort-arrow">{{sortType === 'time' ? (sortOrder === 'desc' ? '↓' : '↑') : ''}}</text>
+      <!-- 个人统计 (v4.0) -->
+      <view class="filter-group" style="opacity: 0.4;">
+        <text class="filter-label">📈 个人统计 (v4.0)</text>
+        <view class="filter-options">
+          <button class="filter-option">
+            <text class="option-text">个人战绩</text>
           </button>
-          <button class="sort-option {{sortType === 'score' ? 'active' : ''}}" 
-                  data-type="score" bindtap="onSortChange">
-            <text class="sort-icon">🎯</text>
-            <text class="sort-text">总分</text>
-            <text class="sort-arrow">{{sortType === 'score' ? (sortOrder === 'desc' ? '↓' : '↑') : ''}}</text>
+          <button class="filter-option">
+            <text class="option-text">进步轨迹</text>
           </button>
-          <button class="sort-option {{sortType === 'duration' ? 'active' : ''}}" 
-                  data-type="duration" bindtap="onSortChange">
-            <text class="sort-icon">⏱️</text>
-            <text class="sort-text">时长</text>
-            <text class="sort-arrow">{{sortType === 'duration' ? (sortOrder === 'desc' ? '↓' : '↑') : ''}}</text>
+          <button class="filter-option">
+            <text class="option-text">最佳表现</text>
           </button>
         </view>
       </view>
-      
-      <view class="filter-actions">
-        <button class="reset-btn" bindtap="onResetFilters">重置筛选</button>
-        <button class="close-filter-btn" bindtap="onToggleFilter">关闭</button>
+
+      <!-- 筛选统计信息 -->
+      <view class="filter-stats" style="background: #1565C0; padding: 10rpx; border-radius: 4rpx; margin-bottom: 10rpx; font-size: 14rpx; color: white;">
+        <text>📊 筛选统计：</text>
+        <text>• 总比赛数：{{gameHistory.length}}场</text>
+        <text>• 当前功能：时间筛选</text>
+        <text>• 队友筛选：待实现 (v2.1.0)</text>
+        <text>• 个人统计：待实现 (v4.0)</text>
       </view>
     </view>
   </view>
