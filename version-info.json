@@ -1,13 +1,22 @@
 {
-  "version": "v2.0.1",
-  "createdAt": "2025-09-22T11:12:53.089Z",
+  "version": "v2.0.2",
+  "createdAt": "2025-09-23T12:30:00.000Z",
   "author": "Jennifer",
-  "description": "把数选择功能优化版本",
-  "features": [],
+  "description": "历史记录页面按钮样式优化版本",
+  "features": [
+    "历史记录页面按钮尺寸优化",
+    "按钮布局微调",
+    "用户体验改善"
+  ],
   "dependencies": {
     "微信小程序": ">= 8.0.0"
   },
-  "changelog": [],
+  "changelog": [
+    "缩小历史记录页面详情、分享、删除按钮尺寸",
+    "优化按钮字体大小和内边距",
+    "将按钮组向右移动5rpx改善布局",
+    "添加固定高度确保按钮显示一致性"
+  ],
   "status": "dev",
   "rollbackSupported": true
 }
