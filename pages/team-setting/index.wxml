@@ -6,20 +6,14 @@
     <!-- 红队 -->
     <view class="red-team">
       <text class="team-name">东西方</text>
-      
+
       <!-- 红队队员1 -->
       <view class="player-input-group">
         <view class="player-icon-container">
           <text class="player-icon">👤</text>
         </view>
         <view class="input-field">
-          <input 
-            class="input-placeholder" 
-            placeholder="队员1姓名" 
-            value="{{redPlayers[0]}}"
-            bindinput="onRedPlayer1Input"
-            maxlength="10"
-          />
+          <input class="input-placeholder" placeholder="队员1姓名" value="{{redPlayers[0]}}" bindinput="onRedPlayer1Input" maxlength="10" />
         </view>
       </view>
 
@@ -29,13 +23,7 @@
           <text class="player-icon">👤</text>
         </view>
         <view class="input-field">
-          <input 
-            class="input-placeholder" 
-            placeholder="队员2姓名" 
-            value="{{redPlayers[1]}}"
-            bindinput="onRedPlayer2Input"
-            maxlength="10"
-          />
+          <input class="input-placeholder" placeholder="队员2姓名" value="{{redPlayers[1]}}" bindinput="onRedPlayer2Input" maxlength="10" />
         </view>
       </view>
     </view>
@@ -48,20 +36,14 @@
     <!-- 蓝队 -->
     <view class="blue-team">
       <text class="team-name">南北方</text>
-      
+
       <!-- 蓝队队员1 -->
       <view class="player-input-group">
         <view class="player-icon-container">
           <text class="player-icon">👤</text>
         </view>
         <view class="input-field">
-          <input 
-            class="input-placeholder" 
-            placeholder="队员1姓名" 
-            value="{{bluePlayers[0]}}"
-            bindinput="onBluePlayer1Input"
-            maxlength="10"
-          />
+          <input class="input-placeholder" placeholder="队员1姓名" value="{{bluePlayers[0]}}" bindinput="onBluePlayer1Input" maxlength="10" />
         </view>
       </view>
 
@@ -71,13 +53,7 @@
           <text class="player-icon">👤</text>
         </view>
         <view class="input-field">
-          <input 
-            class="input-placeholder" 
-            placeholder="队员2姓名" 
-            value="{{bluePlayers[1]}}"
-            bindinput="onBluePlayer2Input"
-            maxlength="10"
-          />
+          <input class="input-placeholder" placeholder="队员2姓名" value="{{bluePlayers[1]}}" bindinput="onBluePlayer2Input" maxlength="10" />
         </view>
       </view>
     </view>

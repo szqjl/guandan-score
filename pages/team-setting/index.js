@@ -58,8 +58,8 @@ Page({
   // 保存设置
   onSaveSettings() {
     // 验证输入
-    if (!this.data.redPlayers[0] || !this.data.redPlayers[1] || 
-        !this.data.bluePlayers[0] || !this.data.bluePlayers[1]) {
+    if (!this.data.redPlayers[0] || !this.data.redPlayers[1] ||
+      !this.data.bluePlayers[0] || !this.data.bluePlayers[1]) {
       wx.showToast({
         title: '请填写完整队员信息',
         icon: 'none'
@@ -102,8 +102,8 @@ Page({
       success: (res) => {
         if (res.confirm) {
           this.setData({
-              redPlayers: ['东西方队1号', '东西方队2号'],
-              bluePlayers: ['南北方队1号', '南北方队2号']
+            redPlayers: ['东西方队1号', '东西方队2号'],
+            bluePlayers: ['南北方队1号', '南北方队2号']
           });
           // 同时清除本地存储的保存设置
           wx.removeStorageSync('teamSettings');

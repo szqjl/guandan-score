@@ -37,12 +37,12 @@
     <view class="history-header">
       <text class="history-title"></text>
     </view>
-    
+
     <!-- 加载状态 -->
     <view class="loading-state" wx:if="{{isLoading}}">
       <text class="loading-text">加载中...</text>
     </view>
-    
+
     <!-- 历史记录列表 -->
     <view class="history-list" wx:elif="{{filteredHistory.length > 0}}">
       <view class="history-item" wx:for="{{filteredHistory}}" wx:key="gameId" bindtap="onViewDetail" data-index="{{index}}">
@@ -74,7 +74,7 @@
           <view class="result-row">
             <view class="score-display">
               <text class="score red">{{item.finalScore.red}}</text>
-              <text class="vs">  :  </text>
+              <text class="vs"> : </text>
               <text class="score blue">{{item.finalScore.blue}}</text>
             </view>
             <view class="winner {{item.winner}}">
@@ -111,117 +111,106 @@
         <text class="clear-icon">🗑️</text>
         <text class="clear-text">清空记录</text>
       </button>
-      <button class="filter-btn {{showFilter ? 'active' : ''}}" 
-              bindtap="onToggleFilter">
+      <button class="filter-btn {{showFilter ? 'active' : ''}}" bindtap="onToggleFilter">
         <text class="filter-icon">⚙️</text>
         <text class="filter-text">筛选</text>
       </button>
     </view>
   </view>
-  
+
   <!-- 筛选面板 - 移出 action-section -->
   <view class="filter-panel {{showFilter ? 'show' : ''}}">
-      <!-- 时间筛选 -->
-      <view class="filter-group">
-        <view class="filter-label">
-          <text>📅 时间筛选</text>
-          <view class="action-buttons">
-            <button class="action-btn" bindtap="onResetFilters">重置</button>
-            <button class="action-btn close-btn" bindtap="onToggleFilter">关闭</button>
-          </view>
-        </view>
-        <view class="filter-options">
-          <button class="filter-option {{timeFilter === 'all' ? 'active' : ''}}" 
-                  data-time="all" bindtap="onTimeFilterChange">
-            <text class="option-text">全部时间</text>
-          </button>
-          <button class="filter-option {{timeFilter === 'week' ? 'active' : ''}}" 
-                  data-time="week" bindtap="onTimeFilterChange">
-            <text class="option-text">本周</text>
-          </button>
-          <button class="filter-option {{timeFilter === 'lastWeek' ? 'active' : ''}}" 
-                  data-time="lastWeek" bindtap="onTimeFilterChange">
-            <text class="option-text">上周</text>
-          </button>
-          <button class="filter-option {{timeFilter === 'month' ? 'active' : ''}}" 
-                  data-time="month" bindtap="onTimeFilterChange">
-            <text class="option-text">本月</text>
-          </button>
-          <button class="filter-option {{timeFilter === 'lastMonth' ? 'active' : ''}}" 
-                  data-time="lastMonth" bindtap="onTimeFilterChange">
-            <text class="option-text">上月</text>
-          </button>
-          <button class="filter-option {{timeFilter === 'custom' ? 'active' : ''}}" 
-                  data-time="custom" bindtap="onTimeFilterChange">
-            <text class="option-text">自定义时间</text>
-          </button>
-        </view>
-        <!-- 自定义时间选择器 -->
-        <view class="custom-time-picker" wx:if="{{showCustomTimePicker}}" style="margin-top: 10rpx; padding: 10rpx; border: 1rpx solid #e9ecef; border-radius: 4rpx; background: #f8f9fa;">
-          <view style="margin-bottom: 8rpx;">
-            <text style="font-size: 14rpx; color: #2c3e50;">开始时间：</text>
-            <picker mode="date" value="{{customStartDate}}" bindchange="onCustomStartDateChange" style="display: inline-block; margin-left: 8rpx;">
-              <text style="padding: 4rpx 8rpx; border: 1rpx solid #ddd; border-radius: 4rpx; font-size: 14rpx;">{{customStartDate || '选择日期'}}</text>
-            </picker>
-          </view>
-          <view style="margin-bottom: 8rpx;">
-            <text style="font-size: 14rpx; color: #2c3e50;">结束时间：</text>
-            <picker mode="date" value="{{customEndDate}}" bindchange="onCustomEndDateChange" style="display: inline-block; margin-left: 8rpx;">
-              <text style="padding: 4rpx 8rpx; border: 1rpx solid #ddd; border-radius: 4rpx; font-size: 14rpx;">{{customEndDate || '选择日期'}}</text>
-            </picker>
-          </view>
-          <button style="padding: 6rpx 12rpx; background: #4CAF50; color: white; border: none; border-radius: 4rpx; font-size: 14rpx;" bindtap="onApplyCustomTime">应用筛选</button>
+    <!-- 时间筛选 -->
+    <view class="filter-group">
+      <view class="filter-label">
+        <text>📅 时间筛选</text>
+        <view class="action-buttons">
+          <button class="action-btn" bindtap="onResetFilters">重置</button>
+          <button class="action-btn close-btn" bindtap="onToggleFilter">关闭</button>
         </view>
       </view>
-      
-      <!-- 队友筛选 (v2.1.0) -->
-      <view class="filter-group" wx:if="{{allTeammates.length > 0}}" style="opacity: 0.4;">
-        <text class="filter-label">👥 队友筛选 (v2.1.0)</text>
-        <view class="filter-options">
-          <button class="filter-option {{teammateFilter === 'all' ? 'active' : ''}}" 
-                  data-teammate="all" bindtap="onTeammateFilterChange">
-            <text class="option-text">全部队友</text>
-          </button>
-          <button class="filter-option {{teammateFilter === 'mostActive' ? 'active' : ''}}" 
-                  data-teammate="mostActive" bindtap="onTeammateFilterChange">
-            <text class="option-text">最活跃队友</text>
-          </button>
-          <button class="filter-option {{teammateFilter === 'recent' ? 'active' : ''}}" 
-                  data-teammate="recent" bindtap="onTeammateFilterChange">
-            <text class="option-text">最近参与</text>
-          </button>
-          <button class="filter-option {{teammateFilter === 'alphabetical' ? 'active' : ''}}" 
-                  data-teammate="alphabetical" bindtap="onTeammateFilterChange">
-            <text class="option-text">按字母排序</text>
-          </button>
-        </view>
+      <view class="filter-options">
+        <button class="filter-option {{timeFilter === 'all' ? 'active' : ''}}" data-time="all" bindtap="onTimeFilterChange">
+          <text class="option-text">全部时间</text>
+        </button>
+        <button class="filter-option {{timeFilter === 'week' ? 'active' : ''}}" data-time="week" bindtap="onTimeFilterChange">
+          <text class="option-text">本周</text>
+        </button>
+        <button class="filter-option {{timeFilter === 'lastWeek' ? 'active' : ''}}" data-time="lastWeek" bindtap="onTimeFilterChange">
+          <text class="option-text">上周</text>
+        </button>
+        <button class="filter-option {{timeFilter === 'month' ? 'active' : ''}}" data-time="month" bindtap="onTimeFilterChange">
+          <text class="option-text">本月</text>
+        </button>
+        <button class="filter-option {{timeFilter === 'lastMonth' ? 'active' : ''}}" data-time="lastMonth" bindtap="onTimeFilterChange">
+          <text class="option-text">上月</text>
+        </button>
+        <button class="filter-option {{timeFilter === 'custom' ? 'active' : ''}}" data-time="custom" bindtap="onTimeFilterChange">
+          <text class="option-text">自定义时间</text>
+        </button>
       </view>
-      
-      <!-- 个人统计 (v4.0) -->
-      <view class="filter-group" style="opacity: 0.4;">
-        <text class="filter-label">📈 个人统计 (v4.0)</text>
-        <view class="filter-options">
-          <button class="filter-option">
-            <text class="option-text">个人战绩</text>
-          </button>
-          <button class="filter-option">
-            <text class="option-text">进步轨迹</text>
-          </button>
-          <button class="filter-option">
-            <text class="option-text">最佳表现</text>
-          </button>
+      <!-- 自定义时间选择器 -->
+      <view class="custom-time-picker" wx:if="{{showCustomTimePicker}}" style="margin-top: 10rpx; padding: 10rpx; border: 1rpx solid #e9ecef; border-radius: 4rpx; background: #f8f9fa;">
+        <view style="margin-bottom: 8rpx;">
+          <text style="font-size: 14rpx; color: #2c3e50;">开始时间：</text>
+          <picker mode="date" value="{{customStartDate}}" bindchange="onCustomStartDateChange" style="display: inline-block; margin-left: 8rpx;">
+            <text style="padding: 4rpx 8rpx; border: 1rpx solid #ddd; border-radius: 4rpx; font-size: 14rpx;">{{customStartDate || '选择日期'}}</text>
+          </picker>
         </view>
-      </view>
-
-      <!-- 筛选统计信息 -->
-      <view class="filter-stats" style="background: #1565C0; padding: 10rpx; border-radius: 4rpx; margin-bottom: 10rpx; font-size: 14rpx; color: white;">
-        <text>📊 筛选统计：</text>
-        <text>• 总比赛数：{{gameHistory.length}}场</text>
-        <text>• 当前功能：时间筛选</text>
-        <text>• 队友筛选：待实现 (v2.1.0)</text>
-        <text>• 个人统计：待实现 (v4.0)</text>
+        <view style="margin-bottom: 8rpx;">
+          <text style="font-size: 14rpx; color: #2c3e50;">结束时间：</text>
+          <picker mode="date" value="{{customEndDate}}" bindchange="onCustomEndDateChange" style="display: inline-block; margin-left: 8rpx;">
+            <text style="padding: 4rpx 8rpx; border: 1rpx solid #ddd; border-radius: 4rpx; font-size: 14rpx;">{{customEndDate || '选择日期'}}</text>
+          </picker>
+        </view>
+        <button style="padding: 6rpx 12rpx; background: #4CAF50; color: white; border: none; border-radius: 4rpx; font-size: 14rpx;" bindtap="onApplyCustomTime">应用筛选</button>
       </view>
     </view>
+
+    <!-- 队友筛选 (v2.1.0) -->
+    <view class="filter-group" wx:if="{{allTeammates.length > 0}}" style="opacity: 0.4;">
+      <text class="filter-label">👥 队友筛选 (v2.1.0)</text>
+      <view class="filter-options">
+        <button class="filter-option {{teammateFilter === 'all' ? 'active' : ''}}" data-teammate="all" bindtap="onTeammateFilterChange">
+          <text class="option-text">全部队友</text>
+        </button>
+        <button class="filter-option {{teammateFilter === 'mostActive' ? 'active' : ''}}" data-teammate="mostActive" bindtap="onTeammateFilterChange">
+          <text class="option-text">最活跃队友</text>
+        </button>
+        <button class="filter-option {{teammateFilter === 'recent' ? 'active' : ''}}" data-teammate="recent" bindtap="onTeammateFilterChange">
+          <text class="option-text">最近参与</text>
+        </button>
+        <button class="filter-option {{teammateFilter === 'alphabetical' ? 'active' : ''}}" data-teammate="alphabetical" bindtap="onTeammateFilterChange">
+          <text class="option-text">按字母排序</text>
+        </button>
+      </view>
+    </view>
+
+    <!-- 个人统计 (v4.0) -->
+    <view class="filter-group" style="opacity: 0.4;">
+      <text class="filter-label">📈 个人统计 (v4.0)</text>
+      <view class="filter-options">
+        <button class="filter-option">
+          <text class="option-text">个人战绩</text>
+        </button>
+        <button class="filter-option">
+          <text class="option-text">进步轨迹</text>
+        </button>
+        <button class="filter-option">
+          <text class="option-text">最佳表现</text>
+        </button>
+      </view>
+    </view>
+
+    <!-- 筛选统计信息 -->
+    <view class="filter-stats" style="background: #1565C0; padding: 10rpx; border-radius: 4rpx; margin-bottom: 10rpx; font-size: 14rpx; color: white;">
+      <text>📊 筛选统计：</text>
+      <text>• 总比赛数：{{gameHistory.length}}场</text>
+      <text>• 当前功能：时间筛选</text>
+      <text>• 队友筛选：待实现 (v2.1.0)</text>
+      <text>• 个人统计：待实现 (v4.0)</text>
+    </view>
+  </view>
 
   <!-- 详情弹窗 -->
   <view class="detail-modal" wx:if="{{showDetail}}" bindtap="onCloseDetail">
@@ -230,7 +219,7 @@
         <text class="scores-title">本把详细比分</text>
         <text class="close-btn" bindtap="onCloseDetail">×</text>
       </view>
-        <view class="detail-scores">
+      <view class="detail-scores">
         <view class="scores-table">
           <!-- 行标题列 -->
           <view class="row-header-column">

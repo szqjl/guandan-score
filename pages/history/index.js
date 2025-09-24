@@ -46,10 +46,10 @@ Page({
   loadGameHistory() {
     try {
       const history = wx.getStorageSync('gameHistory') || [];
-      
+
       // 直接使用现有数据，不进行修复
       const fixedHistory = history;
-      
+
       // 如果有数据被修复，保存回存储
       if (JSON.stringify(history) !== JSON.stringify(fixedHistory)) {
         wx.setStorageSync('gameHistory', fixedHistory);
@@ -58,7 +58,7 @@ Page({
           icon: 'success'
         });
       }
-      
+
       this.calculateStats(fixedHistory);
       this.extractTeammates(fixedHistory); // v2.1.0 提取队友列表
       this.setData({
@@ -90,7 +90,7 @@ Page({
       } else if (game.winner === 'draw') {
         draws++;
       }
-      
+
       // 计算平均时长
       if (game.duration && game.duration > 0) {
         totalDuration += game.duration;
@@ -115,7 +115,7 @@ Page({
   onViewDetail(e) {
     const index = e.currentTarget.dataset.index;
     const selectedGame = this.data.gameHistory[index];
-    
+
     this.setData({
       selectedGame,
       showDetail: true
@@ -139,7 +139,7 @@ Page({
   onDeleteGame(e) {
     const index = e.currentTarget.dataset.index;
     const gameHistory = [...this.data.gameHistory];
-    
+
     wx.showModal({
       title: '确认删除',
       content: '确定要删除这条游戏记录吗？',
@@ -209,12 +209,12 @@ Page({
   onSortChange(e) {
     const sortType = e.currentTarget.dataset.type;
     let sortOrder = 'desc';
-    
+
     // 如果点击的是当前排序类型，则切换排序顺序
     if (this.data.sortType === sortType) {
       sortOrder = this.data.sortOrder === 'desc' ? 'asc' : 'desc';
     }
-    
+
     this.setData({
       sortType: sortType,
       sortOrder: sortOrder
@@ -248,7 +248,10 @@ Page({
 
   // 应用自定义时间筛选
   onApplyCustomTime() {
-    const { customStartDate, customEndDate } = this.data;
+    const {
+      customStartDate,
+      customEndDate
+    } = this.data;
     if (!customStartDate || !customEndDate) {
       wx.showToast({
         title: '请选择开始时间和结束时间',
@@ -263,39 +266,52 @@ Page({
   getTimeRange(timeFilter) {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    
-    switch(timeFilter) {
+
+    switch (timeFilter) {
       case 'week':
         const startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay());
-        return { start: startOfWeek, end: now };
-        
+        return {
+          start: startOfWeek, end: now
+        };
+
       case 'lastWeek':
         const startOfLastWeek = new Date(today);
         startOfLastWeek.setDate(today.getDate() - today.getDay() - 7);
         const endOfLastWeek = new Date(today);
         endOfLastWeek.setDate(today.getDate() - today.getDay());
-        return { start: startOfLastWeek, end: endOfLastWeek };
-        
+        return {
+          start: startOfLastWeek, end: endOfLastWeek
+        };
+
       case 'month':
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        return { start: startOfMonth, end: now };
-        
+        return {
+          start: startOfMonth, end: now
+        };
+
       case 'lastMonth':
         const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
         const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-        return { start: startOfLastMonth, end: endOfLastMonth };
-        
+        return {
+          start: startOfLastMonth, end: endOfLastMonth
+        };
+
       case 'custom':
-        const { customStartDate, customEndDate } = this.data;
+        const {
+          customStartDate, customEndDate
+        } = this.data;
         if (customStartDate && customEndDate) {
           const start = new Date(customStartDate);
           const end = new Date(customEndDate);
           end.setHours(23, 59, 59, 999);
-          return { start, end };
+          return {
+            start,
+            end
+          };
         }
         return null;
-        
+
       default:
         return null;
     }
@@ -305,13 +321,17 @@ Page({
   extractTeammates(history) {
     const teammates = new Set();
     const teammateStats = {};
-    
+
     history.forEach(game => {
       if (game.redPlayers) {
         game.redPlayers.forEach(player => {
           teammates.add(player);
           if (!teammateStats[player]) {
-            teammateStats[player] = { totalGames: 0, wins: 0, losses: 0 };
+            teammateStats[player] = {
+              totalGames: 0,
+              wins: 0,
+              losses: 0
+            };
           }
           teammateStats[player].totalGames++;
           if (game.winner === 'red') {
@@ -325,7 +345,11 @@ Page({
         game.bluePlayers.forEach(player => {
           teammates.add(player);
           if (!teammateStats[player]) {
-            teammateStats[player] = { totalGames: 0, wins: 0, losses: 0 };
+            teammateStats[player] = {
+              totalGames: 0,
+              wins: 0,
+              losses: 0
+            };
           }
           teammateStats[player].totalGames++;
           if (game.winner === 'blue') {
@@ -336,13 +360,13 @@ Page({
         });
       }
     });
-    
+
     const allTeammates = Array.from(teammates).sort();
     this.setData({
       allTeammates: allTeammates,
       teammateStats: teammateStats
     });
-    
+
     // v3.0 预留：提取搭档组合
     this.extractPartners(history);
   },
@@ -350,7 +374,7 @@ Page({
   // v3.0 预留：提取搭档组合
   extractPartners(history) {
     const partners = new Set();
-    
+
     history.forEach(game => {
       if (game.redPlayers && game.redPlayers.length === 2) {
         const redPartner = game.redPlayers.sort().join(' & ');
@@ -361,7 +385,7 @@ Page({
         partners.add(bluePartner);
       }
     });
-    
+
     const allPartners = Array.from(partners).sort();
     this.setData({
       allPartners: allPartners
@@ -382,19 +406,19 @@ Page({
     if (teammateName === 'all') {
       return this.data.gameHistory.length;
     }
-    
+
     return this.data.gameHistory.filter(game => {
       const redPlayers = game.redPlayers || [];
       const bluePlayers = game.bluePlayers || [];
-      return redPlayers.includes(teammateName) || 
-             bluePlayers.includes(teammateName);
+      return redPlayers.includes(teammateName) ||
+        bluePlayers.includes(teammateName);
     }).length;
   },
 
   // 应用筛选和排序
   applyFilters() {
     let filtered = [...this.data.gameHistory];
-    
+
     // 应用时间筛选
     if (this.data.timeFilter !== 'all') {
       const timeRange = this.getTimeRange(this.data.timeFilter);
@@ -405,36 +429,36 @@ Page({
         });
       }
     }
-    
+
     // 应用胜负筛选
     if (this.data.filterType !== 'all') {
       filtered = filtered.filter(game => game.winner === this.data.filterType);
     }
-    
+
     // v2.1.0 应用队友筛选
     if (this.data.teammateFilter !== 'all') {
       filtered = filtered.filter(game => {
         const redPlayers = game.redPlayers || [];
         const bluePlayers = game.bluePlayers || [];
-        return redPlayers.includes(this.data.teammateFilter) || 
-               bluePlayers.includes(this.data.teammateFilter);
+        return redPlayers.includes(this.data.teammateFilter) ||
+          bluePlayers.includes(this.data.teammateFilter);
       });
     }
-    
+
     // v3.0 预留：应用搭档筛选
     if (this.data.partnerFilter !== 'all') {
       filtered = filtered.filter(game => {
         const redPartner = game.redPlayers ? game.redPlayers.sort().join(' & ') : '';
         const bluePartner = game.bluePlayers ? game.bluePlayers.sort().join(' & ') : '';
-        return redPartner === this.data.partnerFilter || 
-               bluePartner === this.data.partnerFilter;
+        return redPartner === this.data.partnerFilter ||
+          bluePartner === this.data.partnerFilter;
       });
     }
-    
+
     // 应用排序
     filtered.sort((a, b) => {
       let aValue, bValue;
-      
+
       switch (this.data.sortType) {
         case 'time':
           aValue = new Date(a.date + ' ' + a.time).getTime();
@@ -451,14 +475,14 @@ Page({
         default:
           return 0;
       }
-      
+
       if (this.data.sortOrder === 'desc') {
         return bValue - aValue;
       } else {
         return aValue - bValue;
       }
     });
-    
+
     this.setData({
       filteredHistory: filtered
     });
@@ -484,7 +508,7 @@ Page({
   onShareGame(e) {
     const index = e.currentTarget.dataset.index;
     const game = this.data.filteredHistory[index];
-    
+
     wx.showShareMenu({
       withShareTicket: true,
       success: () => {

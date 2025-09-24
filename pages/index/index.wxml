@@ -1,21 +1,13 @@
 <view class="container cn-paper-bg">
-  <image class="cn-ornament left" 
-         src="{{leftBorderImage}}" 
-         mode="heightFix" 
-         lazy-load="{{true}}"
-         binderror="onImageError"/>
-  <image class="cn-ornament right" 
-         src="{{rightBorderImage}}" 
-         mode="heightFix" 
-         lazy-load="{{true}}"
-         binderror="onImageError"/>
-  
+  <image class="cn-ornament left" src="{{leftBorderImage}}" mode="heightFix" lazy-load="{{true}}" binderror="onImageError" />
+  <image class="cn-ornament right" src="{{rightBorderImage}}" mode="heightFix" lazy-load="{{true}}" binderror="onImageError" />
+
   <!-- 环境标识 -->
   <view class="env-badge">
     <text wx:if="{{isTrial}}" class="env-text trial">体验版</text>
     <text wx:elif="{{isDevelop}}" class="env-text develop">开发版</text>
   </view>
-  
+
   <!-- 左侧导航按钮组 -->
   <view class="left-nav-panel">
     <button class="nav-btn" bindtap="onShowHistory">
@@ -35,7 +27,7 @@
       <text class="nav-text">设置</text>
     </button>
   </view>
-  
+
   <!-- 把数显示 - 移到体验版下方 -->
   <view class="left-rounds-display">
     <view class="rounds-clock">
@@ -45,7 +37,7 @@
       </view>
     </view>
   </view>
-  
+
   <!-- 红方 & 蓝方 并排 -->
   <view class="main-layout">
     <!-- 红方 -->
@@ -72,7 +64,7 @@
             <view class="level-display-content">
               <text class="level-text">{{levelTexts.red}}</text>
             </view>
-            <image wx:if="{{showRedIcon}}" src="../../images/victor.svg" class="score-icon"/>
+            <image wx:if="{{showRedIcon}}" src="../../images/victor.svg" class="score-icon" />
           </view>
         </view>
       </view>
@@ -87,7 +79,7 @@
             <view class="level-display-content">
               <text class="level-text">{{levelTexts.blue}}</text>
             </view>
-            <image wx:if="{{showBlueIcon}}" src="../../images/victor.svg" class="score-icon"/>
+            <image wx:if="{{showBlueIcon}}" src="../../images/victor.svg" class="score-icon" />
           </view>
         </view>
         <!-- 蓝方独立升级按钮组 - 放在右侧 -->
@@ -112,25 +104,25 @@
   <!-- 比分历史表格 - 优化版 -->
   <view class="history-table-section">
     <view class="history-header">
-  <text class="history-title">本局每把比分</text>
-  <view class="history-actions">
-    <button class="undo-btn" bindtap="undoLastStep" disabled="{{!canUndo}}">
-      <image src="../../images/CexiaoGrey.svg" class="undo-icon"></image>
-      <text class="undo-text">撤销上一把</text>
-    </button>
-    <button class="restore-btn" bindtap="restoreLastGame" disabled="{{!canRestore}}">
-      <text class="restore-text">恢复游戏</text>
-    </button>
-  </view>
-</view>
-    
+      <text class="history-title">本局每把比分</text>
+      <view class="history-actions">
+        <button class="undo-btn" bindtap="undoLastStep" disabled="{{!canUndo}}">
+          <image src="../../images/CexiaoGrey.svg" class="undo-icon"></image>
+          <text class="undo-text">撤销上一把</text>
+        </button>
+        <button class="restore-btn" bindtap="restoreLastGame" disabled="{{!canRestore}}">
+          <text class="restore-text">恢复游戏</text>
+        </button>
+      </view>
+    </view>
+
     <!-- 固定队伍列 -->
     <view class="fixed-team-column">
       <view class="fixed-team-cell header-cell">把数</view>
       <view class="fixed-team-cell">红方</view>
       <view class="fixed-team-cell">蓝方</view>
     </view>
-    
+
     <!-- 可滚动的表格内容 -->
     <view class="scrollable-table-container">
       <!-- 表格头部 -->
@@ -154,7 +146,7 @@
         <view class="table-cell">十七</view>
         <view class="table-cell">十八</view>
       </view>
-      
+
       <!-- 红方行 -->
       <view class="table-row">
         <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="0">{{historyScores[0] && historyScores[0].red ? historyScores[0].red : '-'}}</view>
@@ -176,7 +168,7 @@
         <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="16">{{historyScores[16] && historyScores[16].red ? historyScores[16].red : '-'}}</view>
         <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="17">{{historyScores[17] && historyScores[17].red ? historyScores[17].red : '-'}}</view>
       </view>
-      
+
       <!-- 蓝方行 -->
       <view class="table-row">
         <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="0">{{historyScores[0] && historyScores[0].blue ? historyScores[0].blue : '-'}}</view>
@@ -210,11 +202,13 @@
 
     <!-- 规则选择 -->
     <view class="rule-section">
-      <text>规则：</text>
+      <text>规则:</text>
       <radio-group bindchange="onRuleChange" disabled="{{gameStarted}}">
-        <label><radio value="by-A" checked="{{rule === 'by-A'}}" disabled="{{gameStarted}}"/>过A</label>
         <label>
-          <radio value="by-rounds" checked="{{rule === 'by-rounds'}}" disabled="{{gameStarted}}"/>把数
+          <radio value="by-A" checked="{{rule === 'by-A'}}" disabled="{{gameStarted}}" />过A
+        </label>
+        <label>
+          <radio value="by-rounds" checked="{{rule === 'by-rounds'}}" disabled="{{gameStarted}}" />把数
           <view wx:if="{{rule === 'by-rounds'}}" class="rounds-selector">
             <text class="rounds-display-text" bindtap="onShowRoundsPicker">{{maxRounds}}</text>
           </view>
@@ -234,24 +228,15 @@
         <text class="rounds-picker-title">选择最大把数</text>
       </view>
       <view class="rounds-picker-grid">
-        <view class="rounds-picker-item {{tempMaxRounds === 7 ? 'selected' : ''}}" 
-              data-value="7" bindtap="onSelectRounds">7把</view>
-        <view class="rounds-picker-item {{tempMaxRounds === 8 ? 'selected' : ''}}" 
-              data-value="8" bindtap="onSelectRounds">8把</view>
-        <view class="rounds-picker-item {{tempMaxRounds === 9 ? 'selected' : ''}}" 
-              data-value="9" bindtap="onSelectRounds">9把</view>
-        <view class="rounds-picker-item {{tempMaxRounds === 10 ? 'selected' : ''}}" 
-              data-value="10" bindtap="onSelectRounds">10把</view>
-        <view class="rounds-picker-item {{tempMaxRounds === 11 ? 'selected' : ''}}" 
-              data-value="11" bindtap="onSelectRounds">11把</view>
-        <view class="rounds-picker-item {{tempMaxRounds === 12 ? 'selected' : ''}}" 
-              data-value="12" bindtap="onSelectRounds">12把</view>
-        <view class="rounds-picker-item {{tempMaxRounds === 13 ? 'selected' : ''}}" 
-              data-value="13" bindtap="onSelectRounds">13把</view>
-        <view class="rounds-picker-item {{tempMaxRounds === 14 ? 'selected' : ''}}" 
-              data-value="14" bindtap="onSelectRounds">14把</view>
-        <view class="rounds-picker-item {{tempMaxRounds === 15 ? 'selected' : ''}}" 
-              data-value="15" bindtap="onSelectRounds">15把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 7 ? 'selected' : ''}}" data-value="7" bindtap="onSelectRounds">7把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 8 ? 'selected' : ''}}" data-value="8" bindtap="onSelectRounds">8把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 9 ? 'selected' : ''}}" data-value="9" bindtap="onSelectRounds">9把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 10 ? 'selected' : ''}}" data-value="10" bindtap="onSelectRounds">10把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 11 ? 'selected' : ''}}" data-value="11" bindtap="onSelectRounds">11把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 12 ? 'selected' : ''}}" data-value="12" bindtap="onSelectRounds">12把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 13 ? 'selected' : ''}}" data-value="13" bindtap="onSelectRounds">13把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 14 ? 'selected' : ''}}" data-value="14" bindtap="onSelectRounds">14把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 15 ? 'selected' : ''}}" data-value="15" bindtap="onSelectRounds">15把</view>
       </view>
       <view class="rounds-picker-footer">
         <button class="rounds-picker-confirm" bindtap="onConfirmRounds">确定</button>
@@ -265,7 +250,7 @@
     <view class="victory-overlay"></view>
     <view class="victory-content">
       <view class="victory-icon">🏆</view>
-      <view class="victory-title">{{victoryTeam === 'red' ? '红方胜利！' : '蓝方胜利！'}}</view>
+      <view class="victory-title">{{victoryTeam === 'red' ? '红方胜利!' : '蓝方胜利!'}}</view>
       <view class="victory-message">{{victoryMessage}}</view>
       <view class="victory-confetti">
         <view class="confetti-piece" wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this"></view>
@@ -284,13 +269,13 @@
           <text class="close-icon">×</text>
         </view>
       </view>
-      
+
       <!-- 设置选项 -->
       <view class="settings-options">
         <!-- 游戏设置 -->
         <view class="settings-section">
           <text class="section-title">游戏设置</text>
-          
+
           <view class="option-item">
             <text class="option-label">默认计分规则</text>
             <view class="option-value">
@@ -299,7 +284,7 @@
               </picker>
             </view>
           </view>
-          
+
           <view class="option-item">
             <text class="option-label">最大把数</text>
             <view class="option-value">
@@ -309,31 +294,31 @@
             </view>
           </view>
         </view>
-        
+
         <!-- 显示设置 -->
         <view class="settings-section">
           <text class="section-title">显示设置</text>
-          
+
           <view class="option-item">
             <text class="option-label">显示环境标识</text>
-            <switch checked="{{showEnvBadge}}" bindchange="onEnvBadgeChange" color="#EE1967"/>
+            <switch checked="{{showEnvBadge}}" bindchange="onEnvBadgeChange" color="#EE1967" />
           </view>
-          
+
           <view class="option-item">
             <text class="option-label">显示点击提示</text>
-            <switch checked="{{showClickToast}}" bindchange="onClickToastChange" color="#EE1967"/>
+            <switch checked="{{showClickToast}}" bindchange="onClickToastChange" color="#EE1967" />
           </view>
         </view>
-        
+
         <!-- 数据设置 -->
         <view class="settings-section">
           <text class="section-title">数据设置</text>
-          
+
           <view class="option-item">
             <text class="option-label">自动保存</text>
-            <switch checked="{{autoSave}}" bindchange="onAutoSaveChange" color="#EE1967"/>
+            <switch checked="{{autoSave}}" bindchange="onAutoSaveChange" color="#EE1967" />
           </view>
-          
+
           <view class="option-item">
             <text class="option-label">清空历史记录</text>
             <view class="option-value">
@@ -342,7 +327,7 @@
           </view>
         </view>
       </view>
-      
+
       <!-- 弹窗底部按钮 -->
       <view class="settings-footer">
         <button class="settings-btn cancel-btn" bindtap="onCloseSettings">取消</button>

@@ -23,10 +23,10 @@ Page({
   loadGameHistory() {
     try {
       const history = wx.getStorageSync('gameHistory') || [];
-      
+
       // 直接使用现有数据，不进行修复
       const fixedHistory = history;
-      
+
       // 如果有数据被修复，保存回存储
       if (JSON.stringify(history) !== JSON.stringify(fixedHistory)) {
         wx.setStorageSync('gameHistory', fixedHistory);
@@ -35,7 +35,7 @@ Page({
           icon: 'success'
         });
       }
-      
+
       this.calculateStats(fixedHistory);
       this.setData({
         gameHistory: fixedHistory
@@ -81,7 +81,7 @@ Page({
   onViewDetail(e) {
     const index = e.currentTarget.dataset.index;
     const selectedGame = this.data.gameHistory[index];
-    
+
     this.setData({
       selectedGame,
       showDetail: true
@@ -105,7 +105,7 @@ Page({
   onDeleteGame(e) {
     const index = e.currentTarget.dataset.index;
     const gameHistory = [...this.data.gameHistory];
-    
+
     wx.showModal({
       title: '确认删除',
       content: '确定要删除这条游戏记录吗？',

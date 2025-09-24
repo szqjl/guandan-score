@@ -9,7 +9,7 @@ App({
   },
   onLaunch() {
     console.log('掼蛋计分开始');
-    
+
     // 异步环境检测，不阻塞启动过程
     setTimeout(() => {
       try {
