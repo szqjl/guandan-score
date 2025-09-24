@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>筛选面板调试</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 3000;
+            max-width: 300px;
+        }
+
+        .filter-panel {
+            position: fixed;
+            bottom: 140px; /* 对应 140rpx */
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.95);
+            border-radius: 8px;
+            padding: 35px 15px 15px 15px; /* 对应 35rpx 15rpx 15rpx 15rpx */
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+            max-height: 65vh;
+            overflow-y: auto;
+            opacity: 1;
+            z-index: 1001;
+            border: 2px solid red; /* 调试边框 */
+        }
+
+        .filter-group {
+            margin-bottom: 8px;
+            border: 1px solid blue; /* 调试边框 */
+        }
+
+        .filter-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            line-height: 1.2;
+            border: 1px solid green; /* 调试边框 */
+            padding: 5px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+            margin-top: 0;
+            border: 1px solid yellow; /* 调试边框 */
+            padding: 2px;
+        }
+
+        .action-btn {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 3px;
+            font-size: 14px;
+            background: #6c757d;
+            color: white;
+            cursor: pointer;
+            border: 1px solid orange; /* 调试边框 */
+        }
+
+        .close-btn {
+            background: #1565C0;
+            color: white;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+            padding: 4px;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.05);
+            margin-top: 2px;
+        }
+
+        .filter-option {
+            padding: 6px 12px;
+            border: 1px solid #4caf50;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            font-size: 16px;
+            color: white;
+            min-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .filter-option.active {
+            background-color: #0B1557;
+            color: white;
+            border-color: #0B1557;
+        }
+
+        .filter-stats {
+            background: #1565C0;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        /* 模拟底部按钮 */
+        .bottom-btn {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #1565C0;
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-info">
+        <h4>筛选面板调试信息</h4>
+        <div>面板位置: bottom: 140px</div>
+        <div>面板内边距: 35px 15px 15px 15px</div>
+        <div>面板最大高度: 65vh</div>
+        <div>标签下边距: 6px</div>
+        <div>按钮上边距: 0px</div>
+        <div>按钮间距: 6px</div>
+        <div>按钮内边距: 4px 8px</div>
+        <div>按钮字体: 14px</div>
+    </div>
+
+    <!-- 筛选面板 -->
+    <div class="filter-panel">
+        <!-- 时间筛选 -->
+        <div class="filter-group">
+            <div class="filter-label">
+                <span>📅 时间筛选</span>
+                <div class="action-buttons">
+                    <button class="action-btn">重置</button>
+                    <button class="action-btn close-btn">关闭</button>
+                </div>
+            </div>
+            <div class="filter-options">
+                <div class="filter-option active">全部时间</div>
+                <div class="filter-option">本周</div>
+                <div class="filter-option">上周</div>
+                <div class="filter-option">本月</div>
+                <div class="filter-option">上月</div>
+                <div class="filter-option">自定义时间</div>
+            </div>
+        </div>
+
+        <!-- 队友筛选 -->
+        <div class="filter-group" style="opacity: 0.4;">
+            <div class="filter-label">
+                <span>👥 队友筛选 (v2.1.0)</span>
+            </div>
+            <div class="filter-options">
+                <div class="filter-option active">全部队友</div>
+                <div class="filter-option">最活跃队友</div>
+                <div class="filter-option">最近参与</div>
+                <div class="filter-option">按字母排序</div>
+            </div>
+        </div>
+
+        <!-- 筛选统计信息 -->
+        <div class="filter-stats">
+            <div>📊 筛选统计：</div>
+            <div>• 总比赛数：95场</div>
+            <div>• 当前功能：时间筛选</div>
+            <div>• 队友筛选：待实现 (v2.1.0)</div>
+            <div>• 个人统计：待实现 (v4.0)</div>
+        </div>
+    </div>
+
+    <!-- 底部按钮 -->
+    <button class="bottom-btn">⚙️ 筛选</button>
+
+    <script>
+        // 添加交互功能
+        document.querySelectorAll('.filter-option').forEach(option => {
+            option.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.filter-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // 显示元素尺寸信息
+        function showElementInfo() {
+            const panel = document.querySelector('.filter-panel');
+            const label = document.querySelector('.filter-label');
+            const buttons = document.querySelector('.action-buttons');
+            const resetBtn = document.querySelector('.action-btn');
+            
+            console.log('面板高度:', panel.offsetHeight);
+            console.log('标签高度:', label.offsetHeight);
+            console.log('按钮容器高度:', buttons.offsetHeight);
+            console.log('重置按钮高度:', resetBtn.offsetHeight);
+        }
+
+        setTimeout(showElementInfo, 1000);
+    </script>
+</body>
+</html>

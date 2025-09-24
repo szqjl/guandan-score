@@ -41,7 +41,7 @@
     <view class="rounds-clock">
       <view class="rounds-number">
         <text wx:if="{{rounds > 0}}" class="rounds-text-large">{{rounds}}</text>
-        <text wx:else class="rounds-text-small">把数</text>
+        <text wx:else class="rounds-text-small">VS</text>
       </view>
     </view>
   </view>
@@ -256,6 +256,19 @@
       <view class="rounds-picker-footer">
         <button class="rounds-picker-confirm" bindtap="onConfirmRounds">确定</button>
         <button class="rounds-picker-cancel" bindtap="onCloseRoundsPicker">取消</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 胜利动画弹窗 -->
+  <view class="victory-animation-modal" wx:if="{{showVictoryAnimation}}">
+    <view class="victory-overlay"></view>
+    <view class="victory-content">
+      <view class="victory-icon">🏆</view>
+      <view class="victory-title">{{victoryTeam === 'red' ? '红方胜利！' : '蓝方胜利！'}}</view>
+      <view class="victory-message">{{victoryMessage}}</view>
+      <view class="victory-confetti">
+        <view class="confetti-piece" wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this"></view>
       </view>
     </view>
   </view>

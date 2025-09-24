@@ -5,6 +5,12 @@ Page({
       red: '2',
       blue: '2'
     },
+    // 音效控制
+    soundEnabled: true,
+    // 胜利动画控制
+    showVictoryAnimation: false,
+    victoryTeam: '',
+    victoryMessage: '',
     historyScores: [],
     rule: 'by-rounds',
     maxRounds: 10,
@@ -59,6 +65,13 @@ Page({
     });
   },
 
+  onUnload() {
+    // 页面卸载时清理音频资源
+    if (this.soundContext) {
+      this.soundContext.destroy();
+    }
+  },
+
   onLoad() {
     // 保持屏幕常亮，防止游戏过程中熄屏
     wx.setKeepScreenOn({
@@ -73,6 +86,9 @@ Page({
 
     // 快速初始化 - 减少复杂处理和日志输出，提高启动速度
     const forceShowTrialBadge = true; // 当前设置为true，强制显示体验版标识用于测试
+    
+    // 初始化音效
+    this.initSounds();
     
     // 从本地存储加载队员设置
     const savedSettings = wx.getStorageSync('teamSettings');
@@ -176,12 +192,6 @@ Page({
   // 防抖处理变量
   lastClickTime: 0,
   debounceDelay: 500,
-  
-  // 按钮禁用状态
-  buttonDisabledStates: {
-    red: { double: false, two: false, one: false },
-    blue: { double: false, two: false, one: false }
-  },
 
   // 处理等级升级
   onLevelUpgrade(e = {}) {
@@ -207,9 +217,12 @@ Page({
     const buttonType = value === 3 ? 'double' : value === 2 ? 'two' : 'one';
     
     // 检查按钮是否已被禁用
-    if (this.buttonDisabledStates[team][buttonType]) {
+    if (this.data.buttonDisabledStates[team][buttonType]) {
       return; // 如果按钮已禁用，直接返回
     }
+
+    // 播放按钮音效
+    this.playButtonSound(buttonType);
 
     // 控制图标显示状态
     if (team === 'red') {
@@ -326,14 +339,12 @@ Page({
     }
     
     // 设置按钮为禁用状态
-    this.buttonDisabledStates[team][buttonType] = true;
     this.setData({
       [`buttonDisabledStates.${team}.${buttonType}`]: true
     });
     
     // 5秒后恢复按钮状态
     setTimeout(() => {
-      this.buttonDisabledStates[team][buttonType] = false;
       // 更新页面数据以触发重新渲染
       this.setData({
         [`buttonDisabledStates.${team}.${buttonType}`]: false
@@ -407,6 +418,9 @@ Page({
         // 处于A阶段，根据操作处理
         if (scoreIncrement >= 2) {
           // 双上(+3)或1游3游(+2)，过A成功
+          // 显示胜利动画
+          this.showVictoryAnimation(currentTeam, currentTeam === 'red' ? '恭喜红方首轮过A成功！' : '恭喜蓝方首轮过A成功！');
+          
           wx.showModal({
             title: '本局结束',
             content: `${currentTeam === 'red' ? '恭喜红方首轮过A成功' : '恭喜蓝方首轮过A成功'}\n本局结束`,
@@ -795,6 +809,13 @@ Page({
           resultText = `恭喜蓝方获胜`;
         } else {
           resultText = `恭喜双方战平`;
+        }
+        
+        // 显示胜利动画
+        if (resultText.includes('红方胜利')) {
+          this.showVictoryAnimation('red', '红方胜利！');
+        } else if (resultText.includes('蓝方胜利')) {
+          this.showVictoryAnimation('blue', '蓝方胜利！');
         }
         
         wx.showModal({
@@ -1729,6 +1750,119 @@ Page({
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${hours}:${minutes}`;
+  },
+
+  // ===================== 音效功能 =====================
+  
+  // 初始化音效
+  initSounds() {
+    try {
+      // 创建音效上下文
+      this.soundContext = wx.createInnerAudioContext();
+      
+      // 设置音效文件路径和属性
+      this.soundContext.src = '/images/sounds/shenj.mp3';
+      this.soundContext.volume = 0.6; // 音量设置为60%
+      this.soundContext.loop = false; // 不循环播放
+      
+      // 添加错误监听
+      this.soundContext.onError((error) => {
+        console.error('音效文件加载错误:', error);
+      });
+      
+      console.log('音效初始化成功');
+    } catch (error) {
+      console.error('音效初始化失败:', error);
+    }
+  },
+
+  // 播放按钮音效
+  playButtonSound(buttonType) {
+    if (!this.data.soundEnabled) {
+      console.log('音效已关闭');
+      return;
+    }
+    
+    try {
+      if (this.soundContext) {
+        console.log('开始播放音效:', buttonType);
+        this.soundContext.play();
+        
+        // 添加播放事件监听
+        this.soundContext.onPlay(() => {
+          console.log('音效播放开始');
+        });
+        
+        this.soundContext.onError((error) => {
+          console.error('音效播放错误:', error);
+        });
+      } else {
+        console.error('音效上下文未初始化');
+      }
+    } catch (error) {
+      console.error('播放音效失败:', error);
+    }
+  },
+
+  // 切换音效开关
+  toggleSound() {
+    this.setData({
+      soundEnabled: !this.data.soundEnabled
+    });
+    
+    wx.showToast({
+      title: this.data.soundEnabled ? '音效已开启' : '音效已关闭',
+      icon: 'none',
+      duration: 1500
+    });
+  },
+
+  // ===================== 胜利动画功能 =====================
+  
+  // 显示胜利动画
+  showVictoryAnimation(team, message) {
+    this.setData({
+      showVictoryAnimation: true,
+      victoryTeam: team,
+      victoryMessage: message
+    });
+    
+    // 播放胜利音效
+    this.playVictorySound();
+    
+    // 3秒后自动隐藏动画
+    setTimeout(() => {
+      this.hideVictoryAnimation();
+    }, 3000);
+  },
+  
+  // 隐藏胜利动画
+  hideVictoryAnimation() {
+    this.setData({
+      showVictoryAnimation: false,
+      victoryTeam: '',
+      victoryMessage: ''
+    });
+  },
+  
+  // 播放胜利音效
+  playVictorySound() {
+    if (!this.data.soundEnabled) return;
+    
+    try {
+      if (this.soundContext) {
+        // 连续播放3次胜利音效
+        this.soundContext.play();
+        setTimeout(() => {
+          this.soundContext.play();
+        }, 500);
+        setTimeout(() => {
+          this.soundContext.play();
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('播放胜利音效失败:', error);
+    }
   },
 
 });

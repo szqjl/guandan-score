@@ -117,16 +117,17 @@
         <text class="filter-text">筛选</text>
       </button>
     </view>
-    
-    <!-- 筛选面板 -->
-    <view class="filter-panel {{showFilter ? 'show' : ''}}">
+  </view>
+  
+  <!-- 筛选面板 - 移出 action-section -->
+  <view class="filter-panel {{showFilter ? 'show' : ''}}">
       <!-- 时间筛选 -->
       <view class="filter-group">
-        <view class="filter-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10rpx;">
+        <view class="filter-label">
           <text>📅 时间筛选</text>
-          <view class="action-buttons" style="display: flex; gap: 6rpx;">
-            <button class="action-btn" style="padding: 6rpx 12rpx; background: #6c757d; color: white; border: none; border-radius: 4rpx; font-size: 16rpx;" bindtap="onResetFilters">重置</button>
-            <button class="action-btn close-btn" style="padding: 6rpx 12rpx; background: #1565C0; color: white; border: none; border-radius: 4rpx; font-size: 16rpx;" bindtap="onToggleFilter">关闭</button>
+          <view class="action-buttons">
+            <button class="action-btn" bindtap="onResetFilters">重置</button>
+            <button class="action-btn close-btn" bindtap="onToggleFilter">关闭</button>
           </view>
         </view>
         <view class="filter-options">
@@ -221,7 +222,6 @@
         <text>• 个人统计：待实现 (v4.0)</text>
       </view>
     </view>
-  </view>
 
   <!-- 详情弹窗 -->
   <view class="detail-modal" wx:if="{{showDetail}}" bindtap="onCloseDetail">
