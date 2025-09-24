@@ -102,7 +102,48 @@ class VersionManager {
   }
 
   /**
-   * 创建新版本
+   * 复制文件或目录
+   */
+  copyFileOrDir(src, dest) {
+    const stat = fs.statSync(src);
+    if (stat.isDirectory()) {
+      if (!fs.existsSync(dest)) {
+        fs.mkdirSync(dest, { recursive: true });
+      }
+      const files = fs.readdirSync(src);
+      files.forEach(file => {
+        const srcPath = path.join(src, file);
+        const destPath = path.join(dest, file);
+        this.copyFileOrDir(srcPath, destPath);
+      });
+    } else {
+      fs.copyFileSync(src, dest);
+    }
+  }
+
+  /**
+   * 获取需要备份的文件和目录列表
+   */
+  getBackupItems() {
+    return [
+      'app.js',
+      'app.json',
+      'package.json',
+      'project.config.json',
+      'project.private.config.json',
+      'sitemap.json',
+      'pages',
+      'images',
+      'utils',
+      'data',
+      '把数制规则.md',
+      '过A制规则.md',
+      '页面标题图片要求.md'
+    ];
+  }
+
+  /**
+   * 创建新版本（包含完整项目文件备份）
    */
   createVersion(version, description, features = [], changelog = []) {
     const versionDir = path.join(this.versionsDir, version);
@@ -114,6 +155,28 @@ class VersionManager {
 
     fs.mkdirSync(versionDir, { recursive: true });
     console.log('✅ 创建版本目录:', version);
+
+    // 备份项目文件
+    console.log('📁 开始备份项目文件...');
+    const backupItems = this.getBackupItems();
+    let backupCount = 0;
+    
+    backupItems.forEach(item => {
+      const srcPath = path.join(this.currentDir, item);
+      const destPath = path.join(versionDir, item);
+      
+      if (fs.existsSync(srcPath)) {
+        try {
+          this.copyFileOrDir(srcPath, destPath);
+          backupCount++;
+          console.log(`  ✅ 备份: ${item}`);
+        } catch (error) {
+          console.log(`  ❌ 备份失败: ${item} - ${error.message}`);
+        }
+      } else {
+        console.log(`  ⚠️  文件不存在: ${item}`);
+      }
+    });
 
     // 创建版本信息
     const versionInfo = {
@@ -128,12 +191,69 @@ class VersionManager {
       changelog: changelog,
       status: version.includes('stable') ? 'stable' : 
               version.includes('beta') ? 'beta' : 'dev',
-      rollbackSupported: true
+      rollbackSupported: true,
+      backupCount: backupCount
     };
 
     const versionInfoPath = path.join(versionDir, this.versionInfoFile);
     fs.writeFileSync(versionInfoPath, JSON.stringify(versionInfo, null, 2));
-    console.log('✅ 版本创建完成:', version);
+    console.log(`✅ 版本创建完成: ${version} (备份了 ${backupCount} 个项目文件)`);
+    return true;
+  }
+
+  /**
+   * 完善现有版本（为只有version-info.json的版本添加完整备份）
+   */
+  completeVersion(version) {
+    const versionDir = path.join(this.versionsDir, version);
+    
+    if (!fs.existsSync(versionDir)) {
+      console.log('❌ 版本不存在:', version);
+      return false;
+    }
+
+    // 检查是否已有完整备份
+    const hasPages = fs.existsSync(path.join(versionDir, 'pages'));
+    const hasApp = fs.existsSync(path.join(versionDir, 'app.js'));
+    
+    if (hasPages && hasApp) {
+      console.log('✅ 版本已完整:', version);
+      return true;
+    }
+
+    console.log(`📁 完善版本 ${version} 的项目文件备份...`);
+    
+    // 备份项目文件
+    const backupItems = this.getBackupItems();
+    let backupCount = 0;
+    
+    backupItems.forEach(item => {
+      const srcPath = path.join(this.currentDir, item);
+      const destPath = path.join(versionDir, item);
+      
+      if (fs.existsSync(srcPath)) {
+        try {
+          this.copyFileOrDir(srcPath, destPath);
+          backupCount++;
+          console.log(`  ✅ 备份: ${item}`);
+        } catch (error) {
+          console.log(`  ❌ 备份失败: ${item} - ${error.message}`);
+        }
+      } else {
+        console.log(`  ⚠️  文件不存在: ${item}`);
+      }
+    });
+
+    // 更新版本信息
+    const versionInfoPath = path.join(versionDir, this.versionInfoFile);
+    if (fs.existsSync(versionInfoPath)) {
+      const versionInfo = JSON.parse(fs.readFileSync(versionInfoPath, 'utf8'));
+      versionInfo.backupCount = backupCount;
+      versionInfo.completedAt = new Date().toISOString();
+      fs.writeFileSync(versionInfoPath, JSON.stringify(versionInfo, null, 2));
+    }
+
+    console.log(`✅ 版本完善完成: ${version} (新增 ${backupCount} 个项目文件)`);
     return true;
   }
 }
@@ -155,6 +275,25 @@ function main() {
       manager.createVersion(version, description);
       break;
 
+    case 'complete':
+      const versionToComplete = args[1];
+      if (!versionToComplete) {
+        console.error('❌ 请指定要完善的版本号');
+        process.exit(1);
+      }
+      manager.completeVersion(versionToComplete);
+      break;
+
+    case 'complete-all':
+      console.log('📁 完善所有版本的完整备份...');
+      const versions = manager.listVersions();
+      versions.forEach(v => {
+        if (v !== 'v1.1.0' && v !== 'v2.0.3') { // 跳过已有完整备份的版本
+          manager.completeVersion(v);
+        }
+      });
+      break;
+
     case 'list':
       manager.listVersions();
       break;
@@ -167,12 +306,16 @@ function main() {
       console.log('📋 guandan-score 版本管理系统');
       console.log('');
       console.log('使用方法:');
-      console.log('  node version-manager.js create <版本号> [描述]     - 创建新版本');
+      console.log('  node version-manager.js create <版本号> [描述]     - 创建新版本（含完整备份）');
+      console.log('  node version-manager.js complete <版本号>           - 完善现有版本备份');
+      console.log('  node version-manager.js complete-all               - 完善所有版本备份');
       console.log('  node version-manager.js list                       - 列出所有版本');
       console.log('  node version-manager.js current                    - 显示当前版本');
       console.log('');
       console.log('示例:');
       console.log('  node version-manager.js create v1.0.0-stable "基础核心功能版"');
+      console.log('  node version-manager.js complete v1.2.0');
+      console.log('  node version-manager.js complete-all');
       console.log('  node version-manager.js current');
       console.log('  node version-manager.js list');
   }

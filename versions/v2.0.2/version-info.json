@@ -22,5 +22,7 @@
     "统一提示信息 - 追不上提示信息标准化"
   ],
   "status": "stable",
-  "rollbackSupported": true
+  "rollbackSupported": true,
+  "backupCount": 13,
+  "completedAt": "2025-09-24T16:11:07.084Z"
 }
