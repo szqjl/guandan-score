@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * guandan-score 版本管理系统
  * 提供版本创建、回滚、调用和状态跟踪功能

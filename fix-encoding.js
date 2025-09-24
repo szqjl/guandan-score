@@ -1,24 +1,20 @@
 const fs = require('fs');
 
-// 中文标点符号映射
+// Chinese punctuation mapping
 const punctuationMap = {
-  '，': ',',
-  '。': '.',
-  '；': ';',
-  '：': ':',
-  '！': '!',
-  '？': '?',
-  '、': ',',
-  '（': '(',
-  '）': ')',
-  '"': '"',
-  '"': '"',
-  ''
-  ': "'
-  ",
-  ''
-  ': "'
-  "
+  '\uFF0C': ',',  // Chinese comma
+  '\u3002': '.',  // Chinese period
+  '\uFF1B': ';',  // Chinese semicolon
+  '\uFF1A': ':',  // Chinese colon
+  '\uFF01': '!',  // Chinese exclamation
+  '\uFF1F': '?',  // Chinese question
+  '\u3001': ',',  // Chinese enumeration comma
+  '\uFF08': '(',  // Chinese left parenthesis
+  '\uFF09': ')',  // Chinese right parenthesis
+  '\u201C': '"',  // Left double quotation mark
+  '\u201D': '"',  // Right double quotation mark
+  '\u2018': "'",  // Left single quotation mark
+  '\u2019': "'"   // Right single quotation mark
 };
 
 function fixEncoding(filePath) {
@@ -26,7 +22,7 @@ function fixEncoding(filePath) {
     let content = fs.readFileSync(filePath, 'utf8');
     let changed = false;
 
-    // 替换中文标点符号
+    // Replace Chinese punctuation
     for (const [chinese, english] of Object.entries(punctuationMap)) {
       if (content.includes(chinese)) {
         content = content.replace(new RegExp(chinese, 'g'), english);
@@ -36,19 +32,19 @@ function fixEncoding(filePath) {
 
     if (changed) {
       fs.writeFileSync(filePath, content, 'utf8');
-      console.log(`✅ 已修复文件: ${filePath}`);
+      console.log(`Fixed file: ${filePath}`);
       return true;
     } else {
-      console.log(`ℹ️  文件无需修复: ${filePath}`);
+      console.log(`No changes needed: ${filePath}`);
       return false;
     }
   } catch (error) {
-    console.error(`❌ 修复文件失败: ${filePath}`, error.message);
+    console.error(`Failed to fix file: ${filePath}`, error.message);
     return false;
   }
 }
 
-// 修复主要文件
+// Files to fix
 const filesToFix = [
   'pages/index/index.js',
   'pages/index/index.wxml',
@@ -56,7 +52,7 @@ const filesToFix = [
   'app.js'
 ];
 
-console.log('🔧 开始修复编码问题...\n');
+console.log('Starting encoding fix...\n');
 
 let totalFixed = 0;
 filesToFix.forEach(file => {
@@ -65,9 +61,9 @@ filesToFix.forEach(file => {
       totalFixed++;
     }
   } else {
-    console.log(`⚠️  文件不存在: ${file}`);
+    console.log(`File not found: ${file}`);
   }
 });
 
-console.log(`\n🎉 修复完成！共修复了 ${totalFixed} 个文件`);
-console.log('📝 建议：重新启动开发服务器测试');
+console.log(`\nFix completed! Fixed ${totalFixed} files`);
+console.log('Please restart the development server to test');
