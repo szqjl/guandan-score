@@ -1362,12 +1362,53 @@ Page({
      });
    },
 
-   onShowSettings() {
-     // 跳转到队伍设置页面
-     wx.navigateTo({
-       url: '/pages/team-setting/index'
-     });
-   },
+  onShowSettings() {
+    // 跳转到队伍设置页面
+    console.log('尝试跳转到队伍设置页面');
+    
+    // 先检查页面是否存在
+    const pages = getCurrentPages();
+    console.log('当前页面栈:', pages.length);
+    
+    // 检查页面栈深度，如果太深则使用redirectTo
+    if (pages.length >= 10) {
+      console.log('页面栈太深，使用redirectTo');
+      wx.redirectTo({
+        url: '/pages/team-setting/index',
+        success: () => {
+          console.log('redirectTo跳转成功');
+        },
+        fail: (error) => {
+          console.error('redirectTo失败:', error);
+          wx.showModal({
+            title: '跳转失败',
+            content: `错误信息: ${error.errMsg || '未知错误'}`,
+            showCancel: false,
+            confirmText: '知道了'
+          });
+        }
+      });
+    } else {
+      wx.navigateTo({
+        url: '/pages/team-setting/index',
+        success: () => {
+          console.log('成功跳转到队伍设置页面');
+        },
+        fail: (error) => {
+          console.error('跳转失败:', error);
+          console.log('错误详情:', JSON.stringify(error));
+          
+          // 显示错误信息给用户
+          wx.showModal({
+            title: '跳转失败',
+            content: `错误信息: ${error.errMsg || '未知错误'}`,
+            showCancel: false,
+            confirmText: '知道了'
+          });
+        }
+      });
+    }
+  },
 
   // 保存游戏到历史记录
   saveGameToHistory() {
