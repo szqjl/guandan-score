@@ -15,7 +15,7 @@ Page({
     showBlueIcon: false,
     // 新增过A制相关状态
     aAttempts: {
-      red: 0, // 红方尝试过A的次数（0: 未尝试, 1:A2, 2:A3）
+      red: 0, // 红方尝试过A的次数(0: 未尝试, 1:A2, 2:A3)
       blue: 0 // 蓝方尝试过A的次数
     },
     // 游戏是否已开始
@@ -60,13 +60,13 @@ Page({
   },
 
    onLoad() {
-     // 快速初始化 - 减少复杂处理和日志输出，提高启动速度
-     const forceShowTrialBadge = true; // 当前设置为true，强制显示体验版标识用于测试
+     // 快速初始化 - 减少复杂处理和日志输出,提高启动速度
+     const forceShowTrialBadge = true; // 当前设置为true,强制显示体验版标识用于测试
 
      // 初始化音效
      this.initSounds();
 
-     // 直接设置默认值，避免复杂的应用实例获取和try-catch处理
+     // 直接设置默认值,避免复杂的应用实例获取和try-catch处理
      this.setData({
        isTrial: forceShowTrialBadge,
        isDevelop: false,
@@ -80,11 +80,11 @@ Page({
         canRestore: true
       });
 
-      // 检查是否需要用户选择（智能提示）
+      // 检查是否需要用户选择(智能提示)
       this.checkNeedUserChoice(savedGameData);
     }
 
-    // 异步更新环境信息（如果后续需要使用）
+    // 异步更新环境信息(如果后续需要使用)
     setTimeout(() => {
       try {
         const app = getApp && getApp();
@@ -104,11 +104,11 @@ Page({
 
   // 将等级文本转换为数字
   textToLevel(text) {
-    // 处理A加上标数字的情况，如A¹、A²、A³和E
+    // 处理A加上标数字的情况,如A¹,A²,A³和E
     if (text.startsWith('A')) {
       const attemptMatch = text.match(/A(\d+)/);
       if (attemptMatch) {
-      // 在把数制下，A/A2/A3视为不同级别：A=14, A2=15, A3=16
+      // 在把数制下,A/A2/A3视为不同级别:A=14, A2=15, A3=16
       const attempt = parseInt(attemptMatch[1]);
       if (this.data.rule === 'by-rounds') {
         return 14 + attempt;
@@ -118,7 +118,7 @@ Page({
       return 14;
     }
     if (text.toLowerCase() === 'e') {
-      return 14; // E也视为14级，但会在UI上特殊显示
+      return 14; // E也视为14级,但会在UI上特殊显示
     }
     if (text === 'J') return 11;
     else if (text === 'Q') return 12;
@@ -135,18 +135,18 @@ Page({
     const blueLevel = this.textToLevel(this.data.levelTexts.blue);
     const remainingRounds = this.data.maxRounds - this.data.rounds;
 
-    // 如果已经达到最大把数，就不需要再检查追不上的情况
+    // 如果已经达到最大把数,就不需要再检查追不上的情况
     if (remainingRounds <= 0) {
       return {
         isUncatchable: false
       };
     }
 
-    // 判定机制之二：一方已经到了A，另外一方没到A，且剩余把数不足以让另一方追到A
+    // 判定机制之二:一方已经到了A,另外一方没到A,且剩余把数不足以让另一方追到A
     if (redLevel >= 14 && blueLevel < 14) {
       // 计算蓝方需要多少分才能追到A
       const blueNeeded = 14 - blueLevel;
-      // 计算剩余把数最多能得多少分（每把最多3分）
+      // 计算剩余把数最多能得多少分(每把最多3分)
       const maxPossible = remainingRounds * 3;
       
       if (maxPossible < blueNeeded) {
@@ -161,7 +161,7 @@ Page({
     if (blueLevel >= 14 && redLevel < 14) {
       // 计算红方需要多少分才能追到A
       const redNeeded = 14 - redLevel;
-      // 计算剩余把数最多能得多少分（每把最多3分）
+      // 计算剩余把数最多能得多少分(每把最多3分)
       const maxPossible = remainingRounds * 3;
       
       if (maxPossible < redNeeded) {
@@ -173,7 +173,7 @@ Page({
       }
     }
 
-    // 判定机制之一：如果一方领先优势过大，即使剩余把数全胜也无法追上
+    // 判定机制之一:如果一方领先优势过大,即使剩余把数全胜也无法追上
     const maxPossibleIncrease = 3 * remainingRounds;
 
     // 检查红方是否追不上蓝方
@@ -218,7 +218,7 @@ Page({
      // 检查游戏是否已结束
      if (this.data.gameEnded) {
        wx.showToast({
-         title: '游戏已结束，无法计分',
+         title: '游戏已结束,无法计分',
          icon: 'none',
          duration: 2000
        });
@@ -227,7 +227,7 @@ Page({
 
      const now = Date.now();
      if (now - this.lastClickTime < this.debounceDelay) {
-       return; // 防抖：忽略短时间内的重复点击
+       return; // 防抖:忽略短时间内的重复点击
      }
      this.lastClickTime = now;
 
@@ -280,7 +280,7 @@ Page({
     // 处理A及以上的情况
     if (newLevel >= 14) {
       if (this.data.rule === 'by-rounds') {
-        // 在把数制下，A/A2/A3升级规则参照过A制
+        // 在把数制下,A/A2/A3升级规则参照过A制
         // 获取当前分数文本对应的尝试次数
         let currentAttempt = 0;
         if (currentText.startsWith('A') && currentText !== 'A') {
@@ -292,8 +292,8 @@ Page({
           currentAttempt = 0;
         }
 
-        // 检查是否需要升级尝试次数（参照过A制规则）
-        // 1. 当点了自身的1游末游、且本方处于A/A2阶段
+        // 检查是否需要升级尝试次数(参照过A制规则)
+        // 1. 当点了自身的1游末游,且本方处于A/A2阶段
         if (scoreIncrement === 1 && currentAttempt < 3) {
           // 升级到下一个尝试阶段
           const nextAttempt = currentAttempt + 1;
@@ -305,7 +305,7 @@ Page({
           // 同时更新实际等级值
           newLevel = 14 + nextAttempt;
         } else if (scoreIncrement > 1) {
-          // 2. 被对方点了升级按钮（双上或1游3游），且当前处于A/A2阶段
+          // 2. 被对方点了升级按钮(双上或1游3游),且当前处于A/A2阶段
           // 检查对方是否处于A阶段
           const otherTeam = selectedTeam === 'red' ? 'blue' : 'red';
           const otherLevel = this.textToLevel(this.data.levelTexts[otherTeam]);
@@ -321,7 +321,7 @@ Page({
             otherAttempt = 0;
           }
 
-          // 如果对方处于A/A2阶段，当前方被对方点击升级按钮，应该升级尝试次数
+          // 如果对方处于A/A2阶段,当前方被对方点击升级按钮,应该升级尝试次数
           if (otherLevel >= 14 && currentAttempt < 3) {
             const nextAttempt = currentAttempt + 1;
             if (nextAttempt > 0) {
@@ -332,7 +332,7 @@ Page({
             // 同时更新实际等级值
             newLevel = 14 + nextAttempt;
           } else {
-            // 其他情况，保持当前等级显示
+            // 其他情况,保持当前等级显示
             if (currentAttempt > 0) {
               displayText = `A${currentAttempt}`;
             } else {
@@ -340,7 +340,7 @@ Page({
             }
           }
         } else {
-          // 其他情况，保持当前等级显示
+          // 其他情况,保持当前等级显示
           if (currentAttempt > 0) {
             displayText = `A${currentAttempt}`;
           } else {
@@ -368,19 +368,19 @@ Page({
     // 创建历史记录副本避免直接修改原数组
     const currentHistory = [...this.data.historyScores];
 
-    // 计算索引位置：数组索引从0开始，把数也从0开始计数
+    // 计算索引位置:数组索引从0开始,把数也从0开始计数
     const index = this.data.rounds;
 
     // 检查是否已经有了当前把数的记录
     const isUpdatingCurrentRound = index < currentHistory.length;
     let nextRounds = this.data.rounds; // 默认使用当前把数
 
-    // 如果是新的一把，添加到数组中；如果是重新编辑已有的把数（修正误点击），更新对应位置
+    // 如果是新的一把,添加到数组中;如果是重新编辑已有的把数(修正误点击),更新对应位置
     if (isUpdatingCurrentRound) {
-      // 修正误点击时，只更新对应索引的记录，不增加把数
+      // 修正误点击时,只更新对应索引的记录,不增加把数
       currentHistory[index] = updatedScores;
     } else {
-      // 新把数操作，添加记录并增加把数
+      // 新把数操作,添加记录并增加把数
       currentHistory.push(updatedScores);
       nextRounds = this.data.rounds + 1;
       // 添加新记录后立即更新撤销按钮状态
@@ -388,7 +388,7 @@ Page({
         canUndo: currentHistory.length > 0
       });
 
-      // 直接更新把数，确保立即显示
+      // 直接更新把数,确保立即显示
       this.setData({
         lastRounds: this.data.rounds,
         rounds: nextRounds
@@ -404,7 +404,7 @@ Page({
     // 显示点击提示
     this.showClickToast(scoreIncrement, selectedTeam);
 
-    // 检查是否达到A（过A制）
+    // 检查是否达到A(过A制)
     if (this.data.rule === 'by-A') {
       // 处理过A制的核心逻辑
       const currentTeam = selectedTeam;
@@ -415,7 +415,7 @@ Page({
 
       // 检查是否刚刚达到A
       if (currentLevel < 14 && newLevel === 14 && currentAttempt === 0) {
-        // 第一次达到A，设置为A
+        // 第一次达到A,设置为A
         this.setData({
           [`aAttempts.${currentTeam}`]: 0,
           [`levelTexts.${currentTeam}`]: 'A'
@@ -427,14 +427,14 @@ Page({
 
         // 判断本轮结果
         if (scoreIncrement >= 2) {
-          // 双上(+3)或1游3游(+2)，过A成功
+          // 双上(+3)或1游3游(+2),过A成功
           wx.showModal({
             title: '本局结束',
             content: `${currentTeam === 'red' ? '恭喜红方首轮过A成功' : '恭喜蓝方首轮过A成功'}\n本局结束`,
             showCancel: false,
             success: (res) => {
               if (res.confirm) {
-                // 首轮过A成功，游戏结束，保持当前状态
+                // 首轮过A成功,游戏结束,保持当前状态
                 this.setData({
                   gameEnded: true // 标记游戏已结束
                 });
@@ -445,7 +445,7 @@ Page({
             }
           });
         } else if (scoreIncrement === 1) {
-          // 1游末游，继续打A
+          // 1游末游,继续打A
           if (attempt < 3) {
             // 升级到下一个尝试阶段
             const nextAttempt = attempt + 1;
@@ -454,10 +454,10 @@ Page({
               [`levelTexts.${currentTeam}`]: this.getFormattedAAttempt(nextAttempt)
             });
           } else {
-            // 已经是A3，第三次未过A，游戏结束
+            // 已经是A3,第三次未过A,游戏结束
             wx.showModal({
               title: '本局结束',
-              content: `${currentTeam === 'red' ? '红方' : '蓝方'}3A未过，遗憾失去冠军\n本局结束`,
+              content: `${currentTeam === 'red' ? '红方' : '蓝方'}3A未过,遗憾失去冠军\n本局结束`,
               showCancel: false,
               success: (res) => {
                 if (res.confirm) {
@@ -490,8 +490,8 @@ Page({
                     icon: 'success'
                   });
 
-                  // 保持A3状态，游戏结束
-                  // 不修改当前状态，保持A3显示
+                  // 保持A3状态,游戏结束
+                  // 不修改当前状态,保持A3显示
                 }
               }
             });
@@ -503,7 +503,7 @@ Page({
       if (this.data.aAttempts.red === 3 && this.data.aAttempts.blue === 3) {
         wx.showModal({
           title: '本局结束',
-          content: '双方握手言和，战平\n本局结束',
+          content: '双方握手言和,战平\n本局结束',
           showCancel: false,
           success: (res) => {
             if (res.confirm) {
@@ -547,7 +547,7 @@ Page({
                   blue: '2'
                 };
               }
-              // 3. 同时更新当前显示的分数、尝试次数和历史记录
+              // 3. 同时更新当前显示的分数,尝试次数和历史记录
               this.setData({
                 levelTexts: {
                   red: '2',
@@ -565,9 +565,9 @@ Page({
         });
       }
     } else {
-      // 先检查是否达到最大把数（把数制）
+      // 先检查是否达到最大把数(把数制)
       if (this.data.rule === 'by-rounds' && nextRounds === this.data.maxRounds) {
-        // 当达到最大把数时，根据比分结果显示不同的结束信息
+        // 当达到最大把数时,根据比分结果显示不同的结束信息
         const redLevel = this.textToLevel(this.data.levelTexts.red);
         const blueLevel = this.textToLevel(this.data.levelTexts.blue);
         let resultText = '';
@@ -595,18 +595,18 @@ Page({
               // 保存到历史记录
               this.saveGameToHistory();
 
-              // 不做任何清零操作，保持当前界面状态
+              // 不做任何清零操作,保持当前界面状态
               // 用户要求结束时保持当前界面
             }
           }
         });
       } else {
-        // 未达到最大把数时，检查是否追不上了
+        // 未达到最大把数时,检查是否追不上了
         const uncatchableResult = this.checkUncatchable();
         if (uncatchableResult.isUncatchable) {
           wx.showModal({
             title: '追不上了',
-            content: `${uncatchableResult.leadingTeam === 'red' ? '红方' : '蓝方'}领先优势过大，即使剩余把数全胜也无法追上！`,
+            content: `${uncatchableResult.leadingTeam === 'red' ? '红方' : '蓝方'}领先优势过大,即使剩余把数全胜也无法追上!`,
             confirmText: '是',
             cancelText: '否',
             success: (res) => {
@@ -619,7 +619,7 @@ Page({
                 // 保存到历史记录
                 this.saveGameToHistory();
 
-                // 不做任何清零操作，保持当前界面状态
+                // 不做任何清零操作,保持当前界面状态
                 // 用户要求结束时保持当前界面
               }
             }
@@ -631,11 +631,11 @@ Page({
 
    // 开始游戏
    onStartGame() {
-     // 如果游戏已结束，提供重新开始选项
+     // 如果游戏已结束,提供重新开始选项
      if (this.data.gameEnded) {
        wx.showModal({
          title: '游戏已结束',
-         content: '当前游戏已结束，是否重新开始新游戏？',
+         content: '当前游戏已结束,是否重新开始新游戏?',
          confirmText: '重新开始',
          cancelText: '取消',
          success: (res) => {
@@ -647,10 +647,10 @@ Page({
        return;
      }
 
-     // 如果游戏已开始，提示用户
+     // 如果游戏已开始,提示用户
      if (this.data.gameStarted) {
        wx.showToast({
-         title: '游戏已开始，请继续游戏',
+         title: '游戏已开始,请继续游戏',
          icon: 'none',
          duration: 2000
        });
@@ -665,7 +665,7 @@ Page({
      });
 
      wx.showToast({
-       title: '游戏开始！',
+       title: '游戏开始!',
        icon: 'success',
        duration: 1500
      });
@@ -717,7 +717,7 @@ Page({
    onShowRoundsPicker() {
      if (this.data.gameStarted) {
        wx.showToast({
-         title: '游戏进行中，无法修改把数',
+         title: '游戏进行中,无法修改把数',
          icon: 'none',
          duration: 2000
        });
@@ -771,7 +771,7 @@ Page({
    onClearHistory() {
      wx.showModal({
        title: '确认清空',
-       content: '确定要清空所有历史记录吗？此操作不可恢复！',
+       content: '确定要清空所有历史记录吗?此操作不可恢复!',
        success: (res) => {
          if (res.confirm) {
            try {
@@ -835,7 +835,7 @@ Page({
       } : this.data.aAttempts
     });
 
-    // 如果是从过A制切换到把数制，保留A1/A2/A3状态
+    // 如果是从过A制切换到把数制,保留A1/A2/A3状态
     if (newRule === 'by-rounds' && currentRedText.startsWith('A') && !currentRedText.startsWith('A2') && !currentRedText.startsWith('A3')) {
       // 检查当前是否有A的尝试
       const redScore = this.textToLevel(currentRedText);
@@ -847,7 +847,7 @@ Page({
         'levelTexts.blue': blueScore === 14 ? `A${this.data.aAttempts.blue}` : blueScore === 11 ? 'J' : blueScore === 12 ? 'Q' : blueScore === 13 ? 'K' : blueScore.toString()
       });
     } else if (newRule === 'by-A') {
-      // 如果是从把数制切换到过A制，重置等级显示文本
+      // 如果是从把数制切换到过A制,重置等级显示文本
       const redScore = this.textToLevel(this.data.levelTexts.red);
       const blueScore = this.textToLevel(this.data.levelTexts.blue);
 
@@ -866,14 +866,14 @@ Page({
     });
   },
 
-  // 长按历史比分，修改指定把数的比分
+  // 长按历史比分,修改指定把数的比分
   onLongPressHistory(e) {
     const {
       index
     } = e.currentTarget.dataset;
     const historyItem = this.data.historyScores[index];
 
-    // 显示操作菜单，让用户选择要修改的队伍
+    // 显示操作菜单,让用户选择要修改的队伍
     wx.showActionSheet({
       itemList: ['修改红方分数', '修改蓝方分数'],
       success: (res) => {
@@ -903,7 +903,7 @@ Page({
             this.updateHistoryScore(team, newScore, index);
           } else {
             wx.showToast({
-              title: '无效的分数，请输入2-A之间的分数',
+              title: '无效的分数,请输入2-A之间的分数',
               icon: 'none'
             });
           }
@@ -919,7 +919,7 @@ Page({
     return validScores.includes(score) || /^A\d+$/.test(score);
   },
 
-  // 获取带格式的A尝试文本（如A¹、A²、A³）
+  // 获取带格式的A尝试文本(如A¹,A²,A³)
   getFormattedAAttempt(attempt) {
     // 在WXML中会被渲染为上标
     return `A${attempt}`;
@@ -931,7 +931,7 @@ Page({
     if (level === 12) return 'Q';
     if (level === 13) return 'K';
     if (level >= 14 && this.data.rule === 'by-rounds') {
-      // 在把数制下，如果等级大于等于14，显示为A/A2/A3格式
+      // 在把数制下,如果等级大于等于14,显示为A/A2/A3格式
       const attempt = level - 14;
       if (attempt > 0) {
         return `A${attempt}`;
@@ -962,7 +962,7 @@ Page({
     const newScoreVal = this.textToLevel(newScore);
     const deltaEdit = newScoreVal - originalScore;
 
-    // 如果没有分数变化，则不执行后续操作
+    // 如果没有分数变化,则不执行后续操作
     if (deltaEdit === 0) return;
 
     // 更新当前回合分数
@@ -985,13 +985,13 @@ Page({
       const newCurrScore = prevScore + originalDelta;
 
       // 创建新对象确保状态更新
-      // 注意：这里需要特殊处理A加上标数字的情况
+      // 注意:这里需要特殊处理A加上标数字的情况
       let displayScore = this.levelToText(newCurrScore);
 
       // 检查原始历史记录中是否包含A加上标数字的格式
       const originalDisplay = this.data.historyScores[i][team];
       if (originalDisplay.startsWith('A') && originalDisplay.length > 1) {
-        // 在把数制下，保持A/A2/A3格式
+        // 在把数制下,保持A/A2/A3格式
         if (this.data.rule === 'by-rounds') {
           // 提取上标数字
           const attemptMatch = originalDisplay.match(/A(\d+)/);
@@ -1006,7 +1006,7 @@ Page({
             }
           }
         }
-        // 在过A制下，保持上标格式
+        // 在过A制下,保持上标格式
         else if (this.data.rule === 'by-A') {
           // 提取上标数字
           const attemptMatch = originalDisplay.match(/A(\d+)/);
@@ -1033,10 +1033,10 @@ Page({
   // 从指定索引重新计算分数
   recalculateScoresFrom(startIndex) {
     if (startIndex >= this.data.historyScores.length - 1) {
-      return; // 已经是最后一把，不需要重新计算
+      return; // 已经是最后一把,不需要重新计算
     }
 
-    // 从startIndex开始，重新计算每一把的分数
+    // 从startIndex开始,重新计算每一把的分数
     const currentHistory = this.data.historyScores.map(item => ({
       ...item
     })); // 创建历史记录的深拷贝
@@ -1045,7 +1045,7 @@ Page({
 
     // 从startIndex+1开始重新计算每一把的分数
     for (let i = startIndex + 1; i < currentHistory.length; i++) {
-      // 计算当前轮与前一轮的差值（delta）
+      // 计算当前轮与前一轮的差值(delta)
       const prevRed = this.textToLevel(currentHistory[i - 1].red);
       const currRed = this.textToLevel(currentHistory[i].red);
       const deltaRed = currRed - prevRed;
@@ -1065,7 +1065,7 @@ Page({
       if (redScore === 12) redDisplay = 'Q';
       if (redScore === 13) redDisplay = 'K';
       if (redScore >= 14) {
-        // 在把数制下，如果等级大于等于14，显示为A/A2/A3格式
+        // 在把数制下,如果等级大于等于14,显示为A/A2/A3格式
         if (this.data.rule === 'by-rounds') {
           const attempt = redScore - 14;
           if (attempt > 0) {
@@ -1093,7 +1093,7 @@ Page({
       if (blueScore === 12) blueDisplay = 'Q';
       if (blueScore === 13) blueDisplay = 'K';
       if (blueScore >= 14) {
-        // 在把数制下，如果等级大于等于14，显示为A/A2/A3格式
+        // 在把数制下,如果等级大于等于14,显示为A/A2/A3格式
         if (this.data.rule === 'by-rounds') {
           const attempt = blueScore - 14;
           if (attempt > 0) {
@@ -1146,10 +1146,10 @@ Page({
       return;
     }
 
-    // 检查是否已达到结束条件（E状态或游戏已结束），如果是则不允许撤销
+    // 检查是否已达到结束条件(E状态或游戏已结束),如果是则不允许撤销
     if (this.data.levelTexts.red === 'E' || this.data.levelTexts.blue === 'E' || this.data.gameEnded) {
       wx.showToast({
-        title: '游戏已结束，不允许撤销',
+        title: '游戏已结束,不允许撤销',
         icon: 'none'
       });
       return;
@@ -1169,7 +1169,7 @@ Page({
       blue: '2'
     };
 
-    // 分析恢复后的分数文本，更新aAttempts状态
+    // 分析恢复后的分数文本,更新aAttempts状态
     const newAAttempts = {
       red: this.getAttemptFromScoreText(prevScores.red),
       blue: this.getAttemptFromScoreText(prevScores.blue)
@@ -1212,7 +1212,7 @@ Page({
   restoreLastGame() {
     wx.showModal({
       title: '恢复游戏',
-      content: '确定要恢复上一局游戏吗？当前游戏数据将被覆盖。',
+      content: '确定要恢复上一局游戏吗?当前游戏数据将被覆盖.',
       success: (res) => {
         if (res.confirm) {
           // 从本地存储获取保存的游戏数据
@@ -1233,7 +1233,7 @@ Page({
                 blue: 0
               },
               canUndo: (savedGameData.historyScores || []).length > 0,
-              // 如果恢复的游戏包含E状态，标记为游戏已结束
+              // 如果恢复的游戏包含E状态,标记为游戏已结束
               gameEnded: savedGameData.levelTexts &&
                 (savedGameData.levelTexts.red === 'E' || savedGameData.levelTexts.blue === 'E')
             });
@@ -1256,7 +1256,7 @@ Page({
   onEndGame() {
     wx.showModal({
       title: '确认结束',
-      content: '确定要结束本局游戏吗？',
+      content: '确定要结束本局游戏吗?',
       success: (res) => {
         if (res.confirm) {
           // 保存历史数据
@@ -1347,7 +1347,7 @@ Page({
   onShowHelp() {
     wx.showModal({
       title: '说明文档',
-      content: '扑克双上计分规则：\n1. 过A规则：先过A的队伍获胜\n2. 把数规则：先达到设定把数的队伍获胜\n3. 双上：+3分\n4. 1游3游：+2分\n5. 1游末游：+1分',
+      content: '扑克双上计分规则:\n1. 过A规则:先过A的队伍获胜\n2. 把数规则:先达到设定把数的队伍获胜\n3. 双上:+3分\n4. 1游3游:+2分\n5. 1游末游:+1分',
       showCancel: false,
       confirmText: '知道了'
     });
@@ -1356,7 +1356,7 @@ Page({
    onShowFeedback() {
      wx.showModal({
        title: '反馈',
-       content: '如有问题或建议，请联系开发者',
+       content: '如有问题或建议,请联系开发者',
        showCancel: false,
        confirmText: '知道了'
      });
@@ -1372,12 +1372,12 @@ Page({
   // 保存游戏到历史记录
   saveGameToHistory() {
     try {
-      // 防止重复保存：如果游戏已结束且已保存过，则不重复保存
+      // 防止重复保存:如果游戏已结束且已保存过,则不重复保存
       if (this.data.gameEnded && this.data.gameSavedToHistory) {
         return;
       }
 
-      // 检查游戏是否真正进行过：必须有历史记录或把数大于0
+      // 检查游戏是否真正进行过:必须有历史记录或把数大于0
       const hasGameData = this.data.historyScores.length > 0 || this.data.rounds > 0;
       if (!hasGameData) {
         return;
@@ -1392,9 +1392,9 @@ Page({
       const blueLevel = this.textToLevel(this.data.levelTexts.blue);
 
       if (redLevel > blueLevel) {
-        winner = 'red'; // 红方分数更高，红方胜
+        winner = 'red'; // 红方分数更高,红方胜
       } else if (blueLevel > redLevel) {
-        winner = 'blue'; // 蓝方分数更高，蓝方胜
+        winner = 'blue'; // 蓝方分数更高,蓝方胜
       }
 
       // 创建游戏记录
@@ -1424,7 +1424,7 @@ Page({
       // 添加到历史记录
       existingHistory.unshift(gameRecord); // 最新的记录放在前面
 
-      // 限制历史记录数量（最多保存50局）
+      // 限制历史记录数量(最多保存50局)
       if (existingHistory.length > 50) {
         existingHistory.splice(50);
       }
@@ -1440,7 +1440,7 @@ Page({
     } catch (error) {}
   },
 
-  // 计算游戏时长（简单实现）
+  // 计算游戏时长(简单实现)
   calculateGameDuration() {
     // 这里可以根据实际需要实现更精确的时长计算
     // 暂时返回一个估算值
@@ -1467,7 +1467,7 @@ Page({
         return;
       }
 
-      // 如果游戏已经结束，不需要重复保存
+      // 如果游戏已经结束,不需要重复保存
       if (this.data.gameEnded) {
         return;
       }
@@ -1488,14 +1488,14 @@ Page({
       wx.setStorageSync('savedGameData', gameData);
 
     } catch (error) {
-      // 自动保存失败，静默处理
+      // 自动保存失败,静默处理
     }
   },
 
-  // 检查是否需要用户选择（智能提示）
+  // 检查是否需要用户选择(智能提示)
   checkNeedUserChoice(savedGameData) {
     try {
-      // 判断是否需要用户选择的条件：
+      // 判断是否需要用户选择的条件:
       // 1. 有保存的游戏数据
       // 2. 游戏未结束
       // 3. 游戏有实际进度
@@ -1513,7 +1513,7 @@ Page({
       const rounds = savedGameData.rounds;
       const ruleText = savedGameData.rule === 'by-A' ? '过A制' : '把数制';
 
-      const content = `检测到未完成的游戏\n\n上一局游戏：红方 ${redScore}分 vs 蓝方 ${blueScore}分（第${rounds}把）\n规则：${ruleText}\n\n请选择：`;
+      const content = `检测到未完成的游戏\n\n上一局游戏:红方 ${redScore}分 vs 蓝方 ${blueScore}分(第${rounds}把)\n规则:${ruleText}\n\n请选择:`;
 
       wx.showModal({
         title: '未完成的游戏',
@@ -1610,7 +1610,7 @@ Page({
       wx.setStorageSync('gameHistory', existingHistory);
 
     } catch (error) {
-      // 保存失败，静默处理
+      // 保存失败,静默处理
     }
   },
 
