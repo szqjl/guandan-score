@@ -958,21 +958,17 @@ checkbox {
 }
 
 /* 规则锁定状态样式 */
-.rule-section[disabled] {
+.rule-section.disabled {
   opacity: 0.6;
   background-color: #F0F0F0;
   border-color: #D0D0D0;
 }
 
-.rule-section[disabled] radio-group {
-  pointer-events: none;
-}
-
-.rule-section[disabled] label {
+.rule-section.disabled label {
   color: #999;
 }
 
-.rule-section[disabled] .picker {
+.rule-section.disabled .picker {
   background-color: #F5F5F5;
   color: #999;
   border-color: #D0D0D0;

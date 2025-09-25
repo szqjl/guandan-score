@@ -1,14 +1,4 @@
 <view class="container cn-paper-bg">
-  <image class="cn-ornament left" 
-         src="{{leftBorderImage}}" 
-         mode="heightFix" 
-         lazy-load="{{true}}"
-         binderror="onImageError"/>
-  <image class="cn-ornament right" 
-         src="{{rightBorderImage}}" 
-         mode="heightFix" 
-         lazy-load="{{true}}"
-         binderror="onImageError"/>
   
   <!-- 环境标识 -->
   <view class="env-badge">

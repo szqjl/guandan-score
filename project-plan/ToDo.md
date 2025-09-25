@@ -40,11 +40,11 @@
    - 位置：`pages/index/index.wxml` 第6行和第11行
    - 影响：会在控制台产生警告
 
-2. **未定义的变量引用**
-   - `leftBorderImage` - 在WXML中引用但JS中未定义
-   - `rightBorderImage` - 在WXML中引用但JS中未定义
-   - 位置：`pages/index/index.wxml` 第3行和第8行
-   - 影响：边框图片无法正常显示
+2. **未定义的变量引用** ✅ 已解决
+   - `leftBorderImage` - 原计划在WXML中引用但JS中未定义
+   - `rightBorderImage` - 原计划在WXML中引用但JS中未定义
+   - 状态：相关SVG文件已删除，无需定义这些变量
+   - 影响：无影响，文件已清理
 
 3. **备份文件清理**
    - `pages/index/index.wxss.backup` - 不需要的备份文件
@@ -65,12 +65,10 @@
    }
    ```
 
-2. **修复边框图片变量**
-   ```javascript
-   // 在pages/index/index.js的data中添加
-   leftBorderImage: '../../images/左边框.svg',
-   rightBorderImage: '../../images/右边框.svg'
-   ```
+2. **修复边框图片变量** ✅ 已删除
+   - 原计划添加的左边框.svg和右边框.svg文件已被删除
+   - 这些文件在代码中未被实际使用
+   - 无需添加相关变量定义
 
 3. **删除备份文件**
    - 删除 `pages/index/index.wxss.backup`

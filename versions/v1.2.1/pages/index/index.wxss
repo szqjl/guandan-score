@@ -1398,10 +1398,6 @@ checkbox {
   font-family: 'Source Han Sans', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-.cn-ornament {
-  display: none;
-  /* 隐藏装饰元素 */
-}
 
 /* 环境徽标简约配�?*/
 .env-text.trial {

@@ -231,8 +231,26 @@ Page({
      }
      this.lastClickTime = now;
 
-     // 播放按钮音效
+     // 获取按钮信息
      const buttonType = e?.currentTarget?.dataset?.value;
+     const buttonTeam = e?.currentTarget?.dataset?.team;
+     
+     // 立即禁用当前点击的按钮，防止重复点击
+     if (buttonTeam && buttonType) {
+       const buttonKey = buttonType === '3' ? 'double' : buttonType === '2' ? 'two' : 'one';
+       this.setData({
+         [`buttonDisabledStates.${buttonTeam}.${buttonKey}`]: true
+       });
+       
+       // 1秒后恢复按钮状态
+       setTimeout(() => {
+         this.setData({
+           [`buttonDisabledStates.${buttonTeam}.${buttonKey}`]: false
+         });
+       }, 1000);
+     }
+
+     // 播放按钮音效
      if (buttonType) {
        this.playButtonSound(buttonType);
      }
@@ -819,6 +837,16 @@ Page({
 
    // 处理规则选择
   onRuleChange(e) {
+    // 检查游戏是否已开始
+    if (this.data.gameStarted) {
+      wx.showToast({
+        title: '游戏进行中,无法修改比赛模式',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+    
     const newRule = e.detail.value;
     // 保存当前的分数文本
     const currentRedText = this.data.levelTexts.red;

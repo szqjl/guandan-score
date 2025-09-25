@@ -1,6 +1,4 @@
 <view class="container cn-paper-bg">
-  <image class="cn-ornament left" src="{{leftBorderImage}}" mode="heightFix" lazy-load="{{true}}" binderror="onImageError" />
-  <image class="cn-ornament right" src="{{rightBorderImage}}" mode="heightFix" lazy-load="{{true}}" binderror="onImageError" />
 
   <!-- 环境标识 -->
   <view class="env-badge">
@@ -195,18 +193,18 @@
   <view class="right-control-panel">
     <!-- 开始游戏按钮 -->
     <button class="start-btn" bindtap="onStartGame" disabled="{{gameStarted && !gameEnded}}">
-      {{gameStarted && !gameEnded ? '游戏进行中' : gameEnded ? '重新开始' : '开始游戏'}}
+      {{gameStarted && !gameEnded ? '游戏进行中' : '开始游戏'}}
     </button>
 
     <!-- 规则选择 -->
-    <view class="rule-section">
+    <view class="rule-section {{gameStarted ? 'disabled' : ''}}" disabled="{{gameStarted}}">
       <text>比赛模式:</text>
-      <radio-group bindchange="onRuleChange" disabled="{{gameStarted}}">
+      <radio-group bindchange="onRuleChange">
         <label>
-          <radio value="by-A" checked="{{rule === 'by-A'}}" disabled="{{gameStarted}}" />过A
+          <radio value="by-A" checked="{{rule === 'by-A'}}" />过A
         </label>
         <label>
-          <radio value="by-rounds" checked="{{rule === 'by-rounds'}}" disabled="{{gameStarted}}" />把数
+          <radio value="by-rounds" checked="{{rule === 'by-rounds'}}" />把数
           <view wx:if="{{rule === 'by-rounds'}}" class="rounds-selector">
             <text class="rounds-display-text" bindtap="onShowRoundsPicker">{{maxRounds}}</text>
           </view>
