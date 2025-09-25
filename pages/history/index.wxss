@@ -103,12 +103,12 @@
 
 .filter-panel {
   position: fixed;
-  bottom: 80rpx;
+  bottom: 70rpx;
   /* 调整到合适位置 */
   left: 20rpx;
-  right: 20rpx;
-  background: rgba(128, 128, 128, 0.95);
-  /* 灰色背景 */
+  right: 7rpx;
+  background: #ffffff;
+  /* 白色背景 - 完全不透明 */
   border-radius: 8rpx;
   padding: 35rpx 15rpx 15rpx 15rpx;
   /* 大幅增加顶部内边距 */
@@ -154,6 +154,8 @@
   background-color: rgba(255, 255, 255, 0.05);
   margin-top: 2rpx;
   overflow-x: auto; /* 如果内容超出，允许水平滚动 */
+  border-top: 2rpx solid #000000; /* 上部黑色分割线 */
+  border-bottom: 2rpx solid #000000; /* 下部黑色分割线 */
 }
 
 .filter-option,
@@ -196,32 +198,44 @@
 /* 上周按钮向左移动和特殊背景 */
 .last-week-btn {
   margin-left: -15rpx !important; /* 向左移动15rpx */
-  background-color: rgba(255, 255, 255, 0.8) !important; /* 更明显的白色背景 */
+  background-color: #4CAF50 !important; /* 绿色背景 */
+  color: white !important; /* 白色文字 */
   border: none !important; /* 去除边框 */
 }
 
 /* 上月按钮向左移动和特殊背景 */
 .last-month-btn {
   margin-left: -15rpx !important; /* 向左移动15rpx */
-  background-color: rgba(255, 255, 255, 0.8) !important; /* 更明显的白色背景 */
+  background-color: #4CAF50 !important; /* 绿色背景 */
+  color: white !important; /* 白色文字 */
   border: none !important; /* 去除边框 */
 }
 
 /* 本周按钮特殊背景 */
 .this-week-btn {
-  background-color: rgba(255, 255, 255, 0.8) !important; /* 更明显的白色背景 */
+  background-color: #4CAF50 !important; /* 绿色背景 */
+  color: white !important; /* 白色文字 */
   border: none !important; /* 去除边框 */
 }
 
 /* 本月按钮特殊背景 */
 .this-month-btn {
-  background-color: rgba(255, 255, 255, 0.8) !important; /* 更明显的白色背景 */
+  background-color: #4CAF50 !important; /* 绿色背景 */
+  color: white !important; /* 白色文字 */
   border: none !important; /* 去除边框 */
 }
 
 /* 自定义时间按钮特殊背景 */
 .custom-time-btn {
-  background-color: rgba(255, 255, 255, 0.8) !important; /* 更明显的白色背景 */
+  background-color: #4CAF50 !important; /* 绿色背景 */
+  color: white !important; /* 白色文字 */
+  border: none !important; /* 去除边框 */
+}
+
+/* 全部时间按钮特殊背景 - 绿色 */
+.filter-option[data-time="all"] {
+  background-color: #4CAF50 !important; /* 绿色背景 */
+  color: white !important; /* 白色文字 */
   border: none !important; /* 去除边框 */
 }
 
@@ -860,10 +874,10 @@
   flex: 0 0 auto;
   padding: 8rpx 2rpx; /* 增加上下内边距 */
   text-align: center;
-  font-size: 14rpx; /* 稍微增大字体 */
+  font-size: 23rpx; /* 调整字体到23rpx */
   color: #333;
   border-right: 1rpx solid #ddd;
-  width: 35rpx;
+  width: 45rpx;
   height: 50rpx; /* 调整为50rpx与行高一致 */
   display: flex;
   align-items: center;
@@ -874,6 +888,7 @@
 /* 把数数据项加粗 */
 .table-data-container .table-row:first-child .table-cell {
   font-weight: bold;
+  font-family: "Courier New", "Monaco", "Consolas", monospace; /* 等宽字体 */
 }
 
 

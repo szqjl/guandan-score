@@ -884,6 +884,24 @@ Page({
         'levelTexts.blue': blueScore === 11 ? 'J' : blueScore === 12 ? 'Q' : blueScore === 13 ? 'K' : blueScore >= 14 ? 'A' : blueScore.toString()
       });
     }
+
+    // 检查是否首次点击比赛模式
+    const hasShownRuleTip = wx.getStorageSync('hasShownRuleTip');
+    if (!hasShownRuleTip) {
+      this.showRuleTip();
+    }
+  },
+
+  // 显示比赛模式说明提示
+  showRuleTip() {
+    const content = `过A制：三次未过A，比赛结束。\n把数制：可选择把数，达到设定把数后，分数高的队伍获胜。\n\n模式切换：\n游戏开始前可以自由切换模式\n游戏进行中无法修改比赛模式`;
+    
+    wx.showModal({
+      title: '比赛模式说明',
+      content: content,
+      showCancel: false,
+      confirmText: '知道了'
+    });
   },
 
   // 处理最大把数变化
@@ -1373,9 +1391,38 @@ Page({
   },
 
   onShowHelp() {
+    const content = `掼蛋计分小程序 v2.0.5
+
+🎯 游戏简介：
+掼蛋是一款流行的扑克牌游戏，本小程序专为掼蛋比赛提供专业的计分服务。
+
+🎮 比赛模式：
+• 过A制：率先达到A级并成功过A的队伍获胜
+• 把数制：在固定把数内获得更高分数的队伍获胜
+
+📊 计分规则：
+• 双上：+3分（两个队伍都升级）
+• 1游3游：+2分（一个队伍升级）
+• 1游末游：+1分（一个队伍升级，另一个队伍降级）
+
+🔧 功能特色：
+• 实时比分记录
+• 历史记录查看
+• 多种筛选方式
+• 详细比分统计
+• 支持横屏显示
+
+💡 使用提示：
+• 游戏开始前可自由切换比赛模式
+• 长按历史比分可修改指定把数
+• 支持撤销上一步操作
+• 自动保存游戏进度
+
+掼蛋计分开发团队并由AI协助`;
+
     wx.showModal({
       title: '说明文档',
-      content: '扑克双上计分规则:\n1. 过A规则:先过A的队伍获胜\n2. 把数规则:先达到设定把数的队伍获胜\n3. 双上:+3分\n4. 1游3游:+2分\n5. 1游末游:+1分',
+      content: content,
       showCancel: false,
       confirmText: '知道了'
     });

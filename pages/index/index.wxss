@@ -75,7 +75,7 @@ checkbox {
   display: flex;
   flex-direction: column;
   gap: 10rpx;
-  width: 45rpx;
+  width: 55rpx;
   align-items: center;
 }
 
@@ -85,8 +85,8 @@ checkbox {
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 45rpx !important;
-  height: 30rpx !important;
+  width: 50rpx !important;
+  height: 35rpx !important;
   background-color: rgba(255, 255, 255, 0.9) !important;
   border: 1rpx solid #E0E0E0 !important;
   border-radius: 4rpx !important;
@@ -113,11 +113,11 @@ checkbox {
 }
 
 .nav-text {
-  font-size: 7rpx;
+  font-size: 10rpx;
   color: #333;
   text-align: center;
   line-height: 1;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .env-text {
