@@ -10,7 +10,7 @@ const path = require('path');
 
 class VersionManager {
   constructor() {
-    this.versionsDir = path.join(__dirname, '..', 'versions');
+    this.versionsDir = path.join(__dirname, 'versions');
     this.currentDir = path.join(__dirname, '..');
     this.versionInfoFile = 'version-info.json';
     this.ensureVersionsDir();
@@ -31,7 +31,7 @@ class VersionManager {
    */
   getCurrentVersion() {
     try {
-      const versionInfoPath = path.join(this.currentDir, this.versionInfoFile);
+      const versionInfoPath = path.join(__dirname, this.versionInfoFile);
       if (fs.existsSync(versionInfoPath)) {
         return JSON.parse(fs.readFileSync(versionInfoPath, 'utf8'));
       }
