@@ -1,0 +1,252 @@
+<view class="container">
+  <!-- 统计概览区 - 移动到顶部 -->
+  <view class="stats-section">
+    <view class="stats-header">
+      <text class="stats-title">游戏统计</text>
+      <view class="stats-grid">
+        <view class="stat-item">
+          <text class="stat-number">{{totalGames}}</text>
+          <text class="stat-label">总局数</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{redWins}}</text>
+          <text class="stat-label">东西方队胜</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{blueWins}}</text>
+          <text class="stat-label">南北方队胜</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{draws}}</text>
+          <text class="stat-label">平局</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{redWinRate}}%</text>
+          <text class="stat-label">东西方队胜率</text>
+        </view>
+        <view class="stat-item" wx:if="{{averageDuration > 0}}">
+          <text class="stat-number">{{averageDuration}}分</text>
+          <text class="stat-label">平均时长</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史局列表 - 移动到统计下面 -->
+  <view class="history-section">
+    <view class="history-header">
+      <text class="history-title"></text>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="loading-state" wx:if="{{isLoading}}">
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 历史记录列表 -->
+    <view class="history-list" wx:elif="{{filteredHistory.length > 0}}">
+      <view class="history-item" wx:for="{{filteredHistory}}" wx:key="gameId" bindtap="onViewDetail" data-index="{{index}}">
+        <view class="game-info">
+          <view class="game-date">{{item.date}}</view>
+          <view class="game-time">{{item.time}}</view>
+        </view>
+        <view class="team-info">
+          <view class="team-red">
+            <view class="team-container">
+              <view class="team-label">东西\n方队</view>
+              <view class="team-players">
+                <view class="player-name">{{item.redPlayers ? item.redPlayers[0] : '东西方队1号'}}</view>
+                <view class="player-name">{{item.redPlayers ? item.redPlayers[1] : '东西方队2号'}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="team-blue">
+            <view class="team-container">
+              <view class="team-label">南北\n方队</view>
+              <view class="team-players">
+                <view class="player-name">{{item.bluePlayers ? item.bluePlayers[0] : '南北方队1号'}}</view>
+                <view class="player-name">{{item.bluePlayers ? item.bluePlayers[1] : '南北方队2号'}}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="game-result">
+          <view class="result-row">
+            <view class="score-display">
+              <text class="score red">{{item.finalScore.red}}</text>
+              <text class="vs"> : </text>
+              <text class="score blue">{{item.finalScore.blue}}</text>
+            </view>
+            <view class="winner {{item.winner}}">
+              {{item.winner === 'red' ? '东西方队胜' : item.winner === 'blue' ? '南北方队胜' : '平局'}}
+            </view>
+          </view>
+        </view>
+        <view class="action-buttons">
+          <button class="detail-btn" bindtap="onViewDetail" data-index="{{index}}">
+            <text>详情</text>
+          </button>
+          <button class="share-btn" bindtap="onShareGame" data-index="{{index}}">
+            <text>分享</text>
+          </button>
+          <button class="delete-btn" bindtap="onDeleteGame" data-index="{{index}}">
+            <text>删除</text>
+          </button>
+        </view>
+      </view>
+    </view>
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <text class="empty-text" wx:if="{{gameHistory.length === 0}}">暂无历史记录</text>
+      <text class="empty-text" wx:else>没有找到匹配的记录</text>
+      <text class="empty-desc" wx:if="{{gameHistory.length === 0}}">开始游戏后记录将显示在这里</text>
+      <text class="empty-desc" wx:else>尝试调整搜索条件或筛选器</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮区 - 移动到屏幕底部 -->
+  <view class="action-section">
+    <view class="action-bar">
+      <button class="clear-btn" bindtap="onClearAll" wx:if="{{gameHistory.length > 0}}">
+        <text class="clear-icon">🗑️</text>
+        <text class="clear-text">清空记录</text>
+      </button>
+      <button class="filter-btn {{showFilter ? 'active' : ''}}" bindtap="onToggleFilter">
+        <text class="filter-icon">⚙️</text>
+        <text class="filter-text">筛选</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 筛选面板 - 移出 action-section -->
+  <view class="filter-panel {{showFilter ? 'show' : ''}}">
+    <!-- 时间筛选 -->
+    <view class="filter-group">
+      <view class="filter-label">
+        <text>📅 时间筛选</text>
+        <view class="action-buttons">
+          <button class="action-btn" bindtap="onResetFilters">重置</button>
+          <button class="action-btn close-btn" bindtap="onToggleFilter">关闭</button>
+        </view>
+      </view>
+      <view class="filter-options">
+        <button class="filter-option {{timeFilter === 'all' ? 'active' : ''}}" data-time="all" bindtap="onTimeFilterChange">
+          <text class="option-text">全部时间</text>
+        </button>
+        <button class="filter-option this-week-btn {{timeFilter === 'week' ? 'active' : ''}}" data-time="week" bindtap="onTimeFilterChange">
+          <text class="option-text">本周</text>
+        </button>
+        <button class="filter-option last-week-btn {{timeFilter === 'lastWeek' ? 'active' : ''}}" data-time="lastWeek" bindtap="onTimeFilterChange">
+          <text class="option-text">上周</text>
+        </button>
+        <button class="filter-option this-month-btn {{timeFilter === 'month' ? 'active' : ''}}" data-time="month" bindtap="onTimeFilterChange">
+          <text class="option-text">本月</text>
+        </button>
+        <button class="filter-option last-month-btn {{timeFilter === 'lastMonth' ? 'active' : ''}}" data-time="lastMonth" bindtap="onTimeFilterChange">
+          <text class="option-text">上月</text>
+        </button>
+        <button class="filter-option custom-time-btn {{timeFilter === 'custom' ? 'active' : ''}}" data-time="custom" bindtap="onTimeFilterChange">
+          <text class="option-text">自定义时间</text>
+        </button>
+      </view>
+      <!-- 自定义时间选择器 -->
+      <view class="custom-time-picker" wx:if="{{showCustomTimePicker}}" style="margin-top: 10rpx; padding: 10rpx; border: 1rpx solid #e9ecef; border-radius: 4rpx; background: #f8f9fa;">
+        <view style="margin-bottom: 8rpx;">
+          <text style="font-size: 14rpx; color: #2c3e50;">开始时间：</text>
+          <picker mode="date" value="{{customStartDate}}" bindchange="onCustomStartDateChange" style="display: inline-block; margin-left: 8rpx;">
+            <text style="padding: 4rpx 8rpx; border: 1rpx solid #ddd; border-radius: 4rpx; font-size: 14rpx;">{{customStartDate || '选择日期'}}</text>
+          </picker>
+        </view>
+        <view style="margin-bottom: 8rpx;">
+          <text style="font-size: 14rpx; color: #2c3e50;">结束时间：</text>
+          <picker mode="date" value="{{customEndDate}}" bindchange="onCustomEndDateChange" style="display: inline-block; margin-left: 8rpx;">
+            <text style="padding: 4rpx 8rpx; border: 1rpx solid #ddd; border-radius: 4rpx; font-size: 14rpx;">{{customEndDate || '选择日期'}}</text>
+          </picker>
+        </view>
+        <view style="display: flex; gap: 8rpx; margin-top: 8rpx;">
+          <button style="flex: 1; padding: 6rpx 12rpx; background: #6c757d; color: white; border: none; border-radius: 4rpx; font-size: 14rpx;" bindtap="onCancelCustomTime">取消</button>
+          <button style="flex: 1; padding: 6rpx 12rpx; background: #4CAF50; color: white; border: none; border-radius: 4rpx; font-size: 14rpx;" bindtap="onApplyCustomTime">应用筛选</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 队友筛选 (v2.1.0) -->
+    <view class="filter-group" wx:if="{{allTeammates.length > 0}}" style="opacity: 0.4;">
+      <text class="filter-label">👥 队友筛选 (v2.1.0)</text>
+      <view class="filter-options">
+        <button class="filter-option {{teammateFilter === 'all' ? 'active' : ''}}" data-teammate="all" bindtap="onTeammateFilterChange">
+          <text class="option-text">全部队友</text>
+        </button>
+        <button class="filter-option {{teammateFilter === 'mostActive' ? 'active' : ''}}" data-teammate="mostActive" bindtap="onTeammateFilterChange">
+          <text class="option-text">最活跃队友</text>
+        </button>
+        <button class="filter-option {{teammateFilter === 'recent' ? 'active' : ''}}" data-teammate="recent" bindtap="onTeammateFilterChange">
+          <text class="option-text">最近参与</text>
+        </button>
+        <button class="filter-option {{teammateFilter === 'alphabetical' ? 'active' : ''}}" data-teammate="alphabetical" bindtap="onTeammateFilterChange">
+          <text class="option-text">按字母排序</text>
+        </button>
+      </view>
+    </view>
+
+    <!-- 个人统计 (v4.0) -->
+    <view class="filter-group" style="opacity: 0.4;">
+      <text class="filter-label">📈 个人统计 (v4.0)</text>
+      <view class="filter-options">
+        <button class="filter-option">
+          <text class="option-text">个人战绩</text>
+        </button>
+        <button class="filter-option">
+          <text class="option-text">进步轨迹</text>
+        </button>
+        <button class="filter-option">
+          <text class="option-text">最佳表现</text>
+        </button>
+      </view>
+    </view>
+
+    <!-- 筛选统计信息 -->
+    <view class="filter-stats" style="background: #1565C0; padding: 10rpx; border-radius: 4rpx; margin-bottom: 10rpx; font-size: 14rpx; color: white;">
+      <text>📊 筛选统计：</text>
+      <text>• 总比赛数：{{gameHistory.length}}场</text>
+      <text>• 当前功能：时间筛选</text>
+      <text>• 队友筛选：待实现 (v2.1.0)</text>
+      <text>• 个人统计：待实现 (v4.0)</text>
+    </view>
+  </view>
+
+  <!-- 详情弹窗 -->
+  <view class="detail-modal" wx:if="{{showDetail}}" bindtap="onCloseDetail">
+    <view class="detail-content" catchtap="stopPropagation">
+      <view class="detail-header">
+        <text class="scores-title">本把详细比分</text>
+        <text class="close-btn" bindtap="onCloseDetail">×</text>
+      </view>
+      <view class="detail-scores">
+        <view class="scores-table">
+          <!-- 行标题列 -->
+          <view class="row-header-column">
+            <view class="row-header-cell header-cell">把数</view>
+            <view class="row-header-cell header-cell">东西方队</view>
+            <view class="row-header-cell header-cell">南北方队</view>
+          </view>
+          <!-- 可滚动的数据区域 -->
+          <view class="table-data-container">
+            <!-- 把数行 -->
+            <view class="table-row">
+              <text class="table-cell" wx:for="{{selectedGame.detailedScores}}" wx:key="index">{{index + 1}}</text>
+            </view>
+            <!-- 红方行 -->
+            <view class="table-row">
+              <text class="table-cell red" wx:for="{{selectedGame.detailedScores}}" wx:key="index">{{item.red}}</text>
+            </view>
+            <!-- 蓝方行 -->
+            <view class="table-row">
+              <text class="table-cell blue" wx:for="{{selectedGame.detailedScores}}" wx:key="index">{{item.blue}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
