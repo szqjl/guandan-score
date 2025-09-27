@@ -111,12 +111,16 @@ Page({
   textToLevel(text) {
     // 处理A加上标数字的情况,如A¹,A²,A³和E
     if (text.startsWith('A')) {
+      // 处理A¹、A²、A³格式
+      if (text === 'A¹' || text === 'A²' || text === 'A³') {
+        return 14; // 过A制下所有A的尝试都视为14级
+      }
+      // 处理A数字格式（把数制）
       const attemptMatch = text.match(/A(\d+)/);
       if (attemptMatch) {
-      // 在把数制下,A/A2/A3视为不同级别:A=14, A2=15, A3=16
-      const attempt = parseInt(attemptMatch[1]);
-      if (this.data.rule === 'by-rounds') {
-        return 14 + attempt;
+        const attempt = parseInt(attemptMatch[1]);
+        if (this.data.rule === 'by-rounds') {
+          return 14 + attempt;
         }
         return 14; // 过A制下所有A的尝试都视为14级
       }
@@ -202,6 +206,75 @@ Page({
     return {
       isUncatchable: false
     };
+  },
+
+  // 把数制预警检查函数
+  checkBashuWarning() {
+    if (this.data.rule !== 'by-rounds') return;
+
+    const redLevel = this.textToLevel(this.data.levelTexts.red);
+    const blueLevel = this.textToLevel(this.data.levelTexts.blue);
+    const remainingRounds = this.data.maxRounds - this.data.rounds;
+
+    // 调试信息
+    console.log('预警检查:', {
+      rule: this.data.rule,
+      maxRounds: this.data.maxRounds,
+      rounds: this.data.rounds,
+      remainingRounds: remainingRounds,
+      redLevel: redLevel,
+      blueLevel: blueLevel
+    });
+
+    // 在剩余5把时检查预警（更早提醒）
+    if (remainingRounds !== 5) return;
+
+    // 检查A阶段差距预警
+    const redInA = redLevel >= 14;
+    const blueInA = blueLevel >= 14;
+
+    if (redInA && !blueInA) {
+      // 红方在A阶段，蓝方不在A阶段
+      const maxPossibleIncrease = 2 * remainingRounds; // 2 * 5 = 10分（T3）
+      const maxPossibleIncreaseDouble = 3 * remainingRounds; // 3 * 5 = 15分（双上）
+      
+      // 如果T3追不上，但双上能追上，就预警
+      if (blueLevel + maxPossibleIncrease < redLevel && blueLevel + maxPossibleIncreaseDouble >= redLevel) {
+        this.showBashuWarning('南北方');
+        return;
+      }
+    } else if (blueInA && !redInA) {
+      // 蓝方在A阶段，红方不在A阶段
+      const maxPossibleIncrease = 2 * remainingRounds; // 2 * 5 = 10分（T3）
+      const maxPossibleIncreaseDouble = 3 * remainingRounds; // 3 * 5 = 15分（双上）
+      
+      // 如果T3追不上，但双上能追上，就预警
+      if (redLevel + maxPossibleIncrease < blueLevel && redLevel + maxPossibleIncreaseDouble >= blueLevel) {
+        this.showBashuWarning('东西方');
+        return;
+      }
+    }
+
+    // 检查等级差距预警
+    const levelGap = Math.abs(redLevel - blueLevel);
+    const maxPossibleIncrease = 2 * remainingRounds; // 2 * 5 = 10分（T3）
+    const maxPossibleIncreaseDouble = 3 * remainingRounds; // 3 * 5 = 15分（双上）
+
+    // 如果T3追不上，但双上能追上，就预警
+    if (levelGap > maxPossibleIncrease && levelGap <= maxPossibleIncreaseDouble) {
+      const leadingTeam = redLevel > blueLevel ? '东西方' : '南北方';
+      this.showBashuWarning(leadingTeam === '东西方' ? '南北方' : '东西方');
+    }
+  },
+
+  // 显示把数制预警Toast（醒目版）
+  showBashuWarning(teamName) {
+    wx.showToast({
+      title: `⚠️ ${teamName}再不双上，将追不上对方了！`,
+      icon: 'none',
+      duration: 5000,
+      mask: true
+    });
   },
 
   // 防抖处理变量
@@ -316,19 +389,19 @@ Page({
         }
 
         // 检查是否需要升级尝试次数(参照过A制规则)
-        // 1. 当点了自身的1游末游,且本方处于A/A2阶段
+        // 1. 当点了自身的T4,且本方处于A/A2阶段
         if (scoreIncrement === 1 && currentAttempt < 3) {
           // 升级到下一个尝试阶段
           const nextAttempt = currentAttempt + 1;
           if (nextAttempt > 0) {
-            displayText = `A${nextAttempt}`;
+            displayText = this.getFormattedAAttempt(nextAttempt);
           } else {
             displayText = 'A';
           }
           // 同时更新实际等级值
           newLevel = 14 + nextAttempt;
         } else if (scoreIncrement > 1) {
-          // 2. 被对方点了升级按钮(双上或1游3游),且当前处于A/A2阶段
+          // 2. 被对方点了升级按钮(双上或T3),且当前处于A/A2阶段
           // 检查对方是否处于A阶段
           const otherTeam = selectedTeam === 'red' ? 'blue' : 'red';
           const otherLevel = this.textToLevel(this.data.levelTexts[otherTeam]);
@@ -348,7 +421,7 @@ Page({
           if (otherLevel >= 14 && currentAttempt < 3) {
             const nextAttempt = currentAttempt + 1;
             if (nextAttempt > 0) {
-              displayText = `A${nextAttempt}`;
+              displayText = this.getFormattedAAttempt(nextAttempt);
             } else {
               displayText = 'A';
             }
@@ -357,7 +430,7 @@ Page({
           } else {
             // 其他情况,保持当前等级显示
             if (currentAttempt > 0) {
-              displayText = `A${currentAttempt}`;
+              displayText = this.getFormattedAAttempt(currentAttempt);
             } else {
               displayText = 'A';
             }
@@ -365,7 +438,7 @@ Page({
         } else {
           // 其他情况,保持当前等级显示
           if (currentAttempt > 0) {
-            displayText = `A${currentAttempt}`;
+            displayText = this.getFormattedAAttempt(currentAttempt);
           } else {
             displayText = 'A';
           }
@@ -427,6 +500,9 @@ Page({
     // 显示点击提示
     this.showClickToast(scoreIncrement, selectedTeam);
 
+    // 把数制预警检查
+    this.checkBashuWarning();
+
     // 检查是否达到A(过A制)
     if (this.data.rule === 'by-A') {
       // 处理过A制的核心逻辑
@@ -450,7 +526,7 @@ Page({
       if (currentLevel >= 14) {
         const attempt = this.data.aAttempts[currentTeam];
         
-        // 情况1: 本方在A阶段点击双上或1游3游 - 成功过A
+        // 情况1: 本方在A阶段点击双上或T3 - 成功过A
         if (scoreIncrement >= 2) {
           const attemptText = attempt === 0 ? '第1轮' : attempt === 1 ? '第2轮' : '第3轮';
           wx.showModal({
@@ -469,7 +545,7 @@ Page({
           return; // 游戏结束，直接返回
         }
         
-        // 情况2: 本方在A阶段点击1游末游 - 推进到下一阶段
+        // 情况2: 本方在A阶段点击T4 - 推进到下一阶段
         if (scoreIncrement === 1) {
           if (attempt < 3) {
             const nextAttempt = attempt + 1;
@@ -478,7 +554,8 @@ Page({
             
             this.setData({
               [`aAttempts.${currentTeam}`]: nextAttempt,
-              [`levelTexts.${currentTeam}`]: this.getFormattedAAttempt(nextAttempt)
+              [`levelTexts.${currentTeam}`]: this.getFormattedAAttempt(nextAttempt),
+              [`firstTimeReachA.${currentTeam}`]: false // 重置首次到达标记
             });
             
             if (nextAttempt === 3) {
@@ -516,8 +593,8 @@ Page({
         const isOtherFirstTimeReach = this.data.firstTimeReachA[otherTeam];
         
         // 只有在对方首次到达A/A¹/A²阶段时，本方升级才会触发对方的推进
-        if (isOtherFirstTimeReach && scoreIncrement >= 2) {
-          // 本方点击双上或1游3游，推进对方的A阶段
+        if (isOtherFirstTimeReach && scoreIncrement >= 1) {
+          // 本方点击双上或T3，推进对方的A阶段
           if (otherAttempt < 3) {
             const nextAttempt = otherAttempt + 1;
             const attemptText = nextAttempt === 1 ? '第1次' : nextAttempt === 2 ? '第2次' : '第3次';
@@ -863,10 +940,10 @@ Page({
       const redScore = this.textToLevel(currentRedText);
       const blueScore = this.textToLevel(currentBlueText);
 
-      // 根据aAttempts设置正确的A/A2/A3格式
+      // 根据aAttempts设置正确的A/A¹/A²/A³格式
       this.setData({
-        'levelTexts.red': redScore === 14 ? `A${this.data.aAttempts.red}` : redScore === 11 ? 'J' : redScore === 12 ? 'Q' : redScore === 13 ? 'K' : redScore.toString(),
-        'levelTexts.blue': blueScore === 14 ? `A${this.data.aAttempts.blue}` : blueScore === 11 ? 'J' : blueScore === 12 ? 'Q' : blueScore === 13 ? 'K' : blueScore.toString()
+        'levelTexts.red': redScore === 14 ? this.getFormattedAAttempt(this.data.aAttempts.red) : redScore === 11 ? 'J' : redScore === 12 ? 'Q' : redScore === 13 ? 'K' : redScore.toString(),
+        'levelTexts.blue': blueScore === 14 ? this.getFormattedAAttempt(this.data.aAttempts.blue) : blueScore === 11 ? 'J' : blueScore === 12 ? 'Q' : blueScore === 13 ? 'K' : blueScore.toString()
       });
     } else if (newRule === 'by-A') {
       // 如果是从把数制切换到过A制,重置等级显示文本
@@ -1374,7 +1451,7 @@ Page({
   // 分享功能
   onShareAppMessage() {
     return {
-      title: '扑克双上计分',
+      title: '扑克计分',
       path: '/pages/index/index',
       imageUrl: '../../images/victor.svg' // 使用已有的victor.svg作为分享图片
     }
@@ -1383,7 +1460,7 @@ Page({
   // 分享到朋友圈
   onShareTimeline() {
     return {
-      title: '扑克双上计分',
+      title: '扑克计分',
       query: '',
       imageUrl: '../../images/victor.svg' // 使用已有的victor.svg作为分享图片
     }
@@ -1408,8 +1485,8 @@ Page({
 
 📊 计分规则：
 • 双上：+3分（两个队伍都升级）
-• 1游3游：+2分（一个队伍升级）
-• 1游末游：+1分（一个队伍升级，另一个队伍降级）
+• T3：+2分（一个队伍升级）
+• T4：+1分（一个队伍升级，另一个队伍降级）
 
 🔧 功能特色：
 • 实时比分记录
