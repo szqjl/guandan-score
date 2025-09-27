@@ -26,8 +26,39 @@
   "compileType": "miniprogram",
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
-    "include": []
+    "ignore": [
+      "version-management/**",
+      "versions/**",
+      "backup/**",
+      "project-plan/**",
+      "ProjectAll/**",
+      "cursor/**",
+      ".vscode/**",
+      "*.md",
+      "*.puml",
+      "*.json.backup",
+      "*.bat",
+      "*.js.backup",
+      "*.wxss.backup",
+      "coreLandscapeguandan-score",
+      "fix-encoding.js",
+      "stagewise.json",
+      "eslint.config.js",
+      "package.json",
+      ".gitignore",
+      ".DS_Store",
+      "Thumbs.db",
+      "ehthumbs.db",
+      "Desktop.ini"
+    ],
+    "include": [
+      "pages/**",
+      "images/**",
+      "utils/**",
+      "app.js",
+      "app.json",
+      "sitemap.json"
+    ]
   },
   "appid": "wx53202fdd45e3b736",
   "editorSetting": {},

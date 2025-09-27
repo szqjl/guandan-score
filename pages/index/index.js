@@ -67,12 +67,23 @@ Page({
      soundEnabled: true
   },
 
-   onLoad() {
-     // 快速初始化 - 减少复杂处理和日志输出,提高启动速度
-     const forceShowTrialBadge = true; // 当前设置为true,强制显示体验版标识用于测试
+  onLoad() {
+    // 快速初始化 - 减少复杂处理和日志输出,提高启动速度
+    const forceShowTrialBadge = true; // 当前设置为true,强制显示体验版标识用于测试
 
-     // 初始化音效
-     this.initSounds();
+    // 防止屏幕息屏
+    wx.setKeepScreenOn({
+      keepScreenOn: true,
+      success: () => {
+        console.log('防息屏设置成功');
+      },
+      fail: (err) => {
+        console.error('防息屏设置失败:', err);
+      }
+    });
+
+    // 初始化音效
+    this.initSounds();
 
      // 直接设置默认值,避免复杂的应用实例获取和try-catch处理
      this.setData({
@@ -1678,6 +1689,19 @@ Page({
   },
 
   // 页面隐藏时自动保存游戏状态
+  onShow() {
+    // 页面显示时重新设置防息屏
+    wx.setKeepScreenOn({
+      keepScreenOn: true,
+      success: () => {
+        console.log('页面显示时防息屏设置成功');
+      },
+      fail: (err) => {
+        console.error('页面显示时防息屏设置失败:', err);
+      }
+    });
+  },
+
   onHide() {
     this.autoSaveGameState();
   },
