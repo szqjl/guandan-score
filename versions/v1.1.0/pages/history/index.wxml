@@ -1,0 +1,120 @@
+<view class="container">
+  <!-- 统计概览区 -->
+  <view class="stats-section">
+    <view class="stats-header">
+      <text class="stats-title">游戏统计</text>
+      <view class="stats-grid">
+        <view class="stat-item">
+          <text class="stat-number">{{totalGames}}</text>
+          <text class="stat-label">总局数</text>
+        </view>
+      <view class="stat-item">
+        <text class="stat-number">{{redWins}}</text>
+        <text class="stat-label">红方胜</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{blueWins}}</text>
+        <text class="stat-label">蓝方胜</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{draws}}</text>
+        <text class="stat-label">平局</text>
+      </view>
+        <view class="stat-item">
+          <text class="stat-number">{{redWinRate}}%</text>
+          <text class="stat-label">红方胜率</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史局列表 -->
+  <view class="history-section">
+    <view class="history-header">
+      <text class="history-title">历史对局</text>
+      <button class="clear-btn" bindtap="onClearAll" wx:if="{{gameHistory.length > 0}}">清空记录</button>
+    </view>
+    <view class="history-list" wx:if="{{gameHistory.length > 0}}">
+      <view class="history-item" wx:for="{{gameHistory}}" wx:key="gameId" bindtap="onViewDetail" data-index="{{index}}">
+        <view class="game-info">
+          <view class="game-date">{{item.date}}</view>
+          <view class="game-time">{{item.time}}</view>
+        </view>
+        <view class="team-info">
+          <view class="team-red">
+            <view class="team-container">
+              <view class="team-label">红队</view>
+              <view class="team-players">
+                <view class="player-name">{{item.redPlayers ? item.redPlayers[0] : '红队1号'}}</view>
+                <view class="player-name">{{item.redPlayers ? item.redPlayers[1] : '红队2号'}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="team-blue">
+            <view class="team-container">
+              <view class="team-label">蓝队</view>
+              <view class="team-players">
+                <view class="player-name">{{item.bluePlayers ? item.bluePlayers[0] : '蓝队1号'}}</view>
+                <view class="player-name">{{item.bluePlayers ? item.bluePlayers[1] : '蓝队2号'}}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="game-result">
+          <view class="result-row">
+            <view class="score-display">
+              <text class="score red">{{item.finalScore.red}}</text>
+              <text class="vs">VS</text>
+              <text class="score blue">{{item.finalScore.blue}}</text>
+            </view>
+            <view class="winner {{item.winner}}">
+              {{item.winner === 'red' ? '红方胜' : item.winner === 'blue' ? '蓝方胜' : '平局'}}
+            </view>
+          </view>
+        </view>
+        <view class="view-detail">
+          <text>查看详情</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty-state" wx:else>
+      <text class="empty-text">暂无历史记录</text>
+      <text class="empty-desc">开始游戏后记录将显示在这里</text>
+    </view>
+  </view>
+
+  <!-- 详情弹窗 -->
+  <view class="detail-modal" wx:if="{{showDetail}}" bindtap="onCloseDetail">
+    <view class="detail-content" catchtap="stopPropagation">
+      <view class="detail-header">
+        <text class="scores-title">本把详细比分</text>
+        <text class="close-btn" bindtap="onCloseDetail">×</text>
+      </view>
+        <view class="detail-scores">
+        <view class="scores-table">
+          <!-- 行标题列 -->
+          <view class="row-header-column">
+            <view class="row-header-cell header-cell">把数</view>
+            <view class="row-header-cell header-cell">红方</view>
+            <view class="row-header-cell header-cell">蓝方</view>
+          </view>
+          <!-- 可滚动的数据区域 -->
+          <view class="table-data-container">
+            <!-- 把数行 -->
+            <view class="table-row">
+              <text class="table-cell" wx:for="{{selectedGame.detailedScores}}" wx:key="index">{{index + 1}}</text>
+            </view>
+            <!-- 红方行 -->
+            <view class="table-row">
+              <text class="table-cell red" wx:for="{{selectedGame.detailedScores}}" wx:key="index">{{item.red}}</text>
+            </view>
+            <!-- 蓝方行 -->
+            <view class="table-row">
+              <text class="table-cell blue" wx:for="{{selectedGame.detailedScores}}" wx:key="index">{{item.blue}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

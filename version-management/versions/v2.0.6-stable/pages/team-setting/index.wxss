@@ -1,0 +1,212 @@
+/* pages/team-setting/index.wxss */
+
+/* 主容器 */
+.team-registration-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  background: #F5F5F5;
+  width: 100%;
+  min-height: 100vh;
+  padding: 36rpx 64rpx 48rpx 64rpx;
+  justify-content: center;
+  font-family: 'Source Han Sans SC', sans-serif;
+  font-size: 32rpx;
+  font-weight: 400;
+  box-sizing: border-box;
+}
+
+
+/* 队伍信息容器 */
+.teams-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10rpx;
+  align-items: stretch;
+  justify-content: center;
+  flex: 1;
+  padding: 0 25rpx;
+}
+
+/* 红队样式 */
+.red-team {
+  background: #FFEEEE;
+  border: 4rpx solid #E74C3C;
+  border-radius: 20rpx;
+  padding: 8rpx;
+  display: flex;
+  width: 330rpx;
+  gap: 8rpx;
+  flex-direction: column;
+  align-items: stretch;
+  box-shadow: 0 4rpx 12rpx rgba(231, 76, 60, 0.1);
+}
+
+.team-name {
+  color: #E74C3C;
+  font-size: 20rpx;
+  font-weight: 500;
+  line-height: 24rpx;
+  text-align: center;
+  margin-bottom: 3rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 蓝队标题色彩 */
+.blue-team .team-name {
+  color: #3498DB;
+}
+
+/* 队员输入组 */
+.player-input-group {
+  display: flex;
+  flex-direction: row;
+  gap: 6rpx;
+  align-items: center;
+}
+
+/* 队员图标容器 */
+.player-icon-container {
+  background: #FFFFFF;
+  border: 3rpx solid #E74C3C;
+  border-radius: 50rpx;
+  padding: 6rpx;
+  display: flex;
+  width: 32rpx;
+  height: 32rpx;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.blue-team .player-icon-container {
+  border-color: #3498DB;
+}
+
+/* 队员图标 */
+.player-icon {
+  font-size: 16rpx;
+}
+
+/* 输入框 */
+.input-field {
+  background: #FFFFFF;
+  border: 3rpx solid #E74C3C;
+  border-radius: 8rpx;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  padding: 4rpx 0 4rpx 8rpx;
+  min-height: 32rpx;
+}
+
+.blue-team .input-field {
+  border-color: #3498DB;
+}
+
+/* 输入框内容 */
+.input-placeholder {
+  color: #333333;
+  line-height: 24rpx;
+  width: 100%;
+  font-size: 20rpx;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.input-placeholder::placeholder {
+  color: #9CA3AF;
+}
+
+/* VS标志 */
+.vs-badge {
+  background: linear-gradient(90deg, rgba(231, 76, 60, 0.20) 0%, rgba(52, 152, 219, 0.20) 100%);
+  border-radius: 50rpx;
+  display: flex;
+  width: 120rpx;
+  height: 120rpx;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  margin: 0 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.vs-text {
+  color: #444444;
+  font-size: 42rpx;
+  font-weight: 700;
+  line-height: 60rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+/* 蓝队样式 */
+.blue-team {
+  background: #EEF5FF;
+  border: 4rpx solid #3498DB;
+  border-radius: 20rpx;
+  padding: 8rpx;
+  display: flex;
+  width: 330rpx;
+  gap: 8rpx;
+  flex-direction: column;
+  align-items: stretch;
+  box-shadow: 0 4rpx 12rpx rgba(52, 152, 219, 0.1);
+}
+
+/* 操作按钮容器 */
+.action-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 30rpx;
+  justify-content: center;
+  margin-top: 10rpx;
+}
+
+/* 重置按钮 */
+.reset-button {
+  background: #FFFFFF;
+  color: #666666;
+  border: 3rpx solid #CCCCCC;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  font-weight: 500;
+  padding: 8rpx 20rpx;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 提交按钮 */
+.submit-button {
+  background: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  font-weight: 500;
+  padding: 8rpx 20rpx;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4rpx 12rpx rgba(74, 144, 226, 0.3);
+}
+
+.submit-button:active {
+  background: #3A7BC8;
+  transform: scale(0.98);
+}
+
+.reset-button:active {
+  background: #F5F5F5;
+  transform: scale(0.98);
+}

@@ -1,0 +1,15 @@
+{
+  "version": "v1.2.1",
+  "createdAt": "2025-09-21T15:59:45.146Z",
+  "author": "Jennifer",
+  "description": "UI布局优化版本",
+  "features": [],
+  "dependencies": {
+    "微信小程序": ">= 8.0.0"
+  },
+  "changelog": [],
+  "status": "dev",
+  "rollbackSupported": true,
+  "backupCount": 13,
+  "completedAt": "2025-09-24T16:11:07.128Z"
+}

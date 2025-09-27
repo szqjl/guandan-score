@@ -1,0 +1,893 @@
+/* 历史记录页面样式 - 与主页面风格保持一致 */
+.container {
+  min-height: 100vh;
+  background-color: black;
+  /* 黑色背景 */
+  padding: 5rpx;
+  width: 100vw;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* 操作按钮区 - 固定在屏幕底部 */
+.action-section {
+  position: fixed;
+  bottom: 0;
+  left: 20rpx;
+  /* 添加左边距，避免被横屏左侧刘海遮住 */
+  right: 0;
+  background: #404040;
+  /* 深灰色背景 - 纯色不透明 */
+  border-radius: 0rpx;
+  padding: 8rpx 20rpx;
+  margin: 0rpx;
+  z-index: 1000;
+  /* 确保在最上层 */
+  box-shadow: 0 -4rpx 15rpx rgba(21, 101, 192, 0.3);
+  /* 深蓝色阴影 */
+  overflow: visible;
+  /* 允许子元素超出容器显示 */
+  border-top: 6rpx solid rgba(0, 0, 0, 0.95);
+  /* 顶部6rpx黑色背景 */
+}
+
+.action-bar {
+  display: flex;
+  align-items: flex-start;
+  /* 改为顶部对齐 */
+  gap: 10rpx;
+  justify-content: center;
+  margin-top: 7rpx;
+  /* 向下移动7rpx */
+}
+
+.clear-btn {
+  flex: 1;
+  height: 32rpx;
+  padding: 0 15rpx;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 4rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  transition: all 0.3s ease;
+  font-size: 20rpx;
+  transform: translateY(-7rpx);
+  /* 使用transform向上移动 */
+}
+
+.clear-btn:active {
+  background-color: #d32f2f;
+}
+
+.clear-icon {
+  font-size: 16rpx;
+}
+
+.clear-text {
+  font-size: 20rpx;
+}
+
+.filter-btn {
+  flex: 1;
+  height: 32rpx;
+  padding: 0 15rpx;
+  background-color: #1565C0;
+  color: white;
+  border: none;
+  border-radius: 4rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  transition: all 0.3s ease;
+  font-size: 24rpx;
+  transform: translateY(-7rpx);
+  /* 使用transform向上移动 */
+}
+
+.filter-btn.active {
+  background-color: #1976d2;
+}
+
+.filter-icon {
+  font-size: 20rpx;
+}
+
+.filter-text {
+  font-size: 24rpx;
+}
+
+.filter-panel {
+  position: fixed;
+  bottom: 80rpx;
+  /* 调整到合适位置 */
+  left: 20rpx;
+  right: 20rpx;
+  background: rgba(128, 128, 128, 0.95);
+  /* 灰色背景 */
+  border-radius: 8rpx;
+  padding: 35rpx 15rpx 15rpx 15rpx;
+  /* 大幅增加顶部内边距 */
+  box-shadow: 0 -4rpx 12rpx rgba(0, 0, 0, 0.3);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1001;
+  /* 在按钮之上 */
+}
+
+.filter-panel.show {
+  max-height: 65vh;
+  opacity: 1;
+  overflow-y: auto;
+}
+
+.filter-group {
+  margin-bottom: 8rpx;
+}
+
+.filter-label {
+  font-size: 18rpx;
+  font-weight: bold;
+  color: #333;
+  /* 深色文字在灰色背景下更清晰 */
+  margin-bottom: 6rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.filter-options,
+.sort-options {
+  display: flex;
+  gap: 1rpx; /* 进一步缩小按钮间距 */
+  flex-wrap: nowrap; /* 强制不换行 */
+  padding: 2rpx; /* 进一步缩小容器内边距 */
+  border: 1rpx solid #e9ecef;
+  border-radius: 4rpx;
+  background-color: rgba(255, 255, 255, 0.05);
+  margin-top: 2rpx;
+  overflow-x: auto; /* 如果内容超出，允许水平滚动 */
+}
+
+.filter-option,
+.sort-option {
+  padding: 4rpx 4rpx; /* 进一步缩小内边距 */
+  border: 1rpx solid #4caf50;
+  /* 绿色边框 */
+  border-radius: 4rpx;
+  background-color: rgba(255, 255, 255, 0.1);
+  /* 半透明白色背景 */
+  font-size: 8rpx; /* 进一步缩小文字大小 */
+  color: #333;
+  /* 深色文字在灰色背景下更清晰 */
+  transition: all 0.3s ease;
+  height: 30rpx; /* 与关闭按钮保持一致 */
+  width: 70rpx !important; /* 强制设置宽度 */
+  min-width: 70rpx !important; /* 最小宽度 */
+  max-width: 70rpx !important; /* 最大宽度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rpx; /* 缩小间距 */
+  flex-shrink: 0; /* 防止按钮被压缩 */
+}
+
+.filter-option.active,
+.sort-option.active {
+  background-color: #0B1557;
+  color: white;
+  border-color: #0B1557;
+}
+
+/* 自定义时间按钮特殊宽度 */
+.custom-time-btn {
+  width: 80rpx !important; /* 自定义时间按钮单独宽度 */
+  min-width: 80rpx !important;
+  max-width: 80rpx !important;
+}
+
+/* 上周按钮向左移动和特殊背景 */
+.last-week-btn {
+  margin-left: -15rpx !important; /* 向左移动15rpx */
+  background-color: rgba(255, 255, 255, 0.8) !important; /* 更明显的白色背景 */
+  border: none !important; /* 去除边框 */
+}
+
+/* 上月按钮向左移动和特殊背景 */
+.last-month-btn {
+  margin-left: -15rpx !important; /* 向左移动15rpx */
+  background-color: rgba(255, 255, 255, 0.8) !important; /* 更明显的白色背景 */
+  border: none !important; /* 去除边框 */
+}
+
+/* 本周按钮特殊背景 */
+.this-week-btn {
+  background-color: rgba(255, 255, 255, 0.8) !important; /* 更明显的白色背景 */
+  border: none !important; /* 去除边框 */
+}
+
+/* 本月按钮特殊背景 */
+.this-month-btn {
+  background-color: rgba(255, 255, 255, 0.8) !important; /* 更明显的白色背景 */
+  border: none !important; /* 去除边框 */
+}
+
+/* 自定义时间按钮特殊背景 */
+.custom-time-btn {
+  background-color: rgba(255, 255, 255, 0.8) !important; /* 更明显的白色背景 */
+  border: none !important; /* 去除边框 */
+}
+
+.filter-option,
+.sort-option {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.option-text,
+.sort-text {
+  font-size: 15rpx; /* 恢复到合适大小 */
+}
+
+.option-count {
+  font-size: 20rpx;
+  opacity: 0.8;
+}
+
+.sort-icon {
+  font-size: 20rpx;
+}
+
+.sort-arrow {
+  font-size: 20rpx;
+  font-weight: bold;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 6rpx;
+  margin-top: 0;
+}
+
+.action-btn {
+  padding: 2rpx 4rpx;
+  border: none;
+  border-radius: 3rpx;
+  font-size: 20rpx; /* 与关闭按钮保持一致 */
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: #6c757d;
+  color: white;
+}
+
+.filter-panel .close-btn {
+  background-color: #1565C0;
+  color: white;
+  font-size: 20rpx; /* 恢复原始大小 */
+}
+
+.filter-stats {
+  background: #1565C0;
+  color: white;
+  padding: 10rpx;
+  border-radius: 4rpx;
+  margin-bottom: 10rpx;
+  font-size: 14rpx;
+}
+
+/* 加载状态 */
+.loading-state {
+  text-align: center;
+  padding: 60rpx 20rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+/* 统计概览区 */
+.stats-section {
+  background: #1565C0;
+  /* 弱深蓝色背景 */
+  border-radius: 4rpx;
+  padding: 1rpx 4rpx 0rpx 4rpx;
+  /* 进一步压缩内边距 */
+  margin-bottom: 2rpx;
+  /* 减少下边距 */
+  margin-left: 20rpx;
+  /* 添加左边距，避免被横屏左侧刘海遮住 */
+  margin-top: 7rpx;
+  /* 整体向下移动7rpx */
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.15);
+  max-width: calc(100vw - 20rpx);
+  /* 调整最大宽度 */
+  box-sizing: border-box;
+}
+
+.stats-header {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  /* 减少间距 */
+  margin-left: 10rpx;
+  /* 整体文字向右移动10rpx */
+}
+
+.stats-title {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: white;
+  /* 白色文字在绿色背景上更清晰 */
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 6rpx;
+  /* 减少间距 */
+  flex: 1;
+  max-width: calc(100vw - 200rpx);
+  box-sizing: border-box;
+  margin-left: 10rpx;
+  /* 整体文字向右移动10rpx */
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-number {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: white;
+  /* 白色数字在绿色背景上更醒目 */
+  margin-bottom: 4rpx;
+}
+
+.stat-label {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.9);
+  /* 半透明白色标签，在绿色背景上清晰可见 */
+}
+
+/* 历史局列表 */
+.history-section {
+  background: white;
+  /* 白色背景 */
+  border-radius: 6rpx;
+  /* 减少圆角 */
+  padding: 6rpx 10rpx 80rpx 10rpx;
+  /* 底部留出空间给固定按钮 */
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
+  max-width: calc(100vw - 20rpx);
+  /* 调整最大宽度 */
+  box-sizing: border-box;
+  border: 1rpx solid #e0e0e0;
+  margin-top: 10rpx;
+  /* 再下移5rpx (5rpx + 5rpx = 10rpx) */
+  margin-left: 20rpx;
+  /* 添加左边距，避免被横屏左侧刘海遮住 */
+  height: 275rpx;
+  /* 调整高度，包含标题和2行记录 */
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4rpx;
+  /* 减少下边距 */
+}
+
+.history-title {
+  font-size: 20rpx;
+  font-weight: bold;
+  color: #333;
+  /* 深色文字在白色背景下可见 */
+}
+
+/* 原来的清空按钮样式已移除，现在在顶部操作区 */
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+  /* 减少间距，让分割线更明显 */
+  max-height: 225rpx;
+  /* 调整高度，2行 × 105rpx + 15rpx间距 = 225rpx */
+  overflow-y: auto;
+  /* 超出部分滚动显示 */
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  /* 改回水平布局 */
+  padding: 15rpx 20rpx;
+  /* 继续增加内边距 */
+  background: #f8f9fa;
+  /* 浅灰色背景 */
+  border-radius: 10rpx;
+  /* 继续增加圆角 */
+  border-left: 5rpx solid #1565C0;
+  /* 继续增加边框宽度 */
+  border-bottom: 1rpx solid black;
+  /* 添加黑色底部分割线 */
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  height: 105rpx;
+  /* 缩小5rpx高度 */
+}
+
+.game-info {
+  flex: 0 0 auto;
+  margin-right: 12rpx;
+  width: 80rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* 垂直居中 */
+  align-items: flex-start;
+  /* 左对齐 */
+}
+
+.game-date {
+  font-size: 16rpx;
+  font-weight: bold;
+  /* 加粗 */
+  color: #000;
+  /* 黑色文字 */
+  margin-bottom: 0rpx;
+  line-height: 1.2;
+}
+
+.game-time {
+  font-size: 14rpx;
+  font-weight: bold;
+  /* 加粗 */
+  color: #000;
+  /* 黑色文字 */
+  margin-top: 0rpx;
+  line-height: 1.2;
+  padding-left: 8rpx;
+  /* 缩进8rpx */
+}
+
+.team-info {
+  flex: 1;
+  margin-right: 10rpx;
+  margin-left: 5rpx;
+  /* 右移5rpx */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8rpx;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.team-red,
+.team-blue {
+  flex: 1;
+  text-align: left;
+}
+
+.team-container {
+  display: flex;
+  align-items: flex-start;
+  /* 改为顶部对齐，允许换行 */
+  gap: 6rpx;
+}
+
+.team-label {
+  font-size: 12rpx;
+  font-weight: 500;
+  line-height: 1.2;
+  /* 调整行高，适应两行文字 */
+  margin: 0rpx;
+  flex-shrink: 0;
+  align-self: center;
+  text-align: center;
+  /* 确保文字居中 */
+  white-space: pre-line;
+  /* 支持换行符 */
+}
+
+.team-red .team-label {
+  color: #d32f2f;
+}
+
+.team-blue .team-label {
+  color: #1976d2;
+}
+
+.team-players {
+  display: flex;
+  flex-direction: column;
+  gap: 0rpx;
+  flex: 1;
+}
+
+.player-name {
+  font-size: 12rpx;
+  font-weight: 400;
+  color: #666;
+  /* 灰色文字 */
+  line-height: 1.1;
+  margin: 0rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.game-result {
+  flex: 1;
+  text-align: center;
+  margin-right: 10rpx;
+  margin-left: -22rpx;
+  /* 向左移动22rpx (12rpx + 10rpx) */
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+}
+
+.score-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score {
+  font-size: 25rpx;
+  font-weight: bold;
+  padding: 2rpx 8rpx;
+  border-radius: 3rpx;
+  margin: 0 4rpx;
+}
+
+.score.red {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.score.blue {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.vs {
+  font-size: 18rpx;
+  color: #999;
+  /* 更淡的灰色 */
+  margin: 0 6rpx;
+}
+
+.winner {
+  font-size: 16rpx;
+  font-weight: 500;
+  padding: 1rpx 6rpx;
+  border-radius: 2rpx;
+  white-space: nowrap;
+}
+
+.winner.red {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.winner.blue {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+
+.detail-btn,
+.share-btn,
+.delete-btn {
+  padding: 4rpx 6rpx;
+  /* 进一步缩小内边距 */
+  border: none;
+  border-radius: 3rpx;
+  /* 缩小圆角 */
+  font-size: 12rpx;
+  /* 进一步缩小字体 */
+  transition: all 0.3s ease;
+  width: 40rpx;
+  /* 进一步缩小宽度 */
+  min-width: 40rpx;
+  /* 最小宽度 */
+  max-width: 40rpx;
+  /* 最大宽度 */
+  text-align: center;
+  /* 文字居中 */
+  height: 24rpx;
+  /* 添加固定高度 */
+  line-height: 1;
+  /* 调整行高 */
+  margin-right: 5rpx;
+  /* 向右移动5rpx */
+}
+
+.detail-btn {
+  background-color: #0B1557;
+  color: white;
+}
+
+.detail-btn:active {
+  background-color: #1976d2;
+}
+
+.share-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.share-btn:active {
+  background-color: #388e3c;
+}
+
+.delete-btn {
+  background-color: #ff4444;
+  color: white;
+}
+
+.delete-btn:active {
+  background-color: #d32f2f;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 60rpx 20rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.empty-desc {
+  font-size: 24rpx;
+  color: #ccc;
+}
+
+/* 详情弹窗 */
+.detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10rpx;
+}
+
+.detail-content {
+  background: white;
+  border-radius: 8rpx;
+  width: 100%;
+  max-width: calc(100vw - 40rpx);
+  max-height: 95vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5rpx 10rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.detail-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.close-btn {
+  font-size: 20rpx;
+  color: #999;
+  width: 30rpx;
+  height: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.detail-scores {
+  padding: 5rpx 10rpx;
+}
+
+.scores-title {
+  font-size: 16rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5rpx;
+}
+
+.scores-table {
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  margin-left: 8rpx; /* 向右移动8rpx */
+}
+
+/* 行标题列样式 */
+.row-header-column {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  width: 80rpx; /* 扩大宽度以容纳"东西方队"和"南北方队" */
+  background-color: #4CAF50;
+}
+
+.row-header-cell {
+  padding: 8rpx 2rpx; /* 增加上下内边距 */
+  text-align: center;
+  font-size: 16rpx; /* 稍微增大字体 */
+  font-weight: bold;
+  color: #fff;
+  background-color: #4CAF50;
+  border-bottom: 1rpx solid #45a049;
+  border-right: 1rpx solid #45a049;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50rpx; /* 调整为50rpx与数据行保持一致 */
+  width: 80rpx; /* 扩大宽度以容纳新文字 */
+  box-sizing: border-box;
+}
+
+/* 把数行标题 - 绿色 */
+.row-header-cell:first-child {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+/* 红方行标题 - 红色 */
+.row-header-cell:nth-child(2) {
+  background-color: #f44336;
+  color: #fff;
+  border-bottom: 1rpx solid #d32f2f;
+  border-right: 1rpx solid #d32f2f;
+}
+
+/* 蓝方行标题 - 蓝色 */
+.row-header-cell:nth-child(3) {
+  background-color: #2196F3;
+  color: #fff;
+  border-bottom: 1rpx solid #1976d2;
+  border-right: 1rpx solid #1976d2;
+}
+
+.row-header-cell:last-child {
+  border-bottom: none;
+}
+
+.header-cell {
+  flex: 0 0 auto;
+  padding: 8rpx 2rpx; /* 增加上下内边距 */
+  text-align: center;
+  font-size: 16rpx; /* 增大字体 */
+  font-weight: bold;
+  color: #fff;
+  background-color: #4CAF50;
+  border-right: 1rpx solid #45a049;
+  width: 80rpx; /* 扩大宽度以容纳新文字 */
+  height: 50rpx; /* 调整为50rpx与数据行保持一致 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1rpx solid #ddd;
+}
+
+.table-data-container {
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+  flex: 1;
+  background-color: white;
+  max-width: calc(100vw - 100rpx);
+  box-sizing: border-box;
+}
+
+.table-data-container .table-row {
+  display: flex;
+  min-width: max-content;
+  background-color: white;
+  height: 50rpx; /* 调整为50rpx */
+  box-sizing: border-box;
+  border-bottom: 1rpx solid #ddd;
+}
+
+/* 把数行样式 - 绿色 */
+.table-data-container .table-row:first-child {
+  background-color: #e8f5e8;
+}
+
+/* 红方行样式 - 红色 */
+.table-data-container .table-row:nth-child(2) {
+  background-color: #ffeaea;
+}
+
+/* 蓝方行样式 - 蓝色 */
+.table-data-container .table-row:nth-child(3) {
+  background-color: #eaf2ff;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-cell {
+  flex: 0 0 auto;
+  padding: 8rpx 2rpx; /* 增加上下内边距 */
+  text-align: center;
+  font-size: 14rpx; /* 稍微增大字体 */
+  color: #333;
+  border-right: 1rpx solid #ddd;
+  width: 35rpx;
+  height: 50rpx; /* 调整为50rpx与行高一致 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* 把数数据项加粗 */
+.table-data-container .table-row:first-child .table-cell {
+  font-weight: bold;
+}
+
+
+
+.table-cell:last-child {
+  border-right: 1rpx solid #ddd;
+}
+
+.table-cell.red {
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+.table-cell.blue {
+  color: #1976d2;
+  font-weight: 500;
+}
