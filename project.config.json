@@ -27,40 +27,132 @@
   "simulatorPluginLibVersion": {},
   "packOptions": {
     "ignore": [
-      "version-management/**",
-      "versions/**",
-      "backup/**",
-      "project-plan/**",
-      "ProjectAll/**",
-      "cursor/**",
-      ".vscode/**",
-      "*.md",
-      "*.puml",
-      "*.json.backup",
-      "*.bat",
-      "*.js.backup",
-      "*.wxss.backup",
-      "coreLandscapeguandan-score",
-      "fix-encoding.js",
-      "stagewise.json",
-      "eslint.config.js",
-      "package.json",
-      ".gitignore",
-      ".DS_Store",
-      "Thumbs.db",
-      "ehthumbs.db",
-      "Desktop.ini"
+      {
+        "type": "glob",
+        "value": "version-management/**"
+      },
+      {
+        "type": "glob",
+        "value": "versions/**"
+      },
+      {
+        "type": "glob",
+        "value": "backup/**"
+      },
+      {
+        "type": "glob",
+        "value": "project-plan/**"
+      },
+      {
+        "type": "glob",
+        "value": "ProjectAll/**"
+      },
+      {
+        "type": "glob",
+        "value": "cursor/**"
+      },
+      {
+        "type": "glob",
+        "value": ".vscode/**"
+      },
+      {
+        "type": "glob",
+        "value": "cloudfunctions/**"
+      },
+      {
+        "type": "glob",
+        "value": "*.md"
+      },
+      {
+        "type": "glob",
+        "value": "*.puml"
+      },
+      {
+        "type": "glob",
+        "value": "*.json.backup"
+      },
+      {
+        "type": "glob",
+        "value": "*.bat"
+      },
+      {
+        "type": "glob",
+        "value": "*.js.backup"
+      },
+      {
+        "type": "glob",
+        "value": "*.wxss.backup"
+      },
+      {
+        "type": "glob",
+        "value": "coreLandscapeguandan-score"
+      },
+      {
+        "type": "glob",
+        "value": "fix-encoding.js"
+      },
+      {
+        "type": "glob",
+        "value": "stagewise.json"
+      },
+      {
+        "type": "glob",
+        "value": "eslint.config.js"
+      },
+      {
+        "type": "glob",
+        "value": "package.json"
+      },
+      {
+        "type": "glob",
+        "value": ".gitignore"
+      },
+      {
+        "type": "glob",
+        "value": ".DS_Store"
+      },
+      {
+        "type": "glob",
+        "value": "Thumbs.db"
+      },
+      {
+        "type": "glob",
+        "value": "ehthumbs.db"
+      },
+      {
+        "type": "glob",
+        "value": "Desktop.ini"
+      }
     ],
     "include": [
-      "pages/**",
-      "images/**",
-      "utils/**",
-      "app.js",
-      "app.json",
-      "sitemap.json"
+      {
+        "type": "glob",
+        "value": "pages/**"
+      },
+      {
+        "type": "glob",
+        "value": "images/**"
+      },
+      {
+        "type": "glob",
+        "value": "utils/**"
+      },
+      {
+        "type": "file",
+        "value": "app.js"
+      },
+      {
+        "type": "file",
+        "value": "app.json"
+      },
+      {
+        "type": "file",
+        "value": "sitemap.json"
+      }
     ]
   },
   "appid": "wx53202fdd45e3b736",
+  "cloudfunctionRoot": "cloudfunctions/",
   "editorSetting": {},
   "libVersion": "3.10.0"
 }
