@@ -1,0 +1,14 @@
+{
+  "version": "v2.1.0",
+  "createdAt": "2025-09-28T05:29:10.181Z",
+  "author": "Jennifer",
+  "description": "UI设计规范和团队协作体系完善版本",
+  "features": [],
+  "dependencies": {
+    "微信小程序": ">= 8.0.0"
+  },
+  "changelog": [],
+  "status": "dev",
+  "rollbackSupported": true,
+  "backupCount": 12
+}
