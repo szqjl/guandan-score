@@ -2,9 +2,9 @@
 <view class="container cn-paper-bg">
 
   <!-- 品牌标识和环境标识 -->
-  <view class="brand-section">
-    <view class="brand-logo">
-      <image class="main-logo" src="/images/GD.png" mode="aspectFit"></image>
+  <view class="brand-section" style="width: 711rpx; display: flex; box-sizing: border-box; left: 20rpx; top: 20rpx">
+    <view class="brand-logo" style="height: 46rpx; display: flex; box-sizing: border-box">
+      <image class="main-logo" src="/images/GD.png" mode="aspectFit" style="width: 65rpx; display: block; box-sizing: border-box; height: 3rpx; position: relative; left: 0rpx; top: -7rpx"></image>
       <text class="brand-text">掼蛋计分</text>
     </view>
     <view class="env-badge">
@@ -15,11 +15,11 @@
 
   <!-- 左侧导航按钮组 -->
   <view class="left-nav-panel">
-    <button class="nav-btn" bindtap="onShowHistory">
+    <button class="nav-btn" bindtap="onShowHistory" style="width: 55rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
       <text class="nav-icon-text">📊</text>
       <text class="nav-text">历史记录</text>
     </button>
-    <button class="nav-btn" bindtap="onShowHelp">
+    <button class="nav-btn" bindtap="onShowHelp" style="width: 43rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
       <text class="nav-icon-text">❓</text>
       <text class="nav-text">说明文档</text>
     </button>
@@ -50,7 +50,7 @@
       <view class="team-layout">
         <!-- 红方独立升级按钮组 - 放在左侧 -->
         <view class="team-buttons left-buttons">
-          <view class="team-btn team-btn-double {{buttonDisabledStates.red.double ? 'btn-disabled' : ''}}" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
+          <view class="team-btn team-btn-double {{buttonDisabledStates.red.double ? 'btn-disabled' : ''}}" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}" style="width: 51rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">3</text>
           </view>
@@ -66,7 +66,7 @@
         <view class="score-container">
           <text class="team-label">东西方</text>
           <view class="level-display">
-            <view class="level-display-content">
+            <view class="level-display-content" style="height: 111rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
               <text class="level-text">{{levelTexts.red}}</text>
             </view>
             <image wx:if="{{showRedIcon}}" src="../../images/victor.svg" class="score-icon" />
@@ -82,7 +82,7 @@
           <text class="team-label">南北方</text>
           <view class="level-display">
             <view class="level-display-content">
-              <text class="level-text">{{levelTexts.blue}}</text>
+              <text class="level-text" style="position: relative; left: 1rpx; top: 0rpx">{{levelTexts.blue}}</text>
             </view>
             <image wx:if="{{showBlueIcon}}" src="../../images/victor.svg" class="score-icon" />
           </view>
@@ -97,7 +97,7 @@
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">2</text>
           </view>
-          <view class="team-btn team-btn-one {{buttonDisabledStates.blue.one ? 'btn-disabled' : ''}}" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
+          <view class="team-btn team-btn-one {{buttonDisabledStates.blue.one ? 'btn-disabled' : ''}}" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}" style="position: ; left: 0rpx; top: -1rpx">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">1</text>
           </view>
@@ -107,7 +107,7 @@
   </view>
 
   <!-- 比分历史表格 - 优化版 -->
-  <view class="history-table-section">
+  <view class="history-table-section" style="width: 406rpx; height: 88rpx; display: flex; box-sizing: border-box; left: 9rpx; top: 0rpx; position: relative">
     <view class="history-header">
       <text class="history-title">本局每把比分</text>
       <button class="undo-btn" bindtap="undoLastStep" disabled="{{!canUndo}}">
@@ -199,7 +199,7 @@
   <!-- 右侧控制面板 -->
   <view class="right-control-panel">
     <!-- 开始游戏按钮 -->
-    <button class="start-btn" bindtap="onStartGame" disabled="{{gameStarted && !gameEnded}}">
+    <button class="start-btn" bindtap="onStartGame" disabled="{{gameStarted && !gameEnded}}" style="left: 0rpx; top: -5rpx; position: relative">
       {{gameStarted && !gameEnded ? '游戏进行中' : '开始游戏'}}
     </button>
 
