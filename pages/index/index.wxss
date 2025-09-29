@@ -15,6 +15,41 @@ checkbox {
   box-sizing: border-box;
 }
 
+/* 多人模式状态显示 */
+.multi-mode-status {
+  position: fixed;
+  top: 80rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(33, 150, 243, 0.9);
+  color: white;
+  padding: 12rpx 24rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  z-index: 1000;
+  font-size: 24rpx;
+}
+
+.mode-text {
+  font-weight: 500;
+}
+
+.exit-multi-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+  border-radius: 8rpx;
+  padding: 4rpx 12rpx;
+  font-size: 20rpx;
+  line-height: 1;
+}
+
+.exit-multi-btn:active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 
 
 
@@ -873,6 +908,30 @@ checkbox {
 
 .rounds-picker-cancel:active {
   background-color: #545b62;
+  transform: scale(0.98);
+}
+
+.right-control-panel .create-btn {
+  background-color: #28A745;
+  color: #fff;
+  border: none;
+  border-radius: 4rpx;
+  padding: 8rpx 12rpx;
+  font-size: 14rpx;
+  margin: -9rpx 0 8rpx 0;
+  width: 100%;
+  margin-left: 0rpx;
+  display: block;
+  box-shadow: none !important;
+  transform: none !important;
+  outline: none;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.right-control-panel .create-btn:active {
+  background-color: #218838;
   transform: scale(0.98);
 }
 

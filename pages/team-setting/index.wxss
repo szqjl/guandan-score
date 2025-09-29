@@ -9,11 +9,101 @@
   width: 100%;
   min-height: 100vh;
   padding: 36rpx 64rpx 48rpx 64rpx;
-  justify-content: center;
+  justify-content: flex-start;
   font-family: 'Source Han Sans SC', sans-serif;
   font-size: 32rpx;
   font-weight: 400;
   box-sizing: border-box;
+}
+
+/* 新增功能样式 */
+.game-mode-section, .default-names-section {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  color: #333333;
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+/* 比赛模式选择 */
+.mode-options {
+  display: flex;
+  flex-direction: row;
+  gap: 16rpx;
+}
+
+.mode-option {
+  flex: 1;
+  background: #F8F9FA;
+  border: 2rpx solid #E9ECEF;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mode-option.selected {
+  background: #E3F2FD;
+  border-color: #2196F3;
+}
+
+.mode-text {
+  color: #333333;
+  font-size: 24rpx;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.mode-desc {
+  color: #666666;
+  font-size: 20rpx;
+  display: block;
+}
+
+/* 默认昵称设置 */
+.default-names-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+}
+
+.name-input-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.seat-label {
+  color: #333333;
+  font-size: 24rpx;
+  font-weight: 500;
+  min-width: 60rpx;
+}
+
+.name-input {
+  flex: 1;
+  background: #F8F9FA;
+  border: 2rpx solid #E9ECEF;
+  border-radius: 8rpx;
+  padding: 8rpx 12rpx;
+  font-size: 22rpx;
+  color: #333333;
+}
+
+.name-input:focus {
+  border-color: #2196F3;
+  background: #FFFFFF;
 }
 
 

@@ -31,6 +31,10 @@
       <text class="nav-icon-text">⚙️</text>
       <text class="nav-text">设置</text>
     </button>
+    <button class="nav-btn" bindtap="onShowJoinRoom">
+      <text class="nav-icon-text">🚪</text>
+      <text class="nav-text">加入房间</text>
+    </button>
   </view>
 
   <!-- 把数显示 - 移到体验版下方 -->
@@ -43,12 +47,18 @@
     </view>
   </view>
 
-  <!-- 红方 & 蓝方 并排 -->
+  <!-- 多人模式状态显示 -->
+  <view class="multi-mode-status" wx:if="{{isMultiMode}}">
+    <text class="mode-text">多人模式 - 房间号：{{roomId}}</text>
+    <button class="exit-multi-btn" bindtap="onExitMultiMode">退出多人模式</button>
+  </view>
+
+  <!-- 东西方队 & 南北方队 并排 -->
   <view class="main-layout">
-    <!-- 红方 -->
+    <!-- 东西方队 -->
     <view class="team red-team">
       <view class="team-layout">
-        <!-- 红方独立升级按钮组 - 放在左侧 -->
+        <!-- 东西方队独立升级按钮组 - 放在左侧 -->
         <view class="team-buttons left-buttons">
           <view class="team-btn team-btn-double {{buttonDisabledStates.red.double ? 'btn-disabled' : ''}}" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}" style="width: 51rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
@@ -75,7 +85,7 @@
       </view>
     </view>
 
-    <!-- 蓝方 -->
+    <!-- 南北方队 -->
     <view class="team blue-team">
       <view class="team-layout">
         <view class="score-container">
@@ -87,7 +97,7 @@
             <image wx:if="{{showBlueIcon}}" src="../../images/victor.svg" class="score-icon" />
           </view>
         </view>
-        <!-- 蓝方独立升级按钮组 - 放在右侧 -->
+        <!-- 南北方队独立升级按钮组 - 放在右侧 -->
         <view class="team-buttons right-buttons">
           <view class="team-btn team-btn-double {{buttonDisabledStates.blue.double ? 'btn-disabled' : ''}}" data-team="blue" data-value="3" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
@@ -122,8 +132,8 @@
     <!-- 固定队伍列 -->
     <view class="fixed-team-column">
       <view class="fixed-team-cell header-cell">把数</view>
-      <view class="fixed-team-cell">红方</view>
-      <view class="fixed-team-cell">蓝方</view>
+      <view class="fixed-team-cell">东西方</view>
+      <view class="fixed-team-cell">南北方</view>
     </view>
 
     <!-- 可滚动的表格内容 -->
@@ -198,9 +208,14 @@
 
   <!-- 右侧控制面板 -->
   <view class="right-control-panel">
+    <!-- 创建比赛按钮 -->
+    <button class="create-btn" bindtap="onCreateMatch" style="left: 0rpx; top: -5rpx; position: relative">
+      创建比赛
+    </button>
+    
     <!-- 开始游戏按钮 -->
     <button class="start-btn" bindtap="onStartGame" disabled="{{gameStarted && !gameEnded}}" style="left: 0rpx; top: -5rpx; position: relative">
-      {{gameStarted && !gameEnded ? '游戏进行中' : '开始游戏'}}
+      {{gameStarted && !gameEnded ? '游戏进行中' : (isMultiMode ? '进入房间' : '开始游戏')}}
     </button>
 
     <!-- 规则选择 -->

@@ -2,7 +2,9 @@
   "pages": [
     "pages/index/index",
     "pages/history/index",
-    "pages/team-setting/index"
+    "pages/team-setting/index",
+    "pages/room/index",
+    "pages/join/index"
   ],
   "window": {
     "navigationBarTitleText": "扑克双上计分",

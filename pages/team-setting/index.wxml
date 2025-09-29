@@ -1,6 +1,50 @@
 <!--pages/team-setting/index.wxml-->
 <view class="team-registration-container">
 
+  <!-- 默认比赛模式设置 -->
+  <view class="game-mode-section">
+    <text class="section-title">默认比赛模式</text>
+    <view class="mode-options">
+      <view class="mode-option {{defaultGameMode === 'guoA' ? 'selected' : ''}}" 
+            data-mode="guoA" bindtap="onGameModeChange">
+        <text class="mode-text">过A制</text>
+        <text class="mode-desc">从2到A的升级路径</text>
+      </view>
+      <view class="mode-option {{defaultGameMode === 'baShu' ? 'selected' : ''}}" 
+            data-mode="baShu" bindtap="onGameModeChange">
+        <text class="mode-text">把数制</text>
+        <text class="mode-desc">固定把数内计分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 默认队友昵称设置 -->
+  <view class="default-names-section">
+    <text class="section-title">默认队友昵称</text>
+    <view class="default-names-grid">
+      <view class="name-input-group">
+        <text class="seat-label">东座：</text>
+        <input class="name-input" value="{{defaultPlayerNames.east}}" 
+               bindinput="onDefaultNameInput" data-seat="east" maxlength="10" />
+      </view>
+      <view class="name-input-group">
+        <text class="seat-label">西座：</text>
+        <input class="name-input" value="{{defaultPlayerNames.west}}" 
+               bindinput="onDefaultNameInput" data-seat="west" maxlength="10" />
+      </view>
+      <view class="name-input-group">
+        <text class="seat-label">南座：</text>
+        <input class="name-input" value="{{defaultPlayerNames.south}}" 
+               bindinput="onDefaultNameInput" data-seat="south" maxlength="10" />
+      </view>
+      <view class="name-input-group">
+        <text class="seat-label">北座：</text>
+        <input class="name-input" value="{{defaultPlayerNames.north}}" 
+               bindinput="onDefaultNameInput" data-seat="north" maxlength="10" />
+      </view>
+    </view>
+  </view>
+
   <!-- 队伍信息容器 -->
   <view class="teams-container">
     <!-- 红队 -->
