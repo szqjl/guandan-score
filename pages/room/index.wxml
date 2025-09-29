@@ -1,126 +1,110 @@
 <!--pages/room/index.wxml-->
 <view class="room-page">
-  <!-- 头部信息 -->
-  <view class="room-header">
-    <view class="room-info">
-      <text class="room-title">房间号：{{roomId}}</text>
-      <text class="room-mode">{{gameModeText}}</text>
+  <!-- 左侧信息块 -->
+  <view class="left-info-block">
+    <!-- 房间信息区域 -->
+    <view class="room-info-section">
+      <view class="room-info">
+        <text class="room-title">🏠 {{roomId}}</text>
+        <view class="user-info" bindtap="onUserInfoClick">
+          <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+            <image wx:if="{{userAvatar}}" src="{{userAvatar}}" class="user-avatar" />
+            <text wx:else class="default-user-avatar">👤</text>
+          </button>
+          <input class="nickname-input" value="{{userNickname}}" bindchange="onNicknameChange" placeholder="点击设置昵称" />
+        </view>
+      </view>
+      <view class="game-mode-selector">
+        <picker bindchange="onGameModeChange" value="{{gameModeIndex}}" range="{{gameModeOptions}}" range-key="text">
+          <view class="mode-picker">
+            <text class="mode-icon">📋</text>
+            <text class="mode-text">{{gameModeText}}</text>
+            <text class="mode-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
     </view>
-    <button class="close-btn" bindtap="onLeaveRoom">离开</button>
   </view>
   
-  <!-- 房间二维码 -->
-  <view class="qr-section">
-    <view class="qr-code">
-      <image src="{{qrCodeUrl}}" class="qr-image" />
-      <text class="qr-tip">扫码加入比赛</text>
-    </view>
-    <button class="share-btn" bindtap="onShareRoom">分享房间</button>
-  </view>
-  
-  <!-- 玩家座位 -->
-  <view class="players-section">
-    <view class="players-title">玩家座位（4人）</view>
-    <view class="players-grid">
+  <!-- 中间牌桌块 -->
+  <view class="center-table-block">
+    <!-- 座位布局：东南西北 + 中央牌桌 -->
+    <view class="seats-layout">
       <!-- 北座 -->
-      <view class="player-seat north-seat {{seatClickable ? 'clickable' : ''}}" 
-            bindtap="onSeatClick" data-seat="north">
-        <view class="seat-content {{seats.north.isHost ? 'host-seat' : ''}}">
+      <view class="seat-container north-container">
+        <view class="player-seat north-seat {{seats.north.isClickable ? 'clickable' : 'disabled'}}" 
+              bindtap="onSeatClick" data-seat="north">
           <view class="seat-avatar">
             <image wx:if="{{seats.north.avatar}}" src="{{seats.north.avatar}}" />
             <text wx:else class="default-avatar">{{seats.north.playerName ? seats.north.playerName.charAt(0) : '北'}}</text>
           </view>
-          <view class="player-info">
-            <text class="player-name">{{seats.north.playerName || '北恋'}}</text>
-            <text wx:if="{{seats.north.isHost}}" class="host-badge">房主</text>
-            <text wx:if="{{!seats.north.isHost && !seats.north.playerName}}" class="default-badge">默认队友</text>
-          </view>
-          <button wx:if="{{isHost && !seats.north.isHost}}" 
-            class="edit-btn" 
-            bindtap="onEditPlayer" 
-            data-seat="north"
-            catchtap="onEditPlayer">
-            编辑
-          </button>
         </view>
-      </view>
-      
-      <!-- 东座 -->
-      <view class="player-seat east-seat {{seatClickable ? 'clickable' : ''}}" 
-            bindtap="onSeatClick" data-seat="east">
-        <view class="seat-content {{seats.east.isHost ? 'host-seat' : ''}}">
-          <view class="seat-avatar">
-            <image wx:if="{{seats.east.avatar}}" src="{{seats.east.avatar}}" />
-            <text wx:else class="default-avatar">{{seats.east.playerName ? seats.east.playerName.charAt(0) : '东'}}</text>
-          </view>
-          <view class="player-info">
-            <text class="player-name">{{seats.east.playerName || '旭日东升'}}</text>
-            <text wx:if="{{seats.east.isHost}}" class="host-badge">房主</text>
-            <text wx:if="{{!seats.east.isHost && !seats.east.playerName}}" class="default-badge">默认队友</text>
-          </view>
-          <button wx:if="{{isHost && !seats.east.isHost}}" 
-            class="edit-btn" 
-            bindtap="onEditPlayer" 
-            data-seat="east"
-            catchtap="onEditPlayer">
-            编辑
-          </button>
+        <view class="seat-label north-label">
+          <text class="player-name">{{seats.north.playerName || seats.north.seatName}}</text>
+          <text wx:if="{{seats.north.isHost}}" class="host-badge">房主</text>
         </view>
       </view>
       
       <!-- 西座 -->
-      <view class="player-seat west-seat {{seatClickable ? 'clickable' : ''}}" 
-            bindtap="onSeatClick" data-seat="west">
-        <view class="seat-content {{seats.west.isHost ? 'host-seat' : ''}}">
+      <view class="seat-container west-container">
+        <view class="player-seat west-seat {{seats.west.isClickable ? 'clickable' : 'disabled'}}" 
+              bindtap="onSeatClick" data-seat="west">
           <view class="seat-avatar">
             <image wx:if="{{seats.west.avatar}}" src="{{seats.west.avatar}}" />
             <text wx:else class="default-avatar">{{seats.west.playerName ? seats.west.playerName.charAt(0) : '西'}}</text>
           </view>
-          <view class="player-info">
-            <text class="player-name">{{seats.west.playerName || '西风斜阳'}}</text>
-            <text wx:if="{{seats.west.isHost}}" class="host-badge">房主</text>
-            <text wx:if="{{!seats.west.isHost && !seats.west.playerName}}" class="default-badge">默认队友</text>
+        </view>
+        <view class="seat-label west-label">
+          <text class="player-name">{{seats.west.playerName || seats.west.seatName}}</text>
+          <text wx:if="{{seats.west.isHost}}" class="host-badge">房主</text>
+        </view>
+      </view>
+      
+      <!-- 中央牌桌 -->
+      <view class="poker-table">
+        <image class="qr-image" src="{{qrCodeUrl}}" />
+        <text class="qr-tip">扫码加入</text>
+      </view>
+      
+      <!-- 东座 -->
+      <view class="seat-container east-container">
+        <view class="player-seat east-seat {{seats.east.isClickable ? 'clickable' : 'disabled'}}" 
+              bindtap="onSeatClick" data-seat="east">
+          <view class="seat-avatar">
+            <image wx:if="{{seats.east.avatar}}" src="{{seats.east.avatar}}" />
+            <text wx:else class="default-avatar">{{seats.east.playerName ? seats.east.playerName.charAt(0) : '东'}}</text>
           </view>
-          <button wx:if="{{isHost && !seats.west.isHost}}" 
-            class="edit-btn" 
-            bindtap="onEditPlayer" 
-            data-seat="west"
-            catchtap="onEditPlayer">
-            编辑
-          </button>
+        </view>
+        <view class="seat-label east-label">
+          <text class="player-name">{{seats.east.playerName || seats.east.seatName}}</text>
+          <text wx:if="{{seats.east.isHost}}" class="host-badge">房主</text>
         </view>
       </view>
       
       <!-- 南座 -->
-      <view class="player-seat south-seat {{seatClickable ? 'clickable' : ''}}" 
-            bindtap="onSeatClick" data-seat="south">
-        <view class="seat-content {{seats.south.isHost ? 'host-seat' : ''}}">
+      <view class="seat-container south-container">
+        <view class="player-seat south-seat {{seats.south.isClickable ? 'clickable' : 'disabled'}}" 
+              bindtap="onSeatClick" data-seat="south">
           <view class="seat-avatar">
             <image wx:if="{{seats.south.avatar}}" src="{{seats.south.avatar}}" />
             <text wx:else class="default-avatar">{{seats.south.playerName ? seats.south.playerName.charAt(0) : '南'}}</text>
           </view>
-          <view class="player-info">
-            <text class="player-name">{{seats.south.playerName || '南尊'}}</text>
-            <text wx:if="{{seats.south.isHost}}" class="host-badge">房主</text>
-            <text wx:if="{{!seats.south.isHost && !seats.south.playerName}}" class="default-badge">默认队友</text>
-          </view>
-          <button wx:if="{{isHost && !seats.south.isHost}}" 
-            class="edit-btn" 
-            bindtap="onEditPlayer" 
-            data-seat="south"
-            catchtap="onEditPlayer">
-            编辑
-          </button>
+        </view>
+        <view class="seat-label south-label">
+          <text class="player-name">{{seats.south.playerName || seats.south.seatName}}</text>
+          <text wx:if="{{seats.south.isHost}}" class="host-badge">房主</text>
         </view>
       </view>
     </view>
   </view>
   
-  <!-- 操作按钮 -->
-  <view class="action-buttons">
-    <button class="start-btn" bindtap="onStartGame" 
-      disabled="{{!canStartGame}}">
-      开始比赛
-    </button>
+  <!-- 右侧按钮块 -->
+  <view class="right-buttons-block">
+    <!-- 操作按钮区域 -->
+    <view class="action-buttons">
+      <button class="create-btn" bindtap="onStartGame" disabled="{{!canStartGame}}">创建</button>
+      <button class="share-btn" bindtap="onShareRoom">分享房间</button>
+      <button class="close-btn" bindtap="onLeaveRoom">离开</button>
+    </view>
   </view>
 </view>

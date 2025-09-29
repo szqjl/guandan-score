@@ -18,33 +18,6 @@
     </view>
   </view>
 
-  <!-- 默认队友昵称设置 -->
-  <view class="default-names-section">
-    <text class="section-title">默认队友昵称</text>
-    <view class="default-names-grid">
-      <view class="name-input-group">
-        <text class="seat-label">东座：</text>
-        <input class="name-input" value="{{defaultPlayerNames.east}}" 
-               bindinput="onDefaultNameInput" data-seat="east" maxlength="10" />
-      </view>
-      <view class="name-input-group">
-        <text class="seat-label">西座：</text>
-        <input class="name-input" value="{{defaultPlayerNames.west}}" 
-               bindinput="onDefaultNameInput" data-seat="west" maxlength="10" />
-      </view>
-      <view class="name-input-group">
-        <text class="seat-label">南座：</text>
-        <input class="name-input" value="{{defaultPlayerNames.south}}" 
-               bindinput="onDefaultNameInput" data-seat="south" maxlength="10" />
-      </view>
-      <view class="name-input-group">
-        <text class="seat-label">北座：</text>
-        <input class="name-input" value="{{defaultPlayerNames.north}}" 
-               bindinput="onDefaultNameInput" data-seat="north" maxlength="10" />
-      </view>
-    </view>
-  </view>
-
   <!-- 队伍信息容器 -->
   <view class="teams-container">
     <!-- 红队 -->

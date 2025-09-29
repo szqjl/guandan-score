@@ -5,7 +5,7 @@
   <view class="brand-section" style="width: 711rpx; display: flex; box-sizing: border-box; left: 20rpx; top: 3rpx; position: fixed; height: 25rpx">
     <view class="brand-logo" style="height: 46rpx; display: flex; box-sizing: border-box">
       <image class="main-logo" src="/images/GD.png" mode="aspectFit" style="width: 65rpx; display: block; box-sizing: border-box; height: 3rpx; position: relative; left: 0rpx; top: -7rpx"></image>
-      <text class="brand-text">掼蛋计分</text>
+      <text class="brand-text" style="width: 173rpx; display: block; box-sizing: border-box">掼蛋计分</text>
     </view>
     <view class="env-badge">
       <text wx:if="{{isTrial}}" class="env-text trial">体验版</text>
@@ -107,7 +107,7 @@
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">2</text>
           </view>
-          <view class="team-btn team-btn-one {{buttonDisabledStates.blue.one ? 'btn-disabled' : ''}}" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}" style="position: ; left: 0rpx; top: -1rpx">
+          <view class="team-btn team-btn-one {{buttonDisabledStates.blue.one ? 'btn-disabled' : ''}}" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}" style="left: 0rpx; top: -1rpx">
             <image src="../../images/arrow_up.svg" class="btn-icon"></image>
             <text class="btn-number">1</text>
           </view>
@@ -231,7 +231,7 @@
   <!-- 右侧控制面板 -->
   <view class="right-control-panel">
     <!-- 创建比赛按钮 -->
-    <button class="create-btn" bindtap="onCreateMatch" style="left: -1rpx; top: -22rpx; position: relative">
+    <button class="create-btn" bindtap="onCreateMatch" style="left: -1rpx; top: -22rpx; position: relative; z-index: 999;">
       创建比赛
     </button>
     

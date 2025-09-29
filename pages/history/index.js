@@ -29,17 +29,83 @@ Page({
     // v3.0 预留字段
     partnerFilter: 'all', // 搭档筛选（v3.0功能）
     allPartners: [], // 所有搭档组合（v3.0功能）
-    // v4.0 预留字段
-    personalStats: {}, // 个人详细统计（v4.0功能）
-    showPersonalStats: false // 是否显示个人统计页面（v4.0功能）
+    // v4.0 个人中心功能
+    personalStats: {}, // 个人详细统计
+    showPersonalStats: false, // 是否显示个人统计页面
+    userProfile: {}, // 用户档案
+    showUserProfile: false // 是否显示用户档案
   },
 
   onLoad() {
     this.loadGameHistory();
+    this.loadUserProfile();
   },
 
   onShow() {
     this.loadGameHistory();
+    this.loadUserProfile();
+  },
+
+  // 加载用户档案
+  loadUserProfile() {
+    const userProfile = wx.getStorageSync('userProfile') || {}
+    const userId = wx.getStorageSync('userId')
+    const userNickname = wx.getStorageSync('userNickname')
+    
+    if (userId && userNickname) {
+      // 计算个人统计
+      const personalStats = this.calculatePersonalStats(userProfile)
+      
+      this.setData({
+        userProfile: userProfile,
+        personalStats: personalStats
+      })
+    }
+  },
+
+  // 计算个人统计
+  calculatePersonalStats(userProfile) {
+    const history = wx.getStorageSync('gameHistory') || []
+    
+    // 基础统计
+    const stats = {
+      totalGames: history.length,
+      totalRooms: userProfile.totalRooms || 0,
+      hostRooms: userProfile.hostRooms || 0,
+      joinRooms: userProfile.joinRooms || 0
+    }
+    
+    // 计算胜率
+    const wins = history.filter(game => {
+      // 根据用户ID判断是否获胜
+      return game.winner === 'red' || game.winner === 'blue'
+    }).length
+    
+    stats.winRate = stats.totalGames > 0 ? (wins / stats.totalGames * 100).toFixed(1) : 0
+    
+    // 计算平均得分
+    const totalScore = history.reduce((sum, game) => {
+      // 根据用户ID计算得分
+      return sum + (game.redScore || 0) + (game.blueScore || 0)
+    }, 0)
+    
+    stats.avgScore = stats.totalGames > 0 ? (totalScore / stats.totalGames).toFixed(1) : 0
+    
+    return stats
+  },
+
+  // 显示个人中心
+  showPersonalCenter() {
+    this.setData({
+      showPersonalStats: true
+    })
+  },
+
+  // 隐藏个人中心
+  hidePersonalCenter() {
+    this.setData({
+      showPersonalStats: false
+    })
   },
 
   // 加载游戏历史记录
