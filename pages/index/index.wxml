@@ -116,6 +116,23 @@
     </view>
   </view>
 
+  <!-- 控制按钮区域 - 位于实时比分下方 -->
+  <view class="control-buttons-section">
+    <!-- 本局比分表按钮 -->
+    <button class="score-table-btn" bindtap="onToggleScoreTable">
+      <text class="score-table-text">本局比分表</text>
+    </button>
+
+    <!-- 撤销和恢复按钮 -->
+    <button class="undo-btn" bindtap="undoLastStep" disabled="{{!canUndo}}">
+      <image src="../../images/CexiaoGrey.svg" class="undo-icon"></image>
+      <text class="undo-text">撤销上一把</text>
+    </button>
+    <button class="restore-btn" bindtap="restoreLastGame" disabled="{{!canRestore}}">
+      <text class="restore-text">恢复游戏</text>
+    </button>
+  </view>
+
   <!-- 比分历史表格 - 可切换显示 -->
   <view class="history-table-section" style="width: 406rpx; height: 88rpx; display: {{showScoreTable ? 'flex' : 'none'}}; box-sizing: border-box; left: 9rpx; top: 0rpx; position: relative">
     <view class="history-header">
@@ -227,19 +244,6 @@
       </radio-group>
     </view> -->
 
-    <!-- 本局比分表按钮 -->
-    <button class="score-table-btn" bindtap="onToggleScoreTable">
-      <text class="score-table-text">本局比分表</text>
-    </button>
-
-    <!-- 撤销和恢复按钮 -->
-    <button class="undo-btn" bindtap="undoLastStep" disabled="{{!canUndo}}">
-      <image src="../../images/CexiaoGrey.svg" class="undo-icon"></image>
-      <text class="undo-text">撤销上一把</text>
-    </button>
-    <button class="restore-btn" bindtap="restoreLastGame" disabled="{{!canRestore}}">
-      <text class="restore-text">恢复游戏</text>
-    </button>
 
     <!-- 结束本局按钮 -->
     <button class="end-btn" bindtap="onEndGame">结束</button>

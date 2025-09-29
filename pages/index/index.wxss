@@ -1122,6 +1122,16 @@ checkbox {
 }
 
 
+/* 控制按钮区域 */
+.control-buttons-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  margin: 10rpx 0;
+  padding: 0 20rpx;
+}
+
 .score-table-btn {
   display: flex;
   align-items: center;
@@ -1131,7 +1141,6 @@ checkbox {
   border: none;
   border-radius: 4rpx;
   padding: 8rpx 12rpx;
-  margin: 5rpx 0;
   font-size: 14rpx;
   flex-shrink: 0;
   transition: all 0.3s ease;
@@ -1152,8 +1161,6 @@ checkbox {
   background: none;
   border: none;
   padding: 1rpx 2rpx;
-  margin: 5rpx 0;
-  /* 调整间距适应右侧面板 */
   flex-shrink: 0;
   /* 防止恢复按钮被压缩 */
 }
@@ -1192,8 +1199,6 @@ checkbox {
   background: none;
   border: none;
   padding: 0;
-  margin: 5rpx 0;
-  /* 调整间距适应右侧面板 */
   flex-shrink: 0;
   /* 防止撤销按钮被压缩 */
 }
