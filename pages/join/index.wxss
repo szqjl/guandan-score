@@ -1,0 +1,320 @@
+/* pages/join/index.wxss */
+
+/* 页面主容器 */
+.join-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #F5F5F5;
+  padding: 20rpx;
+  gap: 20rpx;
+}
+
+/* 页面头部 */
+.page-header {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.page-title {
+  color: #333333;
+  font-size: 36rpx;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.page-subtitle {
+  color: #666666;
+  font-size: 24rpx;
+  display: block;
+}
+
+/* 扫码加入区域 */
+.scan-section {
+  margin-bottom: 20rpx;
+}
+
+.scan-card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.scan-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: #E3F2FD;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scan-icon .icon {
+  font-size: 32rpx;
+}
+
+.scan-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.scan-title {
+  color: #333333;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.scan-desc {
+  color: #666666;
+  font-size: 22rpx;
+}
+
+.scan-btn {
+  background: #2196F3;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8rpx;
+  padding: 12rpx 24rpx;
+  font-size: 24rpx;
+}
+
+.scan-btn:active {
+  background: #1976D2;
+}
+
+/* 输入房间号区域 */
+.input-section {
+  margin-bottom: 20rpx;
+}
+
+.input-card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.input-header {
+  margin-bottom: 20rpx;
+}
+
+.input-title {
+  color: #333333;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.input-group {
+  display: flex;
+  gap: 16rpx;
+  align-items: center;
+}
+
+.room-input {
+  flex: 1;
+  background: #F8F9FA;
+  border: 2rpx solid #E9ECEF;
+  border-radius: 8rpx;
+  padding: 16rpx;
+  font-size: 28rpx;
+  color: #333333;
+  text-align: center;
+}
+
+.room-input:focus {
+  border-color: #2196F3;
+  background: #FFFFFF;
+}
+
+.join-btn {
+  background: #28A745;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8rpx;
+  padding: 16rpx 32rpx;
+  font-size: 24rpx;
+  min-width: 120rpx;
+}
+
+.join-btn:disabled {
+  background: #6C757D;
+  opacity: 0.6;
+}
+
+.join-btn:active:not(:disabled) {
+  background: #218838;
+}
+
+/* 分享加入区域 */
+.share-section {
+  margin-bottom: 20rpx;
+}
+
+.share-card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.share-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: #FFF3E0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-icon .icon {
+  font-size: 32rpx;
+}
+
+.share-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.share-title {
+  color: #333333;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.share-desc {
+  color: #666666;
+  font-size: 22rpx;
+}
+
+.share-btn {
+  background: #FF9800;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8rpx;
+  padding: 12rpx 24rpx;
+  font-size: 24rpx;
+}
+
+.share-btn:active {
+  background: #F57C00;
+}
+
+/* 最近房间区域 */
+.recent-section {
+  margin-bottom: 20rpx;
+}
+
+.recent-header {
+  margin-bottom: 16rpx;
+}
+
+.recent-title {
+  color: #333333;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.recent-item {
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.recent-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.recent-room-id {
+  color: #333333;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.recent-time {
+  color: #666666;
+  font-size: 20rpx;
+}
+
+.recent-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-text {
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+.status-text.waiting {
+  background: #E3F2FD;
+  color: #1976D2;
+}
+
+.status-text.playing {
+  background: #E8F5E8;
+  color: #2E7D32;
+}
+
+.status-text.finished {
+  background: #FFF3E0;
+  color: #F57C00;
+}
+
+/* 帮助提示区域 */
+.help-section {
+  margin-top: auto;
+}
+
+.help-card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.help-title {
+  color: #333333;
+  font-size: 24rpx;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.help-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.help-item {
+  color: #666666;
+  font-size: 22rpx;
+  line-height: 1.4;
+}

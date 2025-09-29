@@ -1,0 +1,92 @@
+<!--pages/join/index.wxml-->
+<view class="join-page">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">加入房间</text>
+    <text class="page-subtitle">扫码或输入房间号加入比赛</text>
+  </view>
+
+  <!-- 扫码加入区域 -->
+  <view class="scan-section">
+    <view class="scan-card">
+      <view class="scan-icon">
+        <text class="icon">📷</text>
+      </view>
+      <view class="scan-content">
+        <text class="scan-title">扫码加入</text>
+        <text class="scan-desc">扫描房间二维码快速加入</text>
+      </view>
+      <button class="scan-btn" bindtap="onScanQRCode">扫码</button>
+    </view>
+  </view>
+
+  <!-- 输入房间号区域 -->
+  <view class="input-section">
+    <view class="input-card">
+      <view class="input-header">
+        <text class="input-title">输入房间号</text>
+      </view>
+      <view class="input-group">
+        <input class="room-input" 
+               placeholder="请输入6位房间号" 
+               value="{{roomId}}" 
+               bindinput="onRoomIdInput"
+               maxlength="6"
+               type="number" />
+        <button class="join-btn" 
+                bindtap="onJoinRoom" 
+                disabled="{{!roomId || roomId.length !== 6}}">
+          加入
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分享加入区域 -->
+  <view class="share-section">
+    <view class="share-card">
+      <view class="share-icon">
+        <text class="icon">🔗</text>
+      </view>
+      <view class="share-content">
+        <text class="share-title">分享链接</text>
+        <text class="share-desc">通过分享链接加入房间</text>
+      </view>
+      <button class="share-btn" bindtap="onShareJoin">分享</button>
+    </view>
+  </view>
+
+  <!-- 最近房间 -->
+  <view class="recent-section" wx:if="{{recentRooms.length > 0}}">
+    <view class="recent-header">
+      <text class="recent-title">最近加入</text>
+    </view>
+    <view class="recent-list">
+      <view class="recent-item" 
+            wx:for="{{recentRooms}}" 
+            wx:key="roomId"
+            bindtap="onJoinRecentRoom" 
+            data-room-id="{{item.roomId}}">
+        <view class="recent-info">
+          <text class="recent-room-id">房间号：{{item.roomId}}</text>
+          <text class="recent-time">{{item.joinTime}}</text>
+        </view>
+        <view class="recent-status">
+          <text class="status-text {{item.status}}">{{item.statusText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 帮助提示 -->
+  <view class="help-section">
+    <view class="help-card">
+      <text class="help-title">💡 加入提示</text>
+      <view class="help-list">
+        <text class="help-item">• 确保网络连接正常</text>
+        <text class="help-item">• 房间号由房主提供</text>
+        <text class="help-item">• 加入后请等待房主开始游戏</text>
+      </view>
+    </view>
+  </view>
+</view>

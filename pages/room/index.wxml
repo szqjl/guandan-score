@@ -1,0 +1,126 @@
+<!--pages/room/index.wxml-->
+<view class="room-page">
+  <!-- 头部信息 -->
+  <view class="room-header">
+    <view class="room-info">
+      <text class="room-title">房间号：{{roomId}}</text>
+      <text class="room-mode">{{gameModeText}}</text>
+    </view>
+    <button class="close-btn" bindtap="onLeaveRoom">离开</button>
+  </view>
+  
+  <!-- 房间二维码 -->
+  <view class="qr-section">
+    <view class="qr-code">
+      <image src="{{qrCodeUrl}}" class="qr-image" />
+      <text class="qr-tip">扫码加入比赛</text>
+    </view>
+    <button class="share-btn" bindtap="onShareRoom">分享房间</button>
+  </view>
+  
+  <!-- 玩家座位 -->
+  <view class="players-section">
+    <view class="players-title">玩家座位（4人）</view>
+    <view class="players-grid">
+      <!-- 北座 -->
+      <view class="player-seat north-seat {{seatClickable ? 'clickable' : ''}}" 
+            bindtap="onSeatClick" data-seat="north">
+        <view class="seat-content {{seats.north.isHost ? 'host-seat' : ''}}">
+          <view class="seat-avatar">
+            <image wx:if="{{seats.north.avatar}}" src="{{seats.north.avatar}}" />
+            <text wx:else class="default-avatar">{{seats.north.playerName ? seats.north.playerName.charAt(0) : '北'}}</text>
+          </view>
+          <view class="player-info">
+            <text class="player-name">{{seats.north.playerName || '北恋'}}</text>
+            <text wx:if="{{seats.north.isHost}}" class="host-badge">房主</text>
+            <text wx:if="{{!seats.north.isHost && !seats.north.playerName}}" class="default-badge">默认队友</text>
+          </view>
+          <button wx:if="{{isHost && !seats.north.isHost}}" 
+            class="edit-btn" 
+            bindtap="onEditPlayer" 
+            data-seat="north"
+            catchtap="onEditPlayer">
+            编辑
+          </button>
+        </view>
+      </view>
+      
+      <!-- 东座 -->
+      <view class="player-seat east-seat {{seatClickable ? 'clickable' : ''}}" 
+            bindtap="onSeatClick" data-seat="east">
+        <view class="seat-content {{seats.east.isHost ? 'host-seat' : ''}}">
+          <view class="seat-avatar">
+            <image wx:if="{{seats.east.avatar}}" src="{{seats.east.avatar}}" />
+            <text wx:else class="default-avatar">{{seats.east.playerName ? seats.east.playerName.charAt(0) : '东'}}</text>
+          </view>
+          <view class="player-info">
+            <text class="player-name">{{seats.east.playerName || '旭日东升'}}</text>
+            <text wx:if="{{seats.east.isHost}}" class="host-badge">房主</text>
+            <text wx:if="{{!seats.east.isHost && !seats.east.playerName}}" class="default-badge">默认队友</text>
+          </view>
+          <button wx:if="{{isHost && !seats.east.isHost}}" 
+            class="edit-btn" 
+            bindtap="onEditPlayer" 
+            data-seat="east"
+            catchtap="onEditPlayer">
+            编辑
+          </button>
+        </view>
+      </view>
+      
+      <!-- 西座 -->
+      <view class="player-seat west-seat {{seatClickable ? 'clickable' : ''}}" 
+            bindtap="onSeatClick" data-seat="west">
+        <view class="seat-content {{seats.west.isHost ? 'host-seat' : ''}}">
+          <view class="seat-avatar">
+            <image wx:if="{{seats.west.avatar}}" src="{{seats.west.avatar}}" />
+            <text wx:else class="default-avatar">{{seats.west.playerName ? seats.west.playerName.charAt(0) : '西'}}</text>
+          </view>
+          <view class="player-info">
+            <text class="player-name">{{seats.west.playerName || '西风斜阳'}}</text>
+            <text wx:if="{{seats.west.isHost}}" class="host-badge">房主</text>
+            <text wx:if="{{!seats.west.isHost && !seats.west.playerName}}" class="default-badge">默认队友</text>
+          </view>
+          <button wx:if="{{isHost && !seats.west.isHost}}" 
+            class="edit-btn" 
+            bindtap="onEditPlayer" 
+            data-seat="west"
+            catchtap="onEditPlayer">
+            编辑
+          </button>
+        </view>
+      </view>
+      
+      <!-- 南座 -->
+      <view class="player-seat south-seat {{seatClickable ? 'clickable' : ''}}" 
+            bindtap="onSeatClick" data-seat="south">
+        <view class="seat-content {{seats.south.isHost ? 'host-seat' : ''}}">
+          <view class="seat-avatar">
+            <image wx:if="{{seats.south.avatar}}" src="{{seats.south.avatar}}" />
+            <text wx:else class="default-avatar">{{seats.south.playerName ? seats.south.playerName.charAt(0) : '南'}}</text>
+          </view>
+          <view class="player-info">
+            <text class="player-name">{{seats.south.playerName || '南尊'}}</text>
+            <text wx:if="{{seats.south.isHost}}" class="host-badge">房主</text>
+            <text wx:if="{{!seats.south.isHost && !seats.south.playerName}}" class="default-badge">默认队友</text>
+          </view>
+          <button wx:if="{{isHost && !seats.south.isHost}}" 
+            class="edit-btn" 
+            bindtap="onEditPlayer" 
+            data-seat="south"
+            catchtap="onEditPlayer">
+            编辑
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="start-btn" bindtap="onStartGame" 
+      disabled="{{!canStartGame}}">
+      开始比赛
+    </button>
+  </view>
+</view>
