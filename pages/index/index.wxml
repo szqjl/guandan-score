@@ -218,8 +218,8 @@
       {{gameStarted && !gameEnded ? '游戏进行中' : '开始游戏'}}
     </button>
 
-    <!-- 规则选择 -->
-    <view class="rule-section {{gameStarted ? 'disabled' : ''}}" disabled="{{gameStarted}}">
+    <!-- 规则选择 - 暂时隐藏 -->
+    <!-- <view class="rule-section {{gameStarted ? 'disabled' : ''}}" disabled="{{gameStarted}}">
       <text>比赛模式:</text>
       <radio-group bindchange="onRuleChange">
         <label>
@@ -232,7 +232,7 @@
           </view>
         </label>
       </radio-group>
-    </view>
+    </view> -->
 
     <!-- 结束本局按钮 -->
     <button class="end-btn" bindtap="onEndGame">结束</button>
