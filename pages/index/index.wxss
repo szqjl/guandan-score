@@ -1128,8 +1128,8 @@ checkbox {
   background: none;
   border: none;
   padding: 1rpx 2rpx;
-  margin-left: 12rpx;
-  /* 与撤销按钮保持12rpx间距 */
+  margin: 5rpx 0;
+  /* 调整间距适应右侧面板 */
   flex-shrink: 0;
   /* 防止恢复按钮被压缩 */
 }
@@ -1168,13 +1168,10 @@ checkbox {
   background: none;
   border: none;
   padding: 0;
-  margin: 0 0 0 30rpx !important;
-  /* 向右移动30rpx (10rpx + 20rpx) */
+  margin: 5rpx 0;
+  /* 调整间距适应右侧面板 */
   flex-shrink: 0;
   /* 防止撤销按钮被压缩 */
-  position: relative;
-  left: 30rpx;
-  /* 强制向右移动30rpx */
 }
 
 .undo-icon {
