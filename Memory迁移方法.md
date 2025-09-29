@@ -6,10 +6,12 @@
 ## 📁 **文件位置**
 Memory数据文件位置：
 ```
-Windows: C:\Users\[用户名]\.cursor\context.db
-macOS: ~/.cursor/context.db
-Linux: ~/.cursor/context.db
+Windows: C:\Users\[用户名]\mcp-data\memory-keeper\context.db
+macOS: ~/mcp-data/memory-keeper/context.db
+Linux: ~/mcp-data/memory-keeper/context.db
 ```
+
+**注意**：实际位置可能在 `mcp-data/memory-keeper/` 目录下，而不是 `.cursor/` 目录。
 
 ## 🔄 **迁移步骤**
 
