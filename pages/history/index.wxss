@@ -877,7 +877,7 @@
   font-size: 23rpx; /* 调整字体到23rpx */
   color: #333;
   border-right: 1rpx solid #ddd;
-  width: 45rpx;
+  width: 30rpx;
   height: 50rpx; /* 调整为50rpx与行高一致 */
   display: flex;
   align-items: center;
