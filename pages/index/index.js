@@ -871,10 +871,8 @@ Page({
         wx.hideLoading()
         const nickname = res.userInfo.nickName || this.generateRandomNickname()
         
-        // 生成用户ID
+        // 获取微信昵称时生成唯一ID
         const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
-        
-        // 保存用户信息（个人昵称，区别于座位默认昵称）
         wx.setStorageSync('userId', userId)
         wx.setStorageSync('userNickname', nickname)
         
@@ -908,11 +906,7 @@ Page({
     
     const nickname = randomAdjective + randomNoun + randomNum
     
-    // 生成用户ID
-    const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
-    
-    // 保存用户信息（个人昵称，区别于座位默认昵称）
-    wx.setStorageSync('userId', userId)
+    // 随机昵称不生成ID，只分配昵称
     wx.setStorageSync('userNickname', nickname)
     
     wx.showToast({

@@ -510,7 +510,7 @@ Page({
         
         console.log('最终使用的昵称:', nickname)
         
-        // 生成用户ID
+        // 获取微信昵称时生成唯一ID
         const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
         
         // 保存用户信息
@@ -560,15 +560,14 @@ Page({
 
   // 设置用户昵称
   setUserNickname(nickname) {
-    // 生成用户ID
-    const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
-    
-    // 保存用户信息
-    wx.setStorageSync('userId', userId)
+    // 手动设置昵称不生成ID，只更新昵称
     wx.setStorageSync('userNickname', nickname)
     
-    // 记录用户进入方式和个人档案
-    this.recordUserEntry(userId, nickname)
+    // 检查是否有ID，如果有则记录用户档案
+    const userId = wx.getStorageSync('userId')
+    if (userId) {
+      this.recordUserEntry(userId, nickname)
+    }
     
     // 更新页面显示
     this.setData({
@@ -593,15 +592,19 @@ Page({
     
     const nickname = randomAdjective + randomNoun + randomNum
     
-    // 生成用户ID
-    const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+    // 根据进入方式决定是否生成ID
+    const entryType = this.data.entryType
+    if (entryType === 'scan' || entryType === 'share') {
+      // 扫码和分享登录时生成唯一ID
+      const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+      wx.setStorageSync('userId', userId)
+      
+      // 记录用户进入方式和个人档案
+      this.recordUserEntry(userId, nickname)
+    }
     
-    // 保存用户信息
-    wx.setStorageSync('userId', userId)
+    // 保存昵称
     wx.setStorageSync('userNickname', nickname)
-    
-    // 记录用户进入方式和个人档案
-    this.recordUserEntry(userId, nickname)
     
     // 更新页面显示
     this.setData({
@@ -845,16 +848,10 @@ Page({
         userNickname: nickname
       })
       
-      // 保存到本地存储
+      // 保存昵称到本地存储
       wx.setStorageSync('userNickname', nickname)
       
-      // 生成用户ID（如果还没有）
-      let userId = wx.getStorageSync('userId')
-      if (!userId) {
-        userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
-        wx.setStorageSync('userId', userId)
-      }
-      
+      // 昵称修改不影响ID，只更新昵称
       wx.showToast({
         title: `欢迎，${nickname}！`,
         icon: 'success',

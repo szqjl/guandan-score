@@ -10,7 +10,7 @@
 
 ### 📤 Git推送任务
     - [x] **推送主项目到远程仓库**
-      - 仓库: `https://github.com/szqjl/guandan-score.git`
+      - 仓库: `https://github.com/szanthony/guandan-score.git`
       - 分支: `feature/fix-by-a-rule-implementation`
       - 状态: ✅ 推送成功
       - 内容: 更新过A制规则文档，明确A/A2/A3为三次尝试机会，去掉E阶段
@@ -18,7 +18,7 @@
       - 完成时间: 2024年12月19日
 
 - [ ] **推送项目实施方案到新仓库**
-  - 仓库: `git@github.com:szqjl/ProjectAll.git`
+  - 仓库: `git@github.com:szanthony/ProjectAll.git`
   - 分支: `main`
   - 状态: 待推送
   - 内容: 完整的项目实施方案文档
