@@ -116,27 +116,18 @@
     </view>
   </view>
 
-  <!-- 控制按钮区域 - 位于实时比分下方 -->
-  <view class="control-buttons-section">
-    <!-- 本局比分表按钮 -->
-    <button class="score-table-btn" bindtap="onToggleScoreTable">
-      <text class="score-table-text">本局比分表</text>
-    </button>
-
-    <!-- 撤销和恢复按钮 -->
-    <button class="undo-btn" bindtap="undoLastStep" disabled="{{!canUndo}}">
-      <image src="../../images/CexiaoGrey.svg" class="undo-icon"></image>
-      <text class="undo-text">撤销上一把</text>
-    </button>
-    <button class="restore-btn" bindtap="restoreLastGame" disabled="{{!canRestore}}">
-      <text class="restore-text">恢复游戏</text>
-    </button>
-  </view>
 
   <!-- 比分历史表格 - 可切换显示 -->
-  <view class="history-table-section" style="width: 406rpx; height: 88rpx; display: {{showScoreTable ? 'flex' : 'none'}}; box-sizing: border-box; left: 9rpx; top: 0rpx; position: relative">
+  <view class="history-table-section" style="width: 450rpx; height: 88rpx; display: flex; box-sizing: border-box; left: 2rpx; top: -3rpx; position: relative">
     <view class="history-header">
       <text class="history-title">本局每把比分</text>
+      <button class="undo-btn" bindtap="undoLastStep" disabled="{{!canUndo}}">
+        <image src="../../images/CexiaoGrey.svg" class="undo-icon"></image>
+        <text class="undo-text">撤销上一把</text>
+      </button>
+      <button class="restore-btn" bindtap="restoreLastGame" disabled="{{!canRestore}}">
+        <text class="restore-text">恢复游戏</text>
+      </button>
     </view>
 
     <!-- 固定队伍列 -->
@@ -168,6 +159,13 @@
         <view class="table-cell">十六</view>
         <view class="table-cell">十七</view>
         <view class="table-cell">十八</view>
+        <view class="table-cell">十九</view>
+        <view class="table-cell">二十</view>
+        <view class="table-cell">二一</view>
+        <view class="table-cell">二二</view>
+        <view class="table-cell">二三</view>
+        <view class="table-cell">二四</view>
+        <view class="table-cell">二五</view>
       </view>
 
       <!-- 红方行 -->
@@ -190,6 +188,13 @@
         <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="15">{{historyScores[15] && historyScores[15].red ? historyScores[15].red : '-'}}</view>
         <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="16">{{historyScores[16] && historyScores[16].red ? historyScores[16].red : '-'}}</view>
         <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="17">{{historyScores[17] && historyScores[17].red ? historyScores[17].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="18">{{historyScores[18] && historyScores[18].red ? historyScores[18].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="19">{{historyScores[19] && historyScores[19].red ? historyScores[19].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="20">{{historyScores[20] && historyScores[20].red ? historyScores[20].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="21">{{historyScores[21] && historyScores[21].red ? historyScores[21].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="22">{{historyScores[22] && historyScores[22].red ? historyScores[22].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="23">{{historyScores[23] && historyScores[23].red ? historyScores[23].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="24">{{historyScores[24] && historyScores[24].red ? historyScores[24].red : '-'}}</view>
       </view>
 
       <!-- 蓝方行 -->
@@ -212,6 +217,13 @@
         <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="15">{{historyScores[15] && historyScores[15].blue ? historyScores[15].blue : '-'}}</view>
         <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="16">{{historyScores[16] && historyScores[16].blue ? historyScores[16].blue : '-'}}</view>
         <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="17">{{historyScores[17] && historyScores[17].blue ? historyScores[17].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="18">{{historyScores[18] && historyScores[18].blue ? historyScores[18].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="19">{{historyScores[19] && historyScores[19].blue ? historyScores[19].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="20">{{historyScores[20] && historyScores[20].blue ? historyScores[20].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="21">{{historyScores[21] && historyScores[21].blue ? historyScores[21].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="22">{{historyScores[22] && historyScores[22].blue ? historyScores[22].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="23">{{historyScores[23] && historyScores[23].blue ? historyScores[23].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="24">{{historyScores[24] && historyScores[24].blue ? historyScores[24].blue : '-'}}</view>
       </view>
     </view>
   </view>
@@ -219,7 +231,7 @@
   <!-- 右侧控制面板 -->
   <view class="right-control-panel">
     <!-- 创建比赛按钮 -->
-    <button class="create-btn" bindtap="onCreateMatch" style="left: 0rpx; top: -5rpx; position: relative">
+    <button class="create-btn" bindtap="onCreateMatch" style="left: -1rpx; top: -22rpx; position: relative">
       创建比赛
     </button>
     

@@ -1122,41 +1122,6 @@ checkbox {
 }
 
 
-/* 控制按钮区域 */
-.control-buttons-section {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 10rpx;
-  margin: 20rpx 0 10rpx 0;
-  padding: 0 20rpx;
-  width: 100%;
-}
-
-.score-table-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4rpx;
-  padding: 8rpx 12rpx;
-  font-size: 14rpx;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-.score-table-btn:active {
-  background: #45a049;
-}
-
-.score-table-text {
-  font-size: 14rpx;
-  color: white;
-}
 
 .restore-btn {
   display: flex;
@@ -1164,8 +1129,9 @@ checkbox {
   background: none;
   border: none;
   padding: 1rpx 2rpx;
+  margin-left: 12rpx;
+  /* 与撤销按钮保持12rpx间距 */
   flex-shrink: 0;
-  white-space: nowrap;
   /* 防止恢复按钮被压缩 */
 }
 
@@ -1203,9 +1169,13 @@ checkbox {
   background: none;
   border: none;
   padding: 0;
+  margin: 0 0 0 30rpx !important;
+  /* 向右移动30rpx (10rpx + 20rpx) */
   flex-shrink: 0;
-  white-space: nowrap;
   /* 防止撤销按钮被压缩 */
+  position: relative;
+  left: 30rpx;
+  /* 强制向右移动30rpx */
 }
 
 .undo-icon {
@@ -1271,7 +1241,7 @@ checkbox {
   position: absolute;
   left: 8rpx;
   top: 26rpx;
-  width: 28rpx;
+  width: 33rpx;
   background-color: white;
   z-index: 10;
   /* 提高层级,确保不被表头遮�?*/
@@ -1290,13 +1260,14 @@ checkbox {
   align-items: center;
   justify-content: center;
   font-weight: 500;
-  font-size: 12rpx;
+  font-size: 10rpx;
   background-color: #F8F8F8;
   border-bottom: 1rpx solid #E0E0E0;
   line-height: 16rpx;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  white-space: nowrap;
 }
 
 /* 固定队伍列中的红方文字为红色 */
@@ -1327,15 +1298,16 @@ checkbox {
   height: 56rpx;
   /* 调整高度:表�?4rpx + 红方16rpx + 蓝方16rpx = 56rpx */
   position: absolute;
-  left: 36rpx;
+  left: 41rpx;
   top: 26rpx;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 44rpx);
+  width: 401rpx;
+  overflow-x: auto;
   /* 调整容器宽度�?00% - 28rpx(固定�? - 16rpx(边距) */
-  min-width: 376rpx;
+  min-width: 401rpx;
   /* 向左右各扩大8rpx�?60rpx + 16rpx = 376rpx */
-  max-width: 476rpx;
+  max-width: 750rpx;
   /* 向左右各扩大8rpx�?60rpx + 16rpx = 476rpx */
   background-color: white;
   border: none;
@@ -1346,8 +1318,9 @@ checkbox {
   /* 添加底部内边距,为滚动条预留空间 */
   transform: none;
   /* 确保内容可以滚动,滚动条出现在底�?*/
-  overflow-x: auto !important;
+  overflow-x: scroll !important;
   overflow-y: hidden !important;
+  white-space: nowrap;
   -webkit-overflow-scrolling: touch;
   z-index: 5;
   /* 确保滚动条有适当间距 */
@@ -1361,9 +1334,9 @@ checkbox {
   height: 16rpx;
   flex-shrink: 0;
   box-sizing: border-box;
-  width: 540rpx;
-  min-width: 540rpx;
-  max-width: 540rpx;
+  width: 750rpx;
+  min-width: 750rpx;
+  max-width: 750rpx;
   margin: 0;
   padding: 0;
   align-items: stretch;
@@ -1384,9 +1357,9 @@ checkbox {
   z-index: 2;
   flex-shrink: 0;
   box-sizing: border-box;
-  width: 540rpx;
-  min-width: 540rpx;
-  max-width: 540rpx;
+  width: 750rpx;
+  min-width: 750rpx;
+  max-width: 750rpx;
   margin: 0;
   padding: 0;
   display: flex;
@@ -1407,6 +1380,8 @@ checkbox {
   align-items: center;
   justify-content: center;
   margin: 0;
+  width: 30rpx;
+  min-width: 30rpx;
 }
 
 .table-cell {
@@ -1424,6 +1399,7 @@ checkbox {
   word-wrap: break-word;
   word-break: break-all;
   height: 16rpx;
+  min-width: 30rpx;
   /* 与表格行高度保持一�?*/
   display: flex;
   align-items: center;
