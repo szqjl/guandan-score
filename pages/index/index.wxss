@@ -1122,6 +1122,30 @@ checkbox {
 }
 
 
+.score-table-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4rpx;
+  padding: 8rpx 12rpx;
+  margin: 5rpx 0;
+  font-size: 14rpx;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.score-table-btn:active {
+  background: #45a049;
+}
+
+.score-table-text {
+  font-size: 14rpx;
+  color: white;
+}
+
 .restore-btn {
   display: flex;
   align-items: center;

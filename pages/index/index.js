@@ -31,6 +31,8 @@ Page({
     gameSavedToHistory: false,
     // 是否可以恢复游戏
     canRestore: false,
+    // 比分表显示状态
+    showScoreTable: false,
     // 环境信息
     isTrial: false,
     isDevelop: false,
@@ -2413,5 +2415,13 @@ Page({
     } catch (error) {
       console.error('播放音效失败:', error)
     }
+  },
+
+  // 切换比分表显示
+  onToggleScoreTable() {
+    this.setData({
+      showScoreTable: !this.data.showScoreTable
+    })
+    console.log('比分表显示状态:', this.data.showScoreTable)
   },
 })

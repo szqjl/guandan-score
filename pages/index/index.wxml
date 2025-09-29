@@ -116,8 +116,8 @@
     </view>
   </view>
 
-  <!-- 比分历史表格 - 暂时隐藏 -->
-  <view class="history-table-section" style="width: 406rpx; height: 88rpx; display: none; box-sizing: border-box; left: 9rpx; top: 0rpx; position: relative">
+  <!-- 比分历史表格 - 可切换显示 -->
+  <view class="history-table-section" style="width: 406rpx; height: 88rpx; display: {{showScoreTable ? 'flex' : 'none'}}; box-sizing: border-box; left: 9rpx; top: 0rpx; position: relative">
     <view class="history-header">
       <text class="history-title">本局每把比分</text>
     </view>
@@ -226,6 +226,11 @@
         </label>
       </radio-group>
     </view> -->
+
+    <!-- 本局比分表按钮 -->
+    <button class="score-table-btn" bindtap="onToggleScoreTable">
+      <text class="score-table-text">本局比分表</text>
+    </button>
 
     <!-- 撤销和恢复按钮 -->
     <button class="undo-btn" bindtap="undoLastStep" disabled="{{!canUndo}}">
