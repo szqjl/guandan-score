@@ -116,8 +116,8 @@
     </view>
   </view>
 
-  <!-- 比分历史表格 - 优化版 -->
-  <view class="history-table-section" style="width: 406rpx; height: 88rpx; display: flex; box-sizing: border-box; left: 9rpx; top: 0rpx; position: relative">
+  <!-- 比分历史表格 - 暂时隐藏 -->
+  <view class="history-table-section" style="width: 406rpx; height: 88rpx; display: none; box-sizing: border-box; left: 9rpx; top: 0rpx; position: relative">
     <view class="history-header">
       <text class="history-title">本局每把比分</text>
     </view>
