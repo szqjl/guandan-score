@@ -23,8 +23,5 @@
     "health:check": "node version-management/version-manager.js current",
     "performance:compare": "echo '性能对比功能待实现'",
     "regression:test": "echo '回归测试功能待实现'"
-  },
-  "dependencies": {
-    "axios": "^1.12.2"
   }
 }

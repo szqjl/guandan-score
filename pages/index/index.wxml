@@ -2,7 +2,7 @@
 <view class="container cn-paper-bg">
 
   <!-- 品牌标识和环境标识 -->
-  <view class="brand-section" style="width: 711rpx; display: flex; box-sizing: border-box; left: 20rpx; top: 20rpx">
+  <view class="brand-section" style="width: 711rpx; display: flex; box-sizing: border-box; left: 20rpx; top: 3rpx; position: fixed; height: 25rpx">
     <view class="brand-logo" style="height: 46rpx; display: flex; box-sizing: border-box">
       <image class="main-logo" src="/images/GD.png" mode="aspectFit" style="width: 65rpx; display: block; box-sizing: border-box; height: 3rpx; position: relative; left: 0rpx; top: -7rpx"></image>
       <text class="brand-text">掼蛋计分</text>
@@ -49,8 +49,8 @@
 
   <!-- 多人模式状态显示 -->
   <view class="multi-mode-status" wx:if="{{isMultiMode}}">
-    <text class="mode-text">多人模式 - 房间号：{{roomId}}</text>
-    <button class="exit-multi-btn" bindtap="onExitMultiMode">退出多人模式</button>
+    <text class="mode-text">多人模式 {{roomId}}</text>
+    <button class="exit-multi-btn" bindtap="onExitMultiMode" size="mini">退出</button>
   </view>
 
   <!-- 东西方队 & 南北方队 并排 -->
@@ -215,7 +215,7 @@
     
     <!-- 开始游戏按钮 -->
     <button class="start-btn" bindtap="onStartGame" disabled="{{gameStarted && !gameEnded}}" style="left: 0rpx; top: -5rpx; position: relative">
-      {{gameStarted && !gameEnded ? '游戏进行中' : (isMultiMode ? '进入房间' : '开始游戏')}}
+      {{gameStarted && !gameEnded ? '游戏进行中' : '开始游戏'}}
     </button>
 
     <!-- 规则选择 -->

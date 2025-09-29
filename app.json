@@ -12,7 +12,6 @@
     "navigationBarTextStyle": "white",
     "pageOrientation": "landscape"
   },
-  "navigationStyle": "custom",
   "style": "v2",
   "sitemapLocation": "sitemap.json"
 }

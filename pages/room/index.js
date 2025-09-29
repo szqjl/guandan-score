@@ -53,14 +53,19 @@ Page({
 
     // 初始化座位选择逻辑
     this.initSeatSelection()
+
+    // 单人测试：自动填充所有座位
+    if (this.data.isHost) {
+      this.autoFillSeats()
+    }
   },
 
   // 生成房间二维码
   generateQRCode() {
     // 这里应该调用微信小程序码生成API
-    // 暂时使用占位图
+    // 暂时使用GD图标作为占位图
     this.setData({
-      qrCodeUrl: '/images/qr-placeholder.png',
+      qrCodeUrl: '/images/GD.png',
     })
   },
 
@@ -71,8 +76,16 @@ Page({
       (seat) => seat.playerName && seat.playerName !== ''
     )
 
+    const canStart = hasPlayers && this.data.isHost
+    console.log('检查开始游戏条件:', {
+      hasPlayers,
+      isHost: this.data.isHost,
+      canStart,
+      seats,
+    })
+
     this.setData({
-      canStartGame: hasPlayers && this.data.isHost,
+      canStartGame: canStart,
     })
   },
 
@@ -82,6 +95,29 @@ Page({
     this.setData({
       seatClickable: true,
     })
+  },
+
+  // 自动填充座位（用于单人测试）
+  autoFillSeats() {
+    console.log('自动填充座位')
+    // 确保所有座位都有玩家名称
+    const seats = this.data.seats
+    const updatedSeats = {
+      ...seats,
+      east: { ...seats.east, playerName: seats.east.playerName || '旭日东升' },
+      west: { ...seats.west, playerName: seats.west.playerName || '西风斜阳' },
+      south: { ...seats.south, playerName: seats.south.playerName || '南尊' },
+      north: { ...seats.north, playerName: seats.north.playerName || '北恋' },
+    }
+
+    this.setData({
+      seats: updatedSeats,
+    })
+
+    // 重新检查是否可以开始游戏
+    this.checkCanStartGame()
+
+    console.log('座位自动填充完成')
   },
 
   // 座位点击事件
@@ -270,22 +306,39 @@ Page({
   // 检查队伍完整性
   checkTeamIntegrity() {
     const seats = this.data.seats
-    const eastWestComplete = seats.east.playerName && seats.west.playerName
-    const southNorthComplete = seats.south.playerName && seats.north.playerName
+    const eastWestComplete = !!(seats.east.playerName && seats.west.playerName)
+    const southNorthComplete = !!(
+      seats.south.playerName && seats.north.playerName
+    )
+    const allComplete = eastWestComplete && southNorthComplete
+
+    console.log('队伍完整性详细检查:', {
+      east: seats.east.playerName,
+      west: seats.west.playerName,
+      south: seats.south.playerName,
+      north: seats.north.playerName,
+      eastWestComplete,
+      southNorthComplete,
+      allComplete,
+    })
 
     return {
       eastWest: eastWestComplete,
       southNorth: southNorthComplete,
-      allComplete: eastWestComplete && southNorthComplete,
+      allComplete: allComplete,
     }
   },
 
   // 开始比赛
   onStartGame() {
+    console.log('onStartGame 被调用')
+
     // 检查队伍完整性
     const teamIntegrity = this.checkTeamIntegrity()
+    console.log('队伍完整性检查:', teamIntegrity)
 
     if (!teamIntegrity.allComplete) {
+      console.log('队伍不完整，显示提示')
       wx.showModal({
         title: '队伍不完整',
         content: '请确保所有座位都有玩家或默认队友',
@@ -295,16 +348,27 @@ Page({
       return
     }
 
+    console.log('队伍完整，开始绑定队伍')
     // 绑定队伍
     this.bindTeams()
 
     const teamInfo = this.getTeamInfo()
+    console.log('获取队伍信息:', teamInfo)
 
-    // 跳转到游戏页面，传递队伍信息
+    // 跳转到主页，传递队伍信息
+    const navigateUrl = `/pages/index/index?roomId=${
+      this.data.roomId
+    }&teams=${JSON.stringify(teamInfo)}&isMultiMode=true`
+    console.log('准备跳转到主页:', navigateUrl)
+
     wx.navigateTo({
-      url: `/pages/game/index?roomId=${this.data.roomId}&teams=${JSON.stringify(
-        teamInfo
-      )}`,
+      url: navigateUrl,
+      success: () => {
+        console.log('成功跳转到主页')
+      },
+      fail: (err) => {
+        console.error('跳转主页失败:', err)
+      },
     })
   },
 

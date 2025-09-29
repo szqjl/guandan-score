@@ -6,9 +6,9 @@
     <text class="section-title">默认比赛模式</text>
     <view class="mode-options">
       <view class="mode-option {{defaultGameMode === 'guoA' ? 'selected' : ''}}" 
-            data-mode="guoA" bindtap="onGameModeChange">
+            data-mode="guoA" bindtap="onGameModeChange" style="height: 94rpx; display: block; box-sizing: border-box">
         <text class="mode-text">过A制</text>
-        <text class="mode-desc">从2到A的升级路径</text>
+        <text class="mode-desc" style="width: 218rpx; height: 13rpx; display: block; box-sizing: border-box">从2到A的升级路径</text>
       </view>
       <view class="mode-option {{defaultGameMode === 'baShu' ? 'selected' : ''}}" 
             data-mode="baShu" bindtap="onGameModeChange">

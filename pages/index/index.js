@@ -76,7 +76,19 @@ Page({
     soundEnabled: true,
   },
 
-  onLoad() {
+  onLoad(options) {
+    console.log('主页加载，参数:', options)
+
+    // 处理多人模式参数
+    if (options.roomId && options.teams && options.isMultiMode) {
+      this.setData({
+        isMultiMode: true,
+        roomId: options.roomId,
+        teams: JSON.parse(options.teams),
+      })
+      console.log('进入多人模式:', this.data)
+    }
+
     // 快速初始化 - 减少复杂处理和日志输出,提高启动速度
     const forceShowTrialBadge = true // 当前设置为true,强制显示体验版标识用于测试
 
@@ -775,27 +787,30 @@ Page({
 
   // 创建比赛
   onCreateMatch() {
-    // 显示加载状态
-    wx.showLoading({
-      title: '创建中...',
-    })
+    console.log('onCreateMatch 函数被调用')
 
-    // 自动获取微信昵称
-    wx.getUserProfile({
-      desc: '用于显示您的昵称',
-      success: (res) => {
-        this.createRoomWithNickname(res.userInfo.nickName)
-      },
-      fail: (err) => {
-        console.log('获取用户信息失败:', err)
-        // 使用默认昵称
-        this.createRoomWithNickname('房主')
-      },
-    })
+    // 先显示一个简单的提示，确认函数被调用
+    // wx.showToast({
+    //   title: '按钮被点击了',
+    //   icon: 'success',
+    // })
+
+    // 延迟1秒后执行创建房间逻辑
+    setTimeout(() => {
+      // 显示加载状态
+      wx.showLoading({
+        title: '创建中...',
+      })
+
+      // 直接使用默认昵称创建房间（跳过用户授权）
+      this.createRoomWithNickname('房主')
+    }, 1000)
   },
 
   // 使用昵称创建房间
   createRoomWithNickname(nickname) {
+    console.log('createRoomWithNickname 函数被调用，昵称:', nickname)
+
     // 获取用户偏好
     const userSettings = wx.getStorageSync('userSettings') || {}
     const gameMode = userSettings.defaultGameMode || 'guoA'
@@ -807,8 +822,10 @@ Page({
     }
 
     const roomName = this.generateRoomName()
+    console.log('准备创建房间:', { roomName, nickname, gameMode })
 
     // 调用云函数创建房间
+    console.log('开始调用云函数 roomManager')
     wx.cloud
       .callFunction({
         name: 'roomManager',
@@ -823,9 +840,13 @@ Page({
         },
       })
       .then((res) => {
+        console.log('云函数调用成功，返回结果:', res)
+        console.log('云函数返回的result:', res.result)
         wx.hideLoading()
 
         if (res.result.success) {
+          console.log('房间创建成功，准备跳转:', res.result.data)
+
           // 设置多人模式状态
           this.setData({
             isMultiMode: true,
@@ -837,6 +858,12 @@ Page({
           // 直接跳转到房间页面
           wx.navigateTo({
             url: `/pages/room/index?roomId=${res.result.data.roomId}&isHost=true&hostSeat=east`,
+            success: () => {
+              console.log('成功跳转到房间页面')
+            },
+            fail: (err) => {
+              console.error('跳转房间页面失败:', err)
+            },
           })
         } else {
           wx.showToast({
@@ -848,9 +875,15 @@ Page({
       .catch((err) => {
         wx.hideLoading()
         console.error('创建房间失败:', err)
-        wx.showToast({
-          title: '网络错误，请重试',
-          icon: 'error',
+        console.error('错误详情:', err.errMsg, err.errCode)
+
+        // 显示具体错误信息
+        const errorMsg = err.errMsg || err.message || '网络错误'
+        wx.showModal({
+          title: '创建房间失败',
+          content: `错误信息: ${errorMsg}`,
+          showCancel: false,
+          confirmText: '知道了',
         })
       })
   },
@@ -913,11 +946,8 @@ Page({
 
     // 检查是否在多人模式
     if (this.data.isMultiMode && this.data.roomId) {
-      // 多人模式：跳转到房间页面
-      wx.navigateTo({
-        url: `/pages/room/index?roomId=${this.data.roomId}&isHost=${this.data.isHost}&hostSeat=${this.data.hostSeat}`,
-      })
-      return
+      // 多人模式：直接开始游戏，不跳转
+      console.log('多人模式开始游戏')
     }
 
     // 单机模式：开始新游戏
@@ -2102,8 +2132,8 @@ Page({
 
     // 将队伍名称映射为云函数需要的格式
     const teamMapping = {
-      red: 'eastWest', // 东西方队
-      blue: 'southNorth', // 南北方队
+      eastWest: 'red', // 东西方队映射为红队
+      southNorth: 'blue', // 南北方队映射为蓝队
     }
 
     const cloudTeam = teamMapping[team] || team
@@ -2122,12 +2152,17 @@ Page({
         },
       })
       .then((res) => {
-        if (res.result.success) {
+        console.log('scoreSync云函数返回结果:', res)
+        if (res.result && res.result.success) {
           console.log('计分数据上传成功')
           // 立即同步最新数据
           this.syncGameData()
         } else {
-          console.error('计分数据上传失败:', res.result.message)
+          console.error('计分数据上传失败:', res.result)
+          console.error(
+            '失败原因:',
+            res.result ? res.result.message : '云函数返回格式错误'
+          )
           wx.showToast({
             title: '同步失败，请检查网络',
             icon: 'error',

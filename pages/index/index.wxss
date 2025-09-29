@@ -18,18 +18,31 @@ checkbox {
 /* 多人模式状态显示 */
 .multi-mode-status {
   position: fixed;
-  top: 80rpx;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(33, 150, 243, 0.9);
+  top: 20rpx;
+  left: 20rpx;
+  background: rgba(33, 150, 243, 0.7);
   color: white;
-  padding: 12rpx 24rpx;
-  border-radius: 20rpx;
+  padding: 3rpx 6rpx;
+  border-radius: 6rpx;
   display: flex;
   align-items: center;
-  gap: 16rpx;
+  gap: 4rpx;
   z-index: 1000;
-  font-size: 24rpx;
+  font-size: 10rpx;
+}
+
+.multi-mode-status .mode-text {
+  color: white;
+  font-size: 10rpx;
+}
+
+.multi-mode-status .exit-multi-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+  font-size: 9rpx;
+  padding: 1rpx 3rpx;
+  border-radius: 3rpx;
 }
 
 .mode-text {
