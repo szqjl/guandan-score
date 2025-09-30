@@ -1,26 +1,35 @@
 <!--pages/launch/index.wxml-->
 <view class="launch-page">
   <!-- 品牌标识和功能按钮 -->
-  <view class="brand-section">
+  <view class="brand-section"
+    style="position: relative; left: 16rpx; top: -16rpx; width: 703rpx; display: flex; box-sizing: border-box">
     <!-- Logo和标题水平排列 -->
-    <view class="brand-header">
-      <image class="main-logo" src="/images/GD.png" mode="aspectFit" />
-      <text class="brand-text">掼蛋计分</text>
+    <view class="brand-header"
+      style="width: 455rpx; display: flex; box-sizing: border-box; height: 85rpx; position: relative; left: 29rpx; top: -7rpx">
+      <image style="height: 47rpx; display: block; box-sizing: border-box; width: 91rpx" class="main-logo"
+        src="/images/GD.png" mode="aspectFit" />
+      <text class="brand-text" style="width: 197rpx; display: block; box-sizing: border-box; height: 47rpx">
+        <text class="gd-text" style="position: relative; left: -11rpx; top: 0rpx">GD</text><text
+          class="other-text">双上计分</text>
+      </text>
     </view>
-    
-    <!-- 三个功能按钮 - 水平排列 -->
-    <view class="buttons-container">
+
+    <!-- 功能按钮组 - 水平排列 -->
+    <view class="buttons-container"
+      style="width: 605rpx; display: flex; box-sizing: border-box; left: 39rpx; top: 3rpx; position: relative; height: 160rpx">
       <!-- 创建房间按钮 -->
-      <button class="function-btn create-room-btn" bindtap="onCreateRoom">
+      <button class="function-btn create-room-btn" bindtap="onCreateRoom"
+        style="position: relative; left: 6rpx; top: -10rpx; width: 125rpx; height: 120rpx; display: flex; box-sizing: border-box">
         <view class="btn-icon">🏠</view>
         <view class="btn-content">
           <text class="btn-title">创建房间</text>
-          <text class="btn-desc">创建多人游戏房间</text>
+          <text class="btn-desc">为本次比赛准备计分</text>
         </view>
       </button>
 
       <!-- 加入房间按钮 -->
-      <button class="function-btn join-room-btn" bindtap="onJoinRoom">
+      <button class="function-btn join-room-btn" bindtap="onJoinRoom"
+        style="position: relative; left: -10rpx; top: -7rpx; width: 125rpx; height: 120rpx; display: flex; box-sizing: border-box">
         <view class="btn-icon">🔍</view>
         <view class="btn-content">
           <text class="btn-title">加入房间</text>
@@ -29,7 +38,8 @@
       </button>
 
       <!-- 快速启动按钮 -->
-      <button class="function-btn quick-start-btn" bindtap="onQuickStart">
+      <button class="function-btn quick-start-btn" bindtap="onQuickStart"
+        style="width: 125rpx; height: 120rpx; display: flex; box-sizing: border-box; left: -16rpx; top: -8rpx; position: relative">
         <view class="btn-icon">⚡</view>
         <view class="btn-content">
           <text class="btn-title">快速启动</text>
@@ -37,10 +47,227 @@
         </view>
       </button>
     </view>
+
+    <!-- 导航按钮组 - 垂直排列，等间距 -->
+    <view class="nav-buttons-container"
+      style="height: 224rpx; display: flex; flex-direction: column; justify-content: space-between; align-items: center; box-sizing: border-box; left: 32rpx; top: 158rpx; width: 79rpx; position: fixed; padding: 10rpx 0;">
+      <!-- 历史记录按钮 -->
+      <button class="nav-btn history-btn" bindtap="onShowHistory"
+        style="width: 60rpx; height: 40rpx; display: flex; box-sizing: border-box;">
+        <view class="nav-icon">📊</view>
+        <text class="nav-text">历史记录</text>
+      </button>
+
+      <!-- 文档说明按钮 -->
+      <button class="nav-btn help-btn" bindtap="onShowHelp"
+        style="width: 60rpx; height: 40rpx; display: flex; box-sizing: border-box;">
+        <view class="nav-icon">❓</view>
+        <text class="nav-text">说明文档</text>
+      </button>
+
+      <!-- 个人中心按钮 -->
+      <button class="nav-btn feedback-btn" bindtap="onShowFeedback"
+        style="width: 60rpx; height: 40rpx; display: flex; box-sizing: border-box;">
+        <view class="nav-icon">👤</view>
+        <text class="nav-text">个人中心</text>
+      </button>
+
+      <!-- 设置按钮 -->
+      <button class="nav-btn settings-btn" bindtap="onShowSettings"
+        style="width: 60rpx; height: 40rpx; display: flex; box-sizing: border-box;">
+        <view class="nav-icon">⚙️</view>
+        <text class="nav-text">设置</text>
+      </button>
+    </view>
+
+
+
+
   </view>
 
   <!-- 底部说明 -->
-  <view class="footer-section">
-    <text class="footer-text">选择您需要的功能开始游戏</text>
+
+  <!-- 文档说明弹窗 -->
+  <view class="help-modal-overlay" wx:if="{{showHelpModal}}" bindtap="onCloseHelpModal">
+    <view class="help-modal-content" catchtap="stopPropagation">
+      <view class="help-modal-header">
+        <view class="help-modal-title">
+          <image class="help-icon" src="/images/GD.png" mode="aspectFit" binderror="onImageError"
+            bindload="onImageLoad"></image>
+          <text class="help-title">GD双上计分使用指南</text>
+        </view>
+        <view class="header-buttons">
+          <view class="back-to-top-btn" bindtap="scrollToTop">
+            <text class="back-icon">⬆</text>
+          </view>
+          <view class="help-close-btn" bindtap="onCloseHelpModal">
+            <text>×</text>
+          </view>
+        </view>
+      </view>
+
+      <scroll-view class="help-modal-body" scroll-y="{{true}}" scroll-top="{{scrollTop}}" id="helpScrollView">
+        <!-- 目录导航 -->
+        <view class="help-toc">
+          <view class="toc-title">📋 目录</view>
+          <view class="toc-list">
+            <view class="toc-item" bindtap="scrollToSection" data-section="version">🏷️ 版本信息</view>
+            <view class="toc-item" bindtap="scrollToSection" data-section="intro">🎯 游戏简介</view>
+            <view class="toc-item" bindtap="scrollToSection" data-section="modes">🎮 比赛模式</view>
+            <view class="toc-item" bindtap="scrollToSection" data-section="rules">📊 计分规则</view>
+            <view class="toc-item" bindtap="scrollToSection" data-section="features">🔧 功能特色</view>
+            <view class="toc-item" bindtap="scrollToSection" data-section="tips">💡 使用提示</view>
+          </view>
+        </view>
+
+        <!-- 版本信息 -->
+        <view class="help-section" id="version">
+          <view class="help-section-title">
+            <text class="section-icon">🏷️</text>
+            <text class="section-title">版本信息</text>
+          </view>
+          <view class="help-section-content">
+            <text class="version-info">GD双上计分小程序 v2.0.6-stable</text>
+            <text class="version-desc">专为掼蛋游戏设计的专业计分工具</text>
+          </view>
+        </view>
+
+        <!-- 游戏简介 -->
+        <view class="help-section" id="intro">
+          <view class="help-section-title">
+            <text class="section-icon">🎯</text>
+            <text class="section-title">游戏简介</text>
+          </view>
+          <view class="help-section-content">
+            <text class="help-text">掼蛋是一款流行于江苏地区的扑克牌游戏，本小程序为掼蛋比赛提供专业的计分服务，支持实时计分、历史记录和数据分析。</text>
+          </view>
+        </view>
+
+        <!-- 比赛模式 -->
+        <view class="help-section" id="modes">
+          <view class="help-section-title">
+            <text class="section-icon">🎮</text>
+            <text class="section-title">比赛模式</text>
+          </view>
+          <view class="help-section-content">
+            <view class="mode-item">
+              <text class="mode-title">过A制</text>
+              <text class="mode-desc">从2到A的升级路径，A必打，有3次机会（A→A1→A2→A3）</text>
+            </view>
+            <view class="mode-item">
+              <text class="mode-title">把数制</text>
+              <text class="mode-desc">设置最大把数，支持"追不上"机制，在固定把数内获得更高分数的队伍获胜</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 计分规则 -->
+        <view class="help-section" id="rules">
+          <view class="help-section-title">
+            <text class="section-icon">📊</text>
+            <text class="section-title">计分规则</text>
+          </view>
+          <view class="help-section-content">
+            <view class="score-rule-item">
+              <text class="score-btn">双上</text>
+              <text class="score-value">+3分，升3级</text>
+            </view>
+            <view class="score-rule-item">
+              <text class="score-btn">1游3游</text>
+              <text class="score-value">+2分，升2级</text>
+            </view>
+            <view class="score-rule-item">
+              <text class="score-btn">1游末游</text>
+              <text class="score-value">+1分，升1级</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 功能特色 -->
+        <view class="help-section" id="features">
+          <view class="help-section-title">
+            <text class="section-icon">🔧</text>
+            <text class="section-title">功能特色</text>
+          </view>
+          <view class="help-section-content">
+            <view class="feature-grid">
+              <view class="feature-item">
+                <text class="feature-icon">⚡</text>
+                <text class="feature-text">实时比分记录</text>
+              </view>
+              <view class="feature-item">
+                <text class="feature-icon">📈</text>
+                <text class="feature-text">历史记录查看</text>
+              </view>
+              <view class="feature-item">
+                <text class="feature-icon">🔍</text>
+                <text class="feature-text">多种筛选方式</text>
+              </view>
+              <view class="feature-item">
+                <text class="feature-icon">📊</text>
+                <text class="feature-text">详细比分统计</text>
+              </view>
+              <view class="feature-item">
+                <text class="feature-icon">📱</text>
+                <text class="feature-text">支持横屏显示</text>
+              </view>
+              <view class="feature-item">
+                <text class="feature-icon">💾</text>
+                <text class="feature-text">自动保存进度</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 使用提示 -->
+        <view class="help-section" id="tips">
+          <view class="help-section-title">
+            <text class="section-icon">💡</text>
+            <text class="section-title">使用提示</text>
+          </view>
+          <view class="help-section-content">
+            <view class="tip-list">
+              <view class="tip-item">
+                <text class="tip-bullet">•</text>
+                <text class="tip-text">游戏开始前可自由切换比赛模式</text>
+              </view>
+              <view class="tip-item">
+                <text class="tip-bullet">•</text>
+                <text class="tip-text">长按历史比分可修改指定把数</text>
+              </view>
+              <view class="tip-item">
+                <text class="tip-bullet">•</text>
+                <text class="tip-text">支持撤销上一步操作</text>
+              </view>
+              <view class="tip-item">
+                <text class="tip-bullet">•</text>
+                <text class="tip-text">自动保存游戏进度，支持恢复</text>
+              </view>
+              <view class="tip-item">
+                <text class="tip-bullet">•</text>
+                <text class="tip-text">点击左侧导航按钮快速访问功能</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 开发团队 -->
+        <view class="help-section help-footer">
+          <view class="help-section-content">
+            <view class="footer-content">
+              <image class="gd-logo" src="/images/GD.png" mode="aspectFit"></image>
+              <view class="footer-text">
+                <text class="team-info">GD双上计分开发团队并由AI协助</text>
+                <text class="copyright">© 2025 GD双上计分小程序</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="help-modal-footer">
+        <button class="help-confirm-btn" bindtap="onCloseHelpModal">知道了</button>
+      </view>
+    </view>
   </view>
 </view>
