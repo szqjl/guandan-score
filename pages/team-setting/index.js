@@ -6,12 +6,6 @@ Page({
 
     // 新增功能
     defaultGameMode: 'guoA', // 默认比赛模式
-    defaultPlayerNames: {
-      east: '旭日东升', // 东座默认昵称
-      west: '西风斜阳', // 西座默认昵称
-      south: '南尊', // 南座默认昵称
-      north: '北恋', // 北座默认昵称
-    },
   },
 
   onLoad() {
@@ -25,12 +19,6 @@ Page({
           '南北方队2号',
         ],
         defaultGameMode: savedSettings.defaultGameMode || 'guoA',
-        defaultPlayerNames: savedSettings.defaultPlayerNames || {
-          east: '旭日东升',
-          west: '西风斜阳',
-          south: '南尊',
-          north: '北恋',
-        },
       })
     } else {
       // 如果本地存储没有，则从主页获取当前队员信息
@@ -81,14 +69,6 @@ Page({
     })
   },
 
-  // 默认昵称输入
-  onDefaultNameInput(e) {
-    const seat = e.currentTarget.dataset.seat
-    const value = e.detail.value
-    this.setData({
-      [`defaultPlayerNames.${seat}`]: value,
-    })
-  },
 
   // 保存设置
   onSaveSettings() {
@@ -111,7 +91,6 @@ Page({
       redPlayers: this.data.redPlayers,
       bluePlayers: this.data.bluePlayers,
       defaultGameMode: this.data.defaultGameMode,
-      defaultPlayerNames: this.data.defaultPlayerNames,
     })
 
     // 更新主页数据
@@ -146,12 +125,6 @@ Page({
             redPlayers: ['东西方队1号', '东西方队2号'],
             bluePlayers: ['南北方队1号', '南北方队2号'],
             defaultGameMode: 'guoA',
-            defaultPlayerNames: {
-              east: '旭日东升',
-              west: '西风斜阳',
-              south: '南尊',
-              north: '北恋',
-            },
           })
           // 同时清除本地存储的保存设置
           wx.removeStorageSync('userSettings')

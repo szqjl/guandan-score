@@ -1241,7 +1241,7 @@ checkbox {
   position: absolute;
   left: 8rpx;
   top: 26rpx;
-  width: 33rpx;
+  width: 35rpx;
   background-color: white;
   z-index: 10;
   /* 提高层级,确保不被表头遮�?*/
@@ -1298,7 +1298,7 @@ checkbox {
   height: 56rpx;
   /* 调整高度:表�?4rpx + 红方16rpx + 蓝方16rpx = 56rpx */
   position: absolute;
-  left: 41rpx;
+  left: 43rpx;
   top: 26rpx;
   display: flex;
   flex-direction: column;

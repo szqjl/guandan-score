@@ -11,7 +11,7 @@
 ### 📤 Git推送任务
     - [x] **推送主项目到远程仓库**
       - 仓库: `https://gitee.com/Philsz/guandan.git`
-      - 分支: `main`
+      - 分支: `master`
       - 状态: ✅ 推送成功
       - 内容: 更新过A制规则文档，明确A/A2/A3为三次尝试机会，去掉E阶段
       - 提交ID: 9d0c915
