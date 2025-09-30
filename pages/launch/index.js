@@ -58,7 +58,7 @@ Page({
   showDetailedModal() {
     wx.showModal({
       title: '扑克双上计分计分小程序申请',
-      content: '获取你的昵称、头像\n\n头像：点击选择微信头像\n昵称：点击输入微信昵称\n\n用于建立您的个人战绩档案',
+      content: '获取你的昵称、头像\n\n头像：\n点击选择微信头像\n昵称：点击输入微信昵称\n\n用于建立您的个人战绩档案',
       confirmText: '允许',
       cancelText: '取消',
       success: (res) => {
