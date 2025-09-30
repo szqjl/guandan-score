@@ -17,16 +17,14 @@ Page({
   onCreateRoom() {
     console.log('点击创建房间')
     
-    // 显示加载提示
-    wx.showLoading({
-      title: '创建房间中...',
-      mask: true
+    // 先显示提示，确认点击事件被触发
+    wx.showToast({
+      title: '创建房间功能',
+      icon: 'success'
     })
-
-    // 模拟创建房间过程
+    
+    // 延迟跳转，让用户看到提示
     setTimeout(() => {
-      wx.hideLoading()
-      
       // 跳转到房间页面，传递创建房间参数
       wx.navigateTo({
         url: '/pages/room/index?isHost=true&entryType=create',
@@ -112,16 +110,14 @@ Page({
   onQuickStart() {
     console.log('点击快速启动')
     
-    // 显示加载提示
-    wx.showLoading({
-      title: '启动中...',
-      mask: true
+    // 先显示提示，确认点击事件被触发
+    wx.showToast({
+      title: '快速启动功能',
+      icon: 'success'
     })
-
-    // 模拟启动过程
+    
+    // 延迟跳转，让用户看到提示
     setTimeout(() => {
-      wx.hideLoading()
-      
       // 跳转到主页（单机模式）
       wx.navigateTo({
         url: '/pages/index/index?mode=single',
@@ -136,7 +132,7 @@ Page({
           })
         }
       })
-    }, 800)
+    }, 1000)
   },
 
   // 页面分享
