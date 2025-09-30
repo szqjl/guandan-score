@@ -91,6 +91,7 @@ view, text, button, input, image {
   padding: 40rpx 20rpx;
   z-index: 10;
   position: relative;
+  min-height: 400rpx;
 }
 
 .function-title {
@@ -112,6 +113,9 @@ view, text, button, input, image {
   gap: 30rpx;
   width: 100%;
   max-width: 600rpx;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20rpx;
+  border-radius: 20rpx;
 }
 
 /* 功能按钮基础样式 - 参考实时比分按钮的颜色块设计 */
