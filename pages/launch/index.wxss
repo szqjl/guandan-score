@@ -116,6 +116,8 @@ view, text, button, input, image {
   background: rgba(255, 255, 255, 0.1);
   padding: 20rpx;
   border-radius: 20rpx;
+  position: relative;
+  z-index: 20;
 }
 
 /* 功能按钮基础样式 - 参考实时比分按钮的颜色块设计 */
@@ -129,7 +131,7 @@ view, text, button, input, image {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  z-index: 5;
+  z-index: 20;
 }
 
 .function-btn::after {
