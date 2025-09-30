@@ -2,8 +2,11 @@
 <view class="launch-page">
   <!-- 品牌标识和功能按钮 -->
   <view class="brand-section">
-    <image class="main-logo" src="/images/GD.png" mode="aspectFit" />
-    <text class="brand-text">掼蛋计分</text>
+    <!-- Logo和标题水平排列 -->
+    <view class="brand-header">
+      <image class="main-logo" src="/images/GD.png" mode="aspectFit" />
+      <text class="brand-text">掼蛋计分</text>
+    </view>
     
     <!-- 三个功能按钮 - 水平排列 -->
     <view class="buttons-container">

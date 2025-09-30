@@ -69,10 +69,19 @@ view, text, button, input, image {
   position: relative;
 }
 
+/* Logo和标题的水平布局 */
+.brand-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+
 .main-logo {
   width: 80rpx;
   height: 80rpx;
-  margin-bottom: 20rpx;
+  margin-right: 20rpx;
 }
 
 .brand-text {
@@ -80,7 +89,6 @@ view, text, button, input, image {
   font-size: 48rpx;
   font-weight: 600;
   text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
-  margin-bottom: 40rpx;
 }
 
 /* 功能选择区域 */
