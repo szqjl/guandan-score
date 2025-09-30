@@ -19,29 +19,20 @@ Page({
   onCreateRoom() {
     console.log('点击创建房间')
 
-    // 先显示提示，确认点击事件被触发
-    wx.showToast({
-      title: '创建房间功能',
-      icon: 'success',
+    // 直接跳转到房间页面，传递创建房间参数
+    wx.navigateTo({
+      url: '/pages/room/index?isHost=true&entryType=create',
+      success: () => {
+        console.log('跳转到房间创建页面成功')
+      },
+      fail: (err) => {
+        console.error('跳转失败:', err)
+        wx.showToast({
+          title: '跳转失败',
+          icon: 'error',
+        })
+      },
     })
-
-    // 延迟跳转，让用户看到提示
-    setTimeout(() => {
-      // 跳转到房间页面，传递创建房间参数
-      wx.navigateTo({
-        url: '/pages/room/index?isHost=true&entryType=create',
-        success: () => {
-          console.log('跳转到房间创建页面成功')
-        },
-        fail: (err) => {
-          console.error('跳转失败:', err)
-          wx.showToast({
-            title: '跳转失败',
-            icon: 'error',
-          })
-        },
-      })
-    }, 1000)
   },
 
   // 加入房间按钮点击事件
@@ -112,29 +103,20 @@ Page({
   onQuickStart() {
     console.log('点击快速启动')
 
-    // 先显示提示，确认点击事件被触发
-    wx.showToast({
-      title: '快速启动功能',
-      icon: 'success',
+    // 直接跳转到主页（单机模式）
+    wx.navigateTo({
+      url: '/pages/index/index?mode=single',
+      success: () => {
+        console.log('跳转到主页成功')
+      },
+      fail: (err) => {
+        console.error('跳转失败:', err)
+        wx.showToast({
+          title: '跳转失败',
+          icon: 'error',
+        })
+      },
     })
-
-    // 延迟跳转，让用户看到提示
-    setTimeout(() => {
-      // 跳转到主页（单机模式）
-      wx.navigateTo({
-        url: '/pages/index/index?mode=single',
-        success: () => {
-          console.log('跳转到主页成功')
-        },
-        fail: (err) => {
-          console.error('跳转失败:', err)
-          wx.showToast({
-            title: '跳转失败',
-            icon: 'error',
-          })
-        },
-      })
-    }, 1000)
   },
 
   // 页面分享
