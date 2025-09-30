@@ -28,30 +28,35 @@ Page({
     const userId = wx.getStorageSync('userId')
     
     if (!userId) {
-      // 没有用户ID，弹出微信授权对话框
-      wx.showModal({
-        title: '用户身份确认',
-        content: '将申请同步你的微信头像和昵称',
-        confirmText: '确定',
-        cancelText: '取消',
-        success: (res) => {
-          if (res.confirm) {
-            // 用户同意，获取微信昵称和头像
-            this.getUserNickname()
-          } else {
-            // 用户取消，显示提示
-            wx.showToast({
-              title: '需要用户身份才能创建房间',
-              icon: 'none',
-              duration: 2000,
-            })
-          }
-        },
-      })
+      // 没有用户ID，显示详细的用户信息获取对话框
+      this.showUserInfoModal()
     } else {
       // 已有用户ID，直接跳转
       this.navigateToCreateRoom()
     }
+  },
+
+  // 显示用户信息获取对话框
+  showUserInfoModal() {
+    wx.showModal({
+      title: '获取你的昵称、头像',
+      content: '注册、登录小程序\n\n头像：点击选择微信头像\n昵称：点击输入微信昵称',
+      confirmText: '确定',
+      cancelText: '取消',
+      success: (res) => {
+        if (res.confirm) {
+          // 用户同意，跳转到房间页面让用户设置信息
+          this.navigateToCreateRoom()
+        } else {
+          // 用户取消，显示提示
+          wx.showToast({
+            title: '需要用户身份才能创建房间',
+            icon: 'none',
+            duration: 2000,
+          })
+        }
+      },
+    })
   },
 
   // 获取微信昵称和头像（使用新的头像昵称填写能力）
