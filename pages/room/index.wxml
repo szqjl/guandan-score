@@ -28,7 +28,8 @@
         style="width: 50rpx; display: flex; box-sizing: border-box; left: -21rpx; top: 0rpx; position: relative; height: 48rpx">
         <image
           style="width: 38rpx; display: block; box-sizing: border-box; height: 38rpx; position: ; left: -8rpx; top: 1rpx"
-          wx:if="{{userAvatar}}" src="{{userAvatar}}" class="user-avatar" />
+          wx:if="{{userAvatar}}" src="{{userAvatar}}" class="user-avatar" 
+          binderror="onAvatarError" bindload="onAvatarLoad" />
         <text wx:else class="default-user-avatar">👤</text>
       </button>
       <input class="nickname-input" type="nickname" value="{{userNickname}}" bindchange="onNicknameChange" placeholder="点击设置昵称"

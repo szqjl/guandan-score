@@ -395,3 +395,172 @@
     height: 50rpx;
   }
 }
+
+/* 用户信息设置弹窗样式 */
+.user-info-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 15rpx;
+  z-index: 1000;
+}
+
+.user-info-modal-content {
+  background: white;
+  border-radius: 20rpx;
+  width: 300rpx;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20rpx 40rpx rgba(0, 0, 0, 0.3);
+}
+
+.user-info-modal-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+  padding: 20rpx 40rpx 0 40rpx;
+}
+
+.user-info-modal-title {
+  font-size: 20rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.user-info-modal-subtitle {
+  font-size: 15rpx;
+  color: #666;
+}
+
+.user-info-modal-body {
+  padding: 20rpx 20rpx 40rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 0rpx;
+}
+
+.nickname-row {
+  display: flex;
+  align-items: center;
+  gap: 0rpx;
+  margin-top: 10rpx;
+}
+
+.section-label {
+  font-size: 20rpx;
+  color: #333;
+  font-weight: bold;
+  min-width: 80rpx;
+}
+
+.avatar-row .avatar-select-btn {
+  width: 40rpx;
+  height: 35rpx;
+  border-radius: 50%;
+  background: #667eea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8rpx;
+  box-sizing: border-box;
+  margin-left: -3rpx;
+  position: relative;
+}
+
+.avatar-button-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+}
+
+.selected-avatar {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+}
+
+.default-avatar {
+  font-size: 15rpx;
+  color: #999;
+}
+
+.avatar-row .avatar-hint {
+  font-size: 12rpx;
+  color: #666;
+  margin-left: 6rpx;
+}
+
+.nickname-input-field {
+  flex: 0.4;
+  height: 31rpx;
+  border: 2rpx solid #ddd;
+  border-radius: 10rpx;
+  padding: 0 20rpx;
+  font-size: 15rpx;
+  background: #f9f9f9;
+  box-sizing: border-box;
+  margin-left: -8rpx;
+}
+
+.nickname-input-field:focus {
+  border-color: #667eea;
+  background: white;
+}
+
+.user-info-actions {
+  display: flex;
+  gap: -20rpx;
+  margin-top: 28rpx;
+  margin-left: 0rpx;
+  justify-content: flex-start;
+}
+
+.user-info-confirm-btn {
+  width: 72rpx !important;
+  height: 30rpx !important;
+  background: #ff4444 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 10rpx !important;
+  font-size: 15rpx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 72rpx !important;
+  margin-left: 13rpx !important;
+}
+
+.user-info-cancel-btn {
+  width: 77rpx !important;
+  height: 30rpx !important;
+  background: #d0d0d0 !important;
+  color: #666 !important;
+  border: none !important;
+  border-radius: 10rpx !important;
+  font-size: 15rpx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 77rpx !important;
+  margin-left: 50rpx !important;
+}

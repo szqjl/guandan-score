@@ -474,36 +474,18 @@ Page({
     const userAvatar = wx.getStorageSync('userAvatar')
     const entryType = this.data.entryType
 
+    console.log('房间页面 - 从本地存储读取的用户信息:', {
+      userId,
+      userNickname,
+      userAvatar
+    })
+
+    // 显示加载状态
+    this.showLoadingProgress()
+
     if (!userId || !userNickname) {
-      // 首次登录，根据进入方式生成不同的提示
-      this.generateRandomNickname()
-
-      // 根据进入方式显示不同提示
-      let welcomeMsg = ''
-      switch (entryType) {
-        case 'create':
-          welcomeMsg = '房间已创建，开始计分吧！'
-          break
-        case 'share':
-          welcomeMsg = '欢迎通过分享加入！'
-          break
-        case 'scan':
-          welcomeMsg = '欢迎扫码加入！'
-          break
-        case 'manual':
-          welcomeMsg = '欢迎手动加入房间！'
-          break
-        default:
-          welcomeMsg = '欢迎进入房间！'
-      }
-
-      setTimeout(() => {
-        wx.showToast({
-          title: welcomeMsg,
-          icon: 'success',
-          duration: 2000,
-        })
-      }, 1000)
+      // 首次登录，从用户表获取用户信息
+      this.loadUserFromDatabase()
     } else {
       // 已有用户信息，更新页面显示
       this.setData({
@@ -511,13 +493,55 @@ Page({
         userAvatar: userAvatar || '',
       })
 
-      // 显示欢迎信息
-      wx.showToast({
-        title: `${userNickname}，继续游戏吧！`,
-        icon: 'success',
-        duration: 2000,
-      })
+      console.log('房间页面 - 设置用户头像:', userAvatar)
+      console.log('房间页面 - 当前页面数据:', this.data.userAvatar)
+
+      // 模拟加载过程，然后显示完成
+      setTimeout(() => {
+        this.hideLoadingProgress()
+        this.showWelcomeMessage(entryType, userNickname)
+      }, 1500)
     }
+  },
+
+  // 显示加载进度条
+  showLoadingProgress() {
+    wx.showLoading({
+      title: '正在加载房间...',
+      mask: true
+    })
+  },
+
+  // 隐藏加载进度条
+  hideLoadingProgress() {
+    wx.hideLoading()
+  },
+
+  // 显示欢迎信息
+  showWelcomeMessage(entryType, userNickname) {
+    let welcomeMsg = ''
+    switch (entryType) {
+      case 'create':
+        welcomeMsg = '房间已创建，开始计分吧！'
+        break
+      case 'share':
+        welcomeMsg = '欢迎通过分享加入！'
+        break
+      case 'scan':
+        welcomeMsg = '欢迎扫码加入！'
+        break
+      case 'manual':
+        welcomeMsg = '欢迎手动加入房间！'
+        break
+      default:
+        welcomeMsg = userNickname ? `${userNickname}，继续游戏吧！` : '欢迎进入房间！'
+    }
+
+    wx.showToast({
+      title: welcomeMsg,
+      icon: 'success',
+      duration: 2000,
+    })
   },
 
   // 显示昵称确认弹窗
@@ -556,6 +580,63 @@ Page({
           this.generateRandomNickname()
         }
       },
+    })
+  },
+
+  // 从用户表加载用户信息
+  loadUserFromDatabase() {
+    wx.cloud.callFunction({
+      name: 'userManager',
+      data: {
+        action: 'getUserProfile'
+      },
+      success: (res) => {
+        console.log('从用户表获取用户信息:', res.result)
+        
+        if (res.result.success && res.result.data) {
+          // 更新页面显示
+          this.setData({
+            userNickname: res.result.data.nickName,
+            userAvatar: res.result.data.avatar || '',
+          })
+          
+          // 保存到本地存储
+          wx.setStorageSync('userId', res.result.data._openid)
+          wx.setStorageSync('userNickname', res.result.data.nickName)
+          wx.setStorageSync('userAvatar', res.result.data.avatar || '')
+          
+          // 隐藏加载进度条，显示欢迎信息
+          setTimeout(() => {
+            this.hideLoadingProgress()
+            this.showWelcomeMessage(this.data.entryType, res.result.data.nickName)
+          }, 1000)
+        } else {
+          // 用户不存在，显示设置界面
+          this.showUserInfoSetup()
+        }
+      },
+      fail: (err) => {
+        console.error('获取用户信息失败:', err)
+        // 网络错误，显示设置界面
+        this.showUserInfoSetup()
+      }
+    })
+  },
+
+  // 显示用户信息设置界面
+  showUserInfoSetup() {
+    // 设置页面数据，显示用户信息设置区域
+    this.setData({
+      userNickname: '',
+      userAvatar: '',
+      showUserInfoSetup: true
+    })
+    
+    // 显示设置提示
+    wx.showToast({
+      title: '请设置您的头像和昵称',
+      icon: 'none',
+      duration: 3000,
     })
   },
 
@@ -881,23 +962,215 @@ Page({
       })
   },
 
+  // 头像加载成功
+  onAvatarLoad(e) {
+    console.log('头像加载成功:', e.detail)
+  },
+
+  // 头像加载失败
+  onAvatarError(e) {
+    console.error('头像加载失败:', e.detail)
+    console.error('头像URL:', this.data.userAvatar)
+    // 头像加载失败时，清空头像URL，显示默认头像
+    this.setData({
+      userAvatar: ''
+    })
+    
+    // 同时清除本地存储中的无效头像
+    wx.removeStorageSync('userAvatar')
+    
+    wx.showToast({
+      title: '头像已过期，请重新选择',
+      icon: 'none',
+      duration: 2000,
+    })
+  },
+
+  // 处理头像URL，确保在不同环境下都能正常显示
+  processAvatarUrl(avatarUrl) {
+    if (!avatarUrl) return ''
+    
+    // 判断当前是否是开发工具环境
+    const isDevTool = wx.getSystemInfoSync().platform === 'devtools'
+    
+    console.log('环境检测:', { isDevTool, originalUrl: avatarUrl })
+    
+    if (isDevTool) {
+      // 开发工具环境，使用 http://tmp/ 路径
+      if (avatarUrl.startsWith('wxfile://')) {
+        // 如果是 wxfile:// 路径，转换为 http://tmp/ 路径
+        const fileName = avatarUrl.split('/').pop()
+        return `http://tmp/${fileName}`
+      }
+      return avatarUrl
+    } else {
+      // 真机环境，使用 wxfile:// 路径
+      if (avatarUrl.startsWith('http://tmp/')) {
+        // 如果是 http://tmp/ 路径，转换为 wxfile:// 路径
+        const fileName = avatarUrl.split('/').pop()
+        return `wxfile://tmp_${fileName}`
+      }
+      return avatarUrl
+    }
+  },
+
   // 选择头像事件
   onChooseAvatar(e) {
     console.log('选择头像:', e.detail)
     const { avatarUrl } = e.detail
 
-    // 更新页面显示
-    this.setData({
-      userAvatar: avatarUrl,
+    // 直接保存到本地，用户无感知
+    this.saveAvatarToPrivateDir(avatarUrl)
+  },
+
+  // 上传头像到云存储
+  uploadAvatarToCloud(tempFilePath) {
+    console.log('开始上传头像到云存储:', tempFilePath)
+    
+    // 生成唯一的文件名
+    const fileName = `avatar_${Date.now()}_${Math.random().toString(36).substr(2, 5)}.jpg`
+    const cloudPath = `avatars/${fileName}`
+
+
+    // 上传到云存储
+    wx.cloud.uploadFile({
+      cloudPath: cloudPath,
+      filePath: tempFilePath,
+      success: (res) => {
+        console.log('头像上传成功:', res)
+        
+        // 获取文件的永久访问链接
+        wx.cloud.getTempFileURL({
+          fileList: [res.fileID],
+          success: (urlRes) => {
+            console.log('获取永久链接成功:', urlRes)
+            
+            const permanentUrl = urlRes.fileList[0].tempFileURL
+            
+            // 更新页面显示
+            this.setData({
+              userAvatar: permanentUrl,
+            })
+
+            // 保存到本地存储
+            wx.setStorageSync('userAvatar', permanentUrl)
+            
+            // 如果没有用户ID，生成一个
+            const userId = wx.getStorageSync('userId')
+            if (!userId) {
+              const newUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+              wx.setStorageSync('userId', newUserId)
+            }
+
+            wx.showToast({
+              title: '头像设置成功',
+              icon: 'success',
+              duration: 1500,
+            })
+          },
+          fail: (err) => {
+            console.error('获取永久链接失败:', err)
+            
+            // 即使获取永久链接失败，也使用云文件ID
+            this.setData({
+              userAvatar: res.fileID,
+            })
+
+            // 保存到本地存储
+            wx.setStorageSync('userAvatar', res.fileID)
+            
+            // 如果没有用户ID，生成一个
+            const userId = wx.getStorageSync('userId')
+            if (!userId) {
+              const newUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+              wx.setStorageSync('userId', newUserId)
+            }
+
+            wx.showToast({
+              title: '头像设置成功',
+              icon: 'success',
+              duration: 1500,
+            })
+          }
+        })
+      },
+      fail: (err) => {
+        console.error('头像上传失败:', err)
+        
+        // 上传失败时，使用本地保存方案
+        this.saveAvatarToPrivateDir(tempFilePath)
+        
+        wx.showToast({
+          title: '头像上传失败，已保存到本地',
+          icon: 'none',
+          duration: 2000,
+        })
+      }
     })
+  },
 
-    // 保存到本地存储
-    wx.setStorageSync('userAvatar', avatarUrl)
+  // 保存头像到私有目录
+  saveAvatarToPrivateDir(tempFilePath) {
+    // 获取小程序私有目录路径
+    const fs = wx.getFileSystemManager()
+    const userDataPath = wx.env.USER_DATA_PATH
+    const fileName = `avatar_${Date.now()}.jpg`
+    const savedPath = `${userDataPath}/${fileName}`
 
-    wx.showToast({
-      title: '头像设置成功',
-      icon: 'success',
-      duration: 1500,
+    console.log('保存头像到私有目录:', { tempFilePath, savedPath })
+
+    // 复制文件到私有目录
+    fs.copyFile({
+      srcPath: tempFilePath,
+      destPath: savedPath,
+      success: (res) => {
+        console.log('头像保存成功:', savedPath)
+        
+        // 更新页面显示
+        this.setData({
+          userAvatar: savedPath,
+        })
+
+        // 保存到本地存储
+        wx.setStorageSync('userAvatar', savedPath)
+        
+        // 如果没有用户ID，生成一个
+        const userId = wx.getStorageSync('userId')
+        if (!userId) {
+          const newUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+          wx.setStorageSync('userId', newUserId)
+        }
+
+        wx.showToast({
+          title: '头像设置成功',
+          icon: 'success',
+          duration: 1500,
+        })
+      },
+      fail: (err) => {
+        console.error('头像保存失败:', err)
+        
+        // 保存失败时，使用原始路径
+        this.setData({
+          userAvatar: tempFilePath,
+        })
+
+        // 保存到本地存储
+        wx.setStorageSync('userAvatar', tempFilePath)
+        
+        // 如果没有用户ID，生成一个
+        const userId = wx.getStorageSync('userId')
+        if (!userId) {
+          const newUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+          wx.setStorageSync('userId', newUserId)
+        }
+
+        wx.showToast({
+          title: '头像设置成功',
+          icon: 'success',
+          duration: 1500,
+        })
+      }
     })
   },
 
@@ -914,8 +1187,13 @@ Page({
 
       // 保存昵称到本地存储
       wx.setStorageSync('userNickname', nickname)
-
-      // 昵称修改不影响ID，只更新昵称
+      
+      // 如果没有用户ID，生成一个
+      const userId = wx.getStorageSync('userId')
+      if (!userId) {
+        const newUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+        wx.setStorageSync('userId', newUserId)
+      }
       wx.showToast({
         title: `欢迎，${nickname}！`,
         icon: 'success',

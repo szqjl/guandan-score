@@ -270,4 +270,39 @@
       </view>
     </view>
   </view>
+
+  <!-- 用户信息设置弹窗 -->
+  <view class="user-info-modal-overlay" wx:if="{{showUserInfoModal}}" bindtap="hideUserInfoModal">
+    <view class="user-info-modal-content" catchtap="stopPropagation">
+      <view class="user-info-modal-title-section">
+        <text class="user-info-modal-title">扑克双上计分申请</text>
+        <text class="user-info-modal-subtitle">获取你的头像、昵称</text>
+      </view>
+      
+      <view class="user-info-modal-body">
+        <form bindsubmit="onFormSubmit">
+          <view class="avatar-row">
+            <text class="section-label">头像：</text>
+            <view class="avatar-select-btn">
+              <image wx:if="{{userAvatar}}" src="{{userAvatar}}" class="selected-avatar" />
+              <text wx:else class="default-avatar">👤</text>
+              <button class="avatar-button-cover" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar"></button>
+            </view>
+            <text class="avatar-hint">点击选择头像</text>
+          </view>
+          
+          <view class="nickname-row">
+            <text class="section-label">昵称：</text>
+            <input class="nickname-input-field" type="nickname" name="nickname" value="{{userNickname}}" bindchange="onNicknameChange" bindfocus="onNicknameFocus" placeholder="输入昵称" />
+          </view>
+          
+          <view class="user-info-actions">
+            <button class="user-info-cancel-btn" bindtap="hideUserInfoModal">取消</button>
+            <button class="user-info-confirm-btn" form-type="submit">允许</button>
+          </view>
+        </form>
+      </view>
+    </view>
+  </view>
+
 </view>

@@ -4,6 +4,9 @@ Page({
     // 页面数据
     showHelpModal: false,
     scrollTop: 0,
+    showUserInfoModal: false, // 控制用户信息设置弹窗
+    userAvatar: '', // 用户头像
+    userNickname: '', // 用户昵称
   },
 
   onLoad(options) {
@@ -57,8 +60,10 @@ Page({
   // 竖屏模式下的详细弹窗
   showDetailedModal() {
     wx.showModal({
-      title: '扑克双上计分计分小程序申请',
-      content: '获取你的昵称、头像\n头像：点击选择\n昵称：点击输入',
+      title: '扑克双上计分计分申请',
+      content: '获取你的昵称、头像\n\n头像：点击选择 👤\n\n昵称：点击输入',
+      editable: true,
+      placeholderText: '请输入您的昵称',
       confirmText: '允许',
       cancelText: '取消',
       success: (res) => {
@@ -74,40 +79,408 @@ Page({
         })
 
         if (res.confirm) {
-          // 用户同意，跳转到房间页面让用户设置信息
-          this.navigateToCreateRoom()
+          // 用户同意，显示完整的用户信息设置弹窗
+          this.showUserInfoModal()
         } else {
-          // 用户取消，显示提示
-          wx.showToast({
-            title: '需要用户身份才能创建房间',
-            icon: 'none',
-            duration: 2000,
-          })
+          // 用户取消，返回启动页面（不需要额外提示）
+          console.log('用户取消授权，返回启动页面')
         }
       },
     })
   },
 
+
   // 简化版弹窗（备用方案）
   showSimpleModal() {
     wx.showModal({
-      title: '扑克双上计分计分小程序申请',
+      title: '扑克双上计分计分申请',
       content: '获取你的昵称、头像\n头像: 昵称:',
       confirmText: '允许',
       cancelText: '取消',
       success: (res) => {
         if (res.confirm) {
-          // 用户同意，跳转到房间页面让用户设置信息
-          this.navigateToCreateRoom()
+          // 用户同意，显示用户信息设置弹窗
+          this.showUserInfoModal()
         } else {
-          // 用户取消，显示提示
+          // 用户取消，返回启动页面（不需要额外提示）
+          console.log('用户取消授权，返回启动页面')
+        }
+      },
+    })
+  },
+
+  // 创建用户信息并跳转
+  createUserWithInfo(userNickname) {
+    // 调用云函数创建用户并保存到用户表
+    wx.cloud.callFunction({
+      name: 'userManager',
+      data: {
+        action: 'createUser',
+        data: {
+          nickName: userNickname.trim(),
+          avatar: ''
+        }
+      },
+      success: (res) => {
+        console.log('用户创建成功:', res.result)
+        
+        if (res.result.success) {
+          // 保存用户信息到本地存储
+          wx.setStorageSync('userId', res.result.data._openid)
+          wx.setStorageSync('userNickname', res.result.data.nickName)
+          wx.setStorageSync('userAvatar', res.result.data.avatar)
+          
           wx.showToast({
-            title: '需要用户身份才能创建房间',
+            title: `欢迎，${userNickname.trim()}！`,
+            icon: 'success',
+            duration: 2000,
+          })
+
+          setTimeout(() => {
+            this.navigateToCreateRoom()
+          }, 2000)
+        } else {
+          wx.showToast({
+            title: '用户创建失败',
             icon: 'none',
             duration: 2000,
           })
         }
       },
+      fail: (err) => {
+        console.error('调用云函数失败:', err)
+        wx.showToast({
+          title: '网络错误，请重试',
+          icon: 'none',
+          duration: 2000,
+        })
+      }
+    })
+  },
+
+  // 显示用户信息设置弹窗
+  showUserInfoModal() {
+    this.setData({
+      showUserInfoModal: true,
+      userAvatar: '',
+      userNickname: '' // 不直接获取昵称，等用户点击输入框时再获取
+    })
+  },
+
+  // 隐藏用户信息设置弹窗
+  hideUserInfoModal() {
+    this.setData({
+      showUserInfoModal: false
+    })
+  },
+
+  // 获取微信昵称（在用户点击输入框时调用）
+  getWechatNickname() {
+    // 尝试从本地存储获取
+    const storedNickname = wx.getStorageSync('userNickname')
+    if (storedNickname) {
+      this.setData({
+        userNickname: storedNickname
+      })
+      return
+    }
+
+    // 如果没有存储的昵称，尝试获取微信昵称
+    wx.cloud.callFunction({
+      name: 'userManager',
+      data: {
+        action: 'getUserProfile'
+      },
+      success: (res) => {
+        if (res.result.success && res.result.data && res.result.data.nickName) {
+          // 获取到微信昵称
+          this.setData({
+            userNickname: res.result.data.nickName
+          })
+        } else {
+          // 没有微信昵称，生成默认的
+          const defaultNickname = '玩家' + Math.floor(Math.random() * 9999)
+          this.setData({
+            userNickname: defaultNickname
+          })
+        }
+      },
+      fail: () => {
+        // 获取失败，生成默认的
+        const defaultNickname = '玩家' + Math.floor(Math.random() * 9999)
+        this.setData({
+          userNickname: defaultNickname
+        })
+      }
+    })
+  },
+
+  // 昵称输入框获得焦点时（用户点击输入框时）
+  onNicknameFocus() {
+    console.log('用户点击了昵称输入框')
+    // 这时候才尝试获取微信昵称
+    this.getWechatNickname()
+  },
+
+  // 选择头像事件
+  onChooseAvatar(e) {
+    console.log('选择头像:', e.detail)
+    const { avatarUrl } = e.detail
+
+    // 尝试保存到私有目录
+    this.saveAvatarToPrivateDir(avatarUrl)
+  },
+
+  // 上传头像到云存储
+  uploadAvatarToCloud(tempFilePath) {
+    console.log('开始上传头像到云存储:', tempFilePath)
+    
+    // 生成唯一的文件名
+    const fileName = `avatar_${Date.now()}_${Math.random().toString(36).substr(2, 5)}.jpg`
+    const cloudPath = `avatars/${fileName}`
+
+
+    // 上传到云存储
+    wx.cloud.uploadFile({
+      cloudPath: cloudPath,
+      filePath: tempFilePath,
+      success: (res) => {
+        console.log('头像上传成功:', res)
+        
+        // 获取文件的永久访问链接
+        wx.cloud.getTempFileURL({
+          fileList: [res.fileID],
+          success: (urlRes) => {
+            console.log('获取永久链接成功:', urlRes)
+            
+            const permanentUrl = urlRes.fileList[0].tempFileURL
+            
+            // 更新页面显示
+            this.setData({
+              userAvatar: permanentUrl
+            })
+
+            wx.showToast({
+              title: '头像上传成功',
+              icon: 'success',
+              duration: 1500,
+            })
+          },
+          fail: (err) => {
+            console.error('获取永久链接失败:', err)
+            
+            // 即使获取永久链接失败，也使用云文件ID
+            this.setData({
+              userAvatar: res.fileID
+            })
+
+            wx.showToast({
+              title: '头像上传成功',
+              icon: 'success',
+              duration: 1500,
+            })
+          }
+        })
+      },
+      fail: (err) => {
+        console.error('头像上传失败:', err)
+        
+        // 上传失败时，使用本地保存方案
+        this.saveAvatarToPrivateDir(tempFilePath)
+        
+        wx.showToast({
+          title: '头像上传失败，已保存到本地',
+          icon: 'none',
+          duration: 2000,
+        })
+      }
+    })
+  },
+
+  // 保存头像到私有目录
+  saveAvatarToPrivateDir(tempFilePath) {
+    // 获取小程序私有目录路径
+    const fs = wx.getFileSystemManager()
+    const userDataPath = wx.env.USER_DATA_PATH
+    const fileName = `avatar_${Date.now()}.jpg`
+    const savedPath = `${userDataPath}/${fileName}`
+
+    console.log('保存头像到私有目录:', { tempFilePath, savedPath })
+
+    // 复制文件到私有目录
+    fs.copyFile({
+      srcPath: tempFilePath,
+      destPath: savedPath,
+      success: (res) => {
+        console.log('头像保存成功:', savedPath)
+        
+        // 使用保存后的永久路径
+        this.setData({
+          userAvatar: savedPath
+        })
+
+        wx.showToast({
+          title: '头像选择成功',
+          icon: 'success',
+          duration: 1500,
+        })
+      },
+      fail: (err) => {
+        console.error('头像保存失败:', err)
+        
+        // 保存失败时，使用原始路径
+        this.setData({
+          userAvatar: tempFilePath
+        })
+
+        wx.showToast({
+          title: '头像选择成功',
+          icon: 'success',
+          duration: 1500,
+        })
+      }
+    })
+  },
+
+  // 处理头像URL，确保在不同环境下都能正常显示
+  processAvatarUrl(avatarUrl) {
+    if (!avatarUrl) return ''
+    
+    // 判断当前是否是开发工具环境
+    const isDevTool = wx.getSystemInfoSync().platform === 'devtools'
+    
+    console.log('环境检测:', { isDevTool, originalUrl: avatarUrl })
+    
+    // 直接返回原始路径，让微信小程序自己处理
+    // 微信小程序会根据环境自动选择正确的路径格式
+    return avatarUrl
+  },
+
+  // 昵称输入事件
+  onNicknameChange(e) {
+    console.log('昵称输入:', e.detail.value)
+    this.setData({
+      userNickname: e.detail.value
+    })
+  },
+
+  // 表单提交处理（官方推荐方式）
+  onFormSubmit(e) {
+    const { userAvatar } = this.data
+    const nickname = e.detail.value.nickname
+    
+    // 验证昵称
+    if (!nickname || nickname.trim() === '') {
+      wx.showToast({
+        title: '请输入昵称',
+        icon: 'none',
+        duration: 2000,
+      })
+      return
+    }
+
+    // 调用云函数创建用户并保存到用户表
+    wx.cloud.callFunction({
+      name: 'userManager',
+      data: {
+        action: 'createUser',
+        data: {
+          nickName: nickname.trim(),
+          avatar: userAvatar
+        }
+      },
+      success: (res) => {
+        console.log('云函数调用成功，完整响应:', res)
+        console.log('云函数返回结果:', res.result)
+        
+        if (res.result.success) {
+          // 保存用户信息到本地存储
+          wx.setStorageSync('userId', res.result.data._openid)
+          wx.setStorageSync('userNickname', res.result.data.nickName)
+          wx.setStorageSync('userAvatar', res.result.data.avatar)
+          
+          console.log('启动页面 - 保存到本地存储的用户信息:', {
+            userId: res.result.data._openid,
+            userNickname: res.result.data.nickName,
+            userAvatar: res.result.data.avatar
+          })
+          
+          // 隐藏弹窗
+          this.hideUserInfoModal()
+          
+          wx.showToast({
+            title: `欢迎，${nickname.trim()}！`,
+            icon: 'success',
+            duration: 2000,
+          })
+
+          setTimeout(() => {
+            this.navigateToCreateRoom()
+          }, 2000)
+        } else {
+          console.error('用户创建失败:', res.result);
+          wx.showToast({
+            title: res.result.message || '用户创建失败',
+            icon: 'none',
+            duration: 3000,
+          })
+        }
+      },
+      fail: (err) => {
+        console.error('调用云函数失败:', err)
+        wx.showToast({
+          title: '网络错误，请重试',
+          icon: 'none',
+          duration: 2000,
+        })
+      }
+    })
+  },
+
+  // 生成用户信息并跳转到房间页面
+  generateUserInfoAndNavigate() {
+    // 生成随机昵称（作为默认值）
+    const randomNickname = '玩家' + Math.floor(Math.random() * 9999)
+    
+    // 调用云函数创建用户并保存到用户表
+    wx.cloud.callFunction({
+      name: 'userManager',
+      data: {
+        action: 'createUser',
+        data: {
+          nickName: randomNickname,
+          avatar: ''
+        }
+      },
+      success: (res) => {
+        console.log('用户创建成功:', res.result)
+        
+        if (res.result.success) {
+          // 保存用户信息到本地存储
+          wx.setStorageSync('userId', res.result.data._openid)
+          wx.setStorageSync('userNickname', res.result.data.nickName)
+          wx.setStorageSync('userAvatar', res.result.data.avatar)
+          
+          console.log('用户信息已保存到本地:', res.result.data)
+          
+          // 跳转到房间页面
+          this.navigateToCreateRoom()
+        } else {
+          wx.showToast({
+            title: '用户创建失败',
+            icon: 'none',
+            duration: 2000,
+          })
+        }
+      },
+      fail: (err) => {
+        console.error('调用云函数失败:', err)
+        wx.showToast({
+          title: '网络错误，请重试',
+          icon: 'none',
+          duration: 2000,
+        })
+      }
     })
   },
 
@@ -150,7 +523,7 @@ Page({
       icon: 'success',
       duration: 2000,
     })
-    
+
     // 延迟跳转
     setTimeout(() => {
       this.navigateToCreateRoom()
@@ -159,18 +532,30 @@ Page({
 
   // 跳转到创建房间页面
   navigateToCreateRoom() {
-    wx.navigateTo({
-      url: '/pages/room/index?isHost=true&entryType=create',
-      success: () => {
-        console.log('跳转到房间创建页面成功')
-      },
-      fail: (err) => {
-        console.error('跳转失败:', err)
-        wx.showToast({
-          title: '跳转失败',
-          icon: 'error',
-        })
-      },
+      wx.navigateTo({
+        url: '/pages/room/index?isHost=true&entryType=create',
+        success: () => {
+          console.log('跳转到房间创建页面成功')
+        },
+        fail: (err) => {
+          console.error('跳转失败:', err)
+          wx.showToast({
+            title: '跳转失败',
+            icon: 'error',
+          })
+        },
+      })
+  },
+
+  // 临时方法：清除用户数据（测试用）
+  clearUserData() {
+    wx.removeStorageSync('userId')
+    wx.removeStorageSync('userNickname')
+    wx.removeStorageSync('userAvatar')
+    wx.showToast({
+      title: '用户数据已清除',
+      icon: 'success',
+      duration: 2000,
     })
   },
 
@@ -213,19 +598,19 @@ Page({
     console.log('加入房间号:', roomId)
 
     // 直接跳转到房间页面，传递加入房间参数
-    wx.navigateTo({
-      url: `/pages/room/index?roomId=${roomId}&isHost=false&entryType=join`,
-      success: () => {
-        console.log('跳转到房间页面成功')
-      },
-      fail: (err) => {
-        console.error('跳转失败:', err)
-        wx.showToast({
-          title: '房间不存在或已满',
-          icon: 'error',
-        })
-      },
-    })
+      wx.navigateTo({
+        url: `/pages/room/index?roomId=${roomId}&isHost=false&entryType=join`,
+        success: () => {
+          console.log('跳转到房间页面成功')
+        },
+        fail: (err) => {
+          console.error('跳转失败:', err)
+          wx.showToast({
+            title: '房间不存在或已满',
+            icon: 'error',
+          })
+        },
+      })
   },
 
   // 快速启动按钮点击事件
@@ -233,19 +618,19 @@ Page({
     console.log('点击快速启动')
 
     // 直接跳转到主页（单机模式）
-    wx.navigateTo({
-      url: '/pages/index/index?mode=single',
-      success: () => {
-        console.log('跳转到主页成功')
-      },
-      fail: (err) => {
-        console.error('跳转失败:', err)
-        wx.showToast({
-          title: '跳转失败',
-          icon: 'error',
-        })
-      },
-    })
+      wx.navigateTo({
+        url: '/pages/index/index?mode=single',
+        success: () => {
+          console.log('跳转到主页成功')
+        },
+        fail: (err) => {
+          console.error('跳转失败:', err)
+          wx.showToast({
+            title: '跳转失败',
+            icon: 'error',
+          })
+        },
+      })
   },
 
   // 页面分享

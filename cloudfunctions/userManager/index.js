@@ -72,14 +72,24 @@ async function getUserProfile(openid) {
 // 创建用户
 async function createUser(data, openid) {
   const { nickName, avatar } = data;
+  
+  console.log('创建用户参数:', { nickName, avatar, openid });
 
   // 检查用户是否已存在
-  const existingUser = await db.collection('users').doc(openid).get();
-  if (existingUser.data) {
-    return {
-      success: false,
-      message: '用户已存在'
-    };
+  try {
+    const existingUser = await db.collection('users').doc(openid).get();
+    console.log('检查现有用户:', existingUser);
+    
+    if (existingUser.data) {
+      console.log('用户已存在，返回现有用户信息');
+      return {
+        success: true,
+        message: '用户已存在',
+        data: existingUser.data
+      };
+    }
+  } catch (error) {
+    console.log('检查用户时出错，继续创建:', error);
   }
 
   // 创建新用户
@@ -98,9 +108,11 @@ async function createUser(data, openid) {
   };
 
   try {
-    await db.collection('users').doc(openid).set({
+    console.log('准备创建用户数据:', userData);
+    const result = await db.collection('users').doc(openid).set({
       data: userData
     });
+    console.log('用户创建结果:', result);
 
     return {
       success: true,
@@ -108,10 +120,12 @@ async function createUser(data, openid) {
       data: userData
     };
   } catch (error) {
+    console.error('用户创建失败:', error);
     return {
       success: false,
       message: '用户创建失败',
-      error: error.message
+      error: error.message,
+      details: error
     };
   }
 }
