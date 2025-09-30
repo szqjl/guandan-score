@@ -482,7 +482,7 @@ Page({
       let welcomeMsg = ''
       switch (entryType) {
         case 'create':
-          welcomeMsg = '欢迎创建房间！'
+          welcomeMsg = '房间已创建，开始计分吧！'
           break
         case 'share':
           welcomeMsg = '欢迎通过分享加入！'
@@ -513,7 +513,7 @@ Page({
 
       // 显示欢迎信息
       wx.showToast({
-        title: `欢迎回来，${userNickname}！`,
+        title: `${userNickname}，继续游戏吧！`,
         icon: 'success',
         duration: 2000,
       })
