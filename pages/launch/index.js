@@ -39,8 +39,8 @@ Page({
   // 显示用户信息获取对话框
   showUserInfoModal() {
     wx.showModal({
-      title: '获取你的昵称、头像',
-      content: '注册、登录小程序\n\n头像：点击选择微信头像\n昵称：点击输入微信昵称',
+      title: '扑克双上计分计分小程序申请',
+      content: '获取你的昵称、头像\n\n头像：',
       confirmText: '确定',
       cancelText: '取消',
       success: (res) => {
