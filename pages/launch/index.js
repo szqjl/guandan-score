@@ -73,30 +73,20 @@ Page({
   joinRoomWithId(roomId) {
     console.log('加入房间号:', roomId)
 
-    wx.showLoading({
-      title: '加入房间中...',
-      mask: true,
+    // 直接跳转到房间页面，传递加入房间参数
+    wx.navigateTo({
+      url: `/pages/room/index?roomId=${roomId}&isHost=false&entryType=join`,
+      success: () => {
+        console.log('跳转到房间页面成功')
+      },
+      fail: (err) => {
+        console.error('跳转失败:', err)
+        wx.showToast({
+          title: '房间不存在或已满',
+          icon: 'error',
+        })
+      },
     })
-
-    // 模拟加入房间过程
-    setTimeout(() => {
-      wx.hideLoading()
-
-      // 跳转到房间页面，传递加入房间参数
-      wx.navigateTo({
-        url: `/pages/room/index?roomId=${roomId}&isHost=false&entryType=join`,
-        success: () => {
-          console.log('跳转到房间页面成功')
-        },
-        fail: (err) => {
-          console.error('跳转失败:', err)
-          wx.showToast({
-            title: '房间不存在或已满',
-            icon: 'error',
-          })
-        },
-      })
-    }, 1000)
   },
 
   // 快速启动按钮点击事件
