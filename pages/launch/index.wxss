@@ -76,17 +76,18 @@ view, text, button, input, image {
   align-items: center;
   justify-content: center;
   margin-bottom: 40rpx;
+  height: 55rpx;
 }
 
 .main-logo {
-  width: 80rpx;
-  height: 80rpx;
+  width: 55rpx;
+  height: 55rpx;
   margin-right: 20rpx;
 }
 
 .brand-text {
   color: #FFFFFF;
-  font-size: 48rpx;
+  font-size: 36rpx;
   font-weight: 600;
   text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
 }
@@ -244,7 +245,7 @@ view, text, button, input, image {
 /* 响应式适配 */
 @media (max-width: 750rpx) {
   .brand-text {
-    font-size: 40rpx;
+    font-size: 30rpx;
   }
   
   .title-text {
