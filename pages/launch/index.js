@@ -19,7 +19,43 @@ Page({
   onCreateRoom() {
     console.log('点击创建房间')
 
-    // 直接跳转到房间页面，传递创建房间参数
+    // 检查用户是否有唯一ID
+    this.checkUserIdentityForCreateRoom()
+  },
+
+  // 检查用户身份，用于创建房间
+  checkUserIdentityForCreateRoom() {
+    const userId = wx.getStorageSync('userId')
+    
+    if (!userId) {
+      // 没有用户ID，弹出微信授权对话框
+      wx.showModal({
+        title: '用户身份确认',
+        content: '将申请同步你的微信头像和昵称',
+        confirmText: '确定',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            // 用户同意，跳转到房间页面
+            this.navigateToCreateRoom()
+          } else {
+            // 用户取消，显示提示
+            wx.showToast({
+              title: '需要用户身份才能创建房间',
+              icon: 'none',
+              duration: 2000,
+            })
+          }
+        },
+      })
+    } else {
+      // 已有用户ID，直接跳转
+      this.navigateToCreateRoom()
+    }
+  },
+
+  // 跳转到创建房间页面
+  navigateToCreateRoom() {
     wx.navigateTo({
       url: '/pages/room/index?isHost=true&entryType=create',
       success: () => {
