@@ -36,8 +36,8 @@ Page({
         cancelText: '取消',
         success: (res) => {
           if (res.confirm) {
-            // 用户同意，跳转到房间页面
-            this.navigateToCreateRoom()
+            // 用户同意，获取微信昵称和头像
+            this.getUserNickname()
           } else {
             // 用户取消，显示提示
             wx.showToast({
@@ -52,6 +52,60 @@ Page({
       // 已有用户ID，直接跳转
       this.navigateToCreateRoom()
     }
+  },
+
+  // 获取微信昵称和头像（复用房间页面的逻辑）
+  getUserNickname() {
+    wx.showLoading({
+      title: '获取昵称中...',
+    })
+
+    wx.getUserProfile({
+      desc: '用于建立您的个人战绩档案',
+      success: (res) => {
+        wx.hideLoading()
+        console.log('获取微信用户信息成功:', res)
+        console.log('用户昵称:', res.userInfo.nickName)
+        console.log('用户头像:', res.userInfo.avatarUrl)
+
+        // 根据官方文档，使用正确的字段名
+        const nickname =
+          res.userInfo.nickName || '微信用户' + Math.floor(Math.random() * 9999)
+
+        console.log('最终使用的昵称:', nickname)
+
+        // 获取微信昵称时生成唯一ID
+        const userId =
+          'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+
+        // 保存用户信息
+        wx.setStorageSync('userId', userId)
+        wx.setStorageSync('userNickname', nickname)
+        wx.setStorageSync('userAvatar', res.userInfo.avatarUrl || '')
+
+        // 显示成功提示
+        wx.showToast({
+          title: `欢迎，${nickname}！`,
+          icon: 'success',
+          duration: 2000,
+        })
+
+        // 延迟跳转到房间创建页面
+        setTimeout(() => {
+          this.navigateToCreateRoom()
+        }, 2000)
+      },
+      fail: (err) => {
+        wx.hideLoading()
+        console.log('获取用户信息失败:', err)
+        
+        wx.showToast({
+          title: '获取用户信息失败',
+          icon: 'error',
+          duration: 2000,
+        })
+      },
+    })
   },
 
   // 跳转到创建房间页面
