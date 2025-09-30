@@ -31,7 +31,7 @@
           wx:if="{{userAvatar}}" src="{{userAvatar}}" class="user-avatar" />
         <text wx:else class="default-user-avatar">👤</text>
       </button>
-      <input class="nickname-input" value="{{userNickname}}" bindchange="onNicknameChange" placeholder="点击设置昵称"
+      <input class="nickname-input" type="nickname" value="{{userNickname}}" bindchange="onNicknameChange" placeholder="点击设置昵称"
         style="margin-left: -12rpx !important; position: relative; left: -18rpx; width: 67rpx; display: block; box-sizing: border-box; top: 1rpx" />
     </view>
 
