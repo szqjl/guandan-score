@@ -43,15 +43,22 @@ Page({
       orientation: 'portrait',
       success: () => {
         console.log('页面方向已设置为竖屏')
+        // 竖屏后显示更多内容的弹窗
+        this.showDetailedModal()
       },
       fail: (err) => {
         console.log('设置页面方向失败:', err)
+        // 如果设置失败，显示简化版弹窗
+        this.showSimpleModal()
       }
     })
+  },
 
+  // 竖屏模式下的详细弹窗
+  showDetailedModal() {
     wx.showModal({
       title: '扑克双上计分计分小程序申请',
-      content: '获取你的昵称、头像\n头像: 昵称:',
+      content: '获取你的昵称、头像\n\n头像：点击选择微信头像\n昵称：点击输入微信昵称\n\n用于建立您的个人战绩档案',
       confirmText: '允许',
       cancelText: '取消',
       success: (res) => {
@@ -66,6 +73,29 @@ Page({
           }
         })
 
+        if (res.confirm) {
+          // 用户同意，跳转到房间页面让用户设置信息
+          this.navigateToCreateRoom()
+        } else {
+          // 用户取消，显示提示
+          wx.showToast({
+            title: '需要用户身份才能创建房间',
+            icon: 'none',
+            duration: 2000,
+          })
+        }
+      },
+    })
+  },
+
+  // 简化版弹窗（备用方案）
+  showSimpleModal() {
+    wx.showModal({
+      title: '扑克双上计分计分小程序申请',
+      content: '获取你的昵称、头像\n头像: 昵称:',
+      confirmText: '允许',
+      cancelText: '取消',
+      success: (res) => {
         if (res.confirm) {
           // 用户同意，跳转到房间页面让用户设置信息
           this.navigateToCreateRoom()
