@@ -38,12 +38,34 @@ Page({
 
   // 显示用户信息获取对话框
   showUserInfoModal() {
+    // 显示弹窗时设置为竖屏
+    wx.setPageOrientation({
+      orientation: 'portrait',
+      success: () => {
+        console.log('页面方向已设置为竖屏')
+      },
+      fail: (err) => {
+        console.log('设置页面方向失败:', err)
+      }
+    })
+
     wx.showModal({
       title: '扑克双上计分计分小程序申请',
       content: '获取你的昵称、头像\n头像: 昵称:',
       confirmText: '允许',
       cancelText: '取消',
       success: (res) => {
+        // 弹窗关闭后恢复横屏
+        wx.setPageOrientation({
+          orientation: 'landscape',
+          success: () => {
+            console.log('页面方向已恢复为横屏')
+          },
+          fail: (err) => {
+            console.log('恢复页面方向失败:', err)
+          }
+        })
+
         if (res.confirm) {
           // 用户同意，跳转到房间页面让用户设置信息
           this.navigateToCreateRoom()
