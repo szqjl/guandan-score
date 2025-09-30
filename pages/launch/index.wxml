@@ -1,0 +1,50 @@
+<!--pages/launch/index.wxml-->
+<view class="launch-page">
+  <!-- 品牌标识 -->
+  <view class="brand-section">
+    <image class="main-logo" src="/images/GD.png" mode="aspectFit" />
+    <text class="brand-text">掼蛋计分</text>
+  </view>
+
+  <!-- 功能选择区域 -->
+  <view class="function-section">
+    <view class="function-title">
+      <text class="title-text">选择功能</text>
+    </view>
+    
+    <!-- 三个功能按钮 -->
+    <view class="buttons-container">
+      <!-- 创建房间按钮 -->
+      <button class="function-btn create-room-btn" bindtap="onCreateRoom">
+        <view class="btn-icon">🏠</view>
+        <view class="btn-content">
+          <text class="btn-title">创建房间</text>
+          <text class="btn-desc">创建多人游戏房间</text>
+        </view>
+      </button>
+
+      <!-- 加入房间按钮 -->
+      <button class="function-btn join-room-btn" bindtap="onJoinRoom">
+        <view class="btn-icon">🔍</view>
+        <view class="btn-content">
+          <text class="btn-title">加入房间</text>
+          <text class="btn-desc">输入房间号加入游戏</text>
+        </view>
+      </button>
+
+      <!-- 快速启动按钮 -->
+      <button class="function-btn quick-start-btn" bindtap="onQuickStart">
+        <view class="btn-icon">⚡</view>
+        <view class="btn-content">
+          <text class="btn-title">快速启动</text>
+          <text class="btn-desc">单机模式，即开即用</text>
+        </view>
+      </button>
+    </view>
+  </view>
+
+  <!-- 底部说明 -->
+  <view class="footer-section">
+    <text class="footer-text">选择您需要的功能开始游戏</text>
+  </view>
+</view>

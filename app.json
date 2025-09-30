@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/launch/index",
     "pages/index/index",
     "pages/history/index",
     "pages/team-setting/index",
