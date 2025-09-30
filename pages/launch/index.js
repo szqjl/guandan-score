@@ -40,7 +40,7 @@ Page({
   showUserInfoModal() {
     wx.showModal({
       title: '扑克双上计分计分小程序申请',
-      content: '获取你的昵称、头像\n\n头像：\n昵称：',
+      content: '获取你的昵称、头像\n头像: 昵称:',
       confirmText: '允许',
       cancelText: '取消',
       success: (res) => {
