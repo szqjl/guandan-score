@@ -85,8 +85,15 @@ Page({
         isMultiMode: true,
         roomId: options.roomId,
         teams: JSON.parse(options.teams),
+        // 从房间页面传递的比赛模式参数
+        rule: options.rule || 'by-rounds',
+        maxRounds: parseInt(options.maxRounds) || 10,
       })
       console.log('进入多人模式:', this.data)
+      console.log('比赛模式设置:', {
+        rule: this.data.rule,
+        maxRounds: this.data.maxRounds,
+      })
     }
 
     // 快速初始化 - 减少复杂处理和日志输出,提高启动速度
@@ -788,10 +795,10 @@ Page({
   // 创建比赛
   onCreateMatch() {
     console.log('onCreateMatch 函数被调用')
-    
+
     // 生成房间号
     const roomId = this.generateRoomName()
-    
+
     // 直接跳转到房间页面，在房间页面检查用户身份
     wx.navigateTo({
       url: `/pages/room/index?roomId=${roomId}&isHost=true&hostSeat=east&entryType=create`,
@@ -803,9 +810,9 @@ Page({
         wx.showToast({
           title: '跳转失败',
           icon: 'none',
-          duration: 2000
+          duration: 2000,
         })
-      }
+      },
     })
   },
 
@@ -815,7 +822,8 @@ Page({
     try {
       wx.showModal({
         title: '设置您的个人昵称',
-        content: '为了在个人中心准确查看您的比赛记录，请设置一个专属的个人昵称：',
+        content:
+          '为了在个人中心准确查看您的比赛记录，请设置一个专属的个人昵称：',
         confirmText: '微信昵称',
         cancelText: '随机昵称',
         success: (res) => {
@@ -832,7 +840,7 @@ Page({
         },
         fail: (err) => {
           console.error('显示昵称设置弹窗失败:', err)
-        }
+        },
       })
       console.log('showModal 调用完成')
     } catch (error) {
@@ -855,7 +863,7 @@ Page({
           // 用户取消授权，使用随机昵称
           this.generateRandomNickname()
         }
-      }
+      },
     })
   },
 
@@ -870,51 +878,71 @@ Page({
       success: (res) => {
         wx.hideLoading()
         const nickname = res.userInfo.nickName || this.generateRandomNickname()
-        
+
         // 获取微信昵称时生成唯一ID
-        const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+        const userId =
+          'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
         wx.setStorageSync('userId', userId)
         wx.setStorageSync('userNickname', nickname)
-        
+
         wx.showToast({
           title: `欢迎，${nickname}！`,
           icon: 'success',
-          duration: 2000
+          duration: 2000,
         })
-        
+
         // 创建房间（使用个人昵称作为房主昵称）
         this.createRoomWithNickname(nickname, userId)
       },
       fail: (err) => {
         wx.hideLoading()
         console.log('获取用户信息失败:', err)
-        
+
         // 获取失败，使用随机昵称
         this.generateRandomNickname()
-      }
+      },
     })
   },
 
   // 生成随机个人昵称（用于个人中心和历史记录）
   generateRandomNickname() {
-    const adjectives = ['聪明', '勇敢', '机智', '灵活', '沉稳', '果断', '敏锐', '精准']
-    const nouns = ['玩家', '高手', '大师', '达人', '专家', '能手', '精英', '冠军']
-    
-    const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)]
+    const adjectives = [
+      '聪明',
+      '勇敢',
+      '机智',
+      '灵活',
+      '沉稳',
+      '果断',
+      '敏锐',
+      '精准',
+    ]
+    const nouns = [
+      '玩家',
+      '高手',
+      '大师',
+      '达人',
+      '专家',
+      '能手',
+      '精英',
+      '冠军',
+    ]
+
+    const randomAdjective =
+      adjectives[Math.floor(Math.random() * adjectives.length)]
     const randomNoun = nouns[Math.floor(Math.random() * nouns.length)]
     const randomNum = Math.floor(Math.random() * 999) + 1
-    
+
     const nickname = randomAdjective + randomNoun + randomNum
-    
+
     // 随机昵称不生成ID，只分配昵称
     wx.setStorageSync('userNickname', nickname)
-    
+
     wx.showToast({
       title: `您的个人昵称：${nickname}`,
       icon: 'none',
-      duration: 3000
+      duration: 3000,
     })
-    
+
     // 创建房间（使用个人昵称作为房主昵称）
     this.createRoomWithNickname(nickname, userId)
   },
@@ -926,7 +954,7 @@ Page({
     wx.showToast({
       title: '用户信息已清除，下次创建比赛将触发首次登录',
       icon: 'success',
-      duration: 2000
+      duration: 2000,
     })
   },
 
@@ -934,18 +962,25 @@ Page({
   testShowUserInfo() {
     const userId = wx.getStorageSync('userId')
     const userNickname = wx.getStorageSync('userNickname')
-    
+
     wx.showModal({
       title: '当前用户信息',
-      content: `用户ID: ${userId || '未设置'}\n昵称: ${userNickname || '未设置'}`,
+      content: `用户ID: ${userId || '未设置'}\n昵称: ${
+        userNickname || '未设置'
+      }`,
       showCancel: false,
-      confirmText: '知道了'
+      confirmText: '知道了',
     })
   },
 
   // 使用昵称创建房间
   createRoomWithNickname(nickname, userId) {
-    console.log('createRoomWithNickname 函数被调用，昵称:', nickname, '用户ID:', userId)
+    console.log(
+      'createRoomWithNickname 函数被调用，昵称:',
+      nickname,
+      '用户ID:',
+      userId
+    )
 
     // 获取用户偏好
     const userSettings = wx.getStorageSync('userSettings') || {}
@@ -1025,8 +1060,7 @@ Page({
 
   // 生成房间名称
   generateRoomName() {
-    const timestamp = Date.now()
-    return `房间${timestamp.toString().slice(-6)}`
+    return Math.floor(1000 + Math.random() * 9000).toString()
   },
 
   // 退出多人模式
@@ -2042,11 +2076,11 @@ Page({
           } else {
             wx.showToast({
               title: '房间号格式错误',
-              icon: 'none'
+              icon: 'none',
             })
           }
         }
-      }
+      },
     })
   },
 
@@ -2307,6 +2341,8 @@ Page({
             team: cloudTeam,
             points: points,
             actionType: actionType,
+            rule: this.data.rule,
+            maxRounds: this.data.maxRounds,
           },
         },
       })

@@ -1,110 +1,174 @@
 <!--pages/room/index.wxml-->
-<view class="room-page">
-  <!-- 左侧信息块 -->
-  <view class="left-info-block">
-    <!-- 房间信息区域 -->
-    <view class="room-info-section">
-      <view class="room-info">
-        <text class="room-title">🏠 {{roomId}}</text>
-        <view class="user-info" bindtap="onUserInfoClick">
-          <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-            <image wx:if="{{userAvatar}}" src="{{userAvatar}}" class="user-avatar" />
-            <text wx:else class="default-user-avatar">👤</text>
-          </button>
-          <input class="nickname-input" value="{{userNickname}}" bindchange="onNicknameChange" placeholder="点击设置昵称" />
-        </view>
+<view class="room-page" style="position: relative; left: 0rpx; top: 0rpx">
+  <!-- 比赛模式选择器 - 屏幕最左边 -->
+  <view class="game-mode-selector"
+    style="width: 133rpx; display: block; box-sizing: border-box; left: 20rpx; top: 100rpx">
+    <view class="mode-title">比赛模式</view>
+    <radio-group bindchange="onRuleChange">
+      <label class="mode-option">
+        <radio value="by-A" checked="{{rule === 'by-A'}}" />
+        <text class="mode-text">过A制</text>
+      </label>
+      <label class="mode-option">
+        <radio value="by-rounds" checked="{{rule === 'by-rounds'}}" />
+        <text class="mode-text">把数制</text>
+      </label>
+      <view wx:if="{{rule === 'by-rounds'}}" class="rounds-selector">
+        <text class="rounds-display-text" bindtap="onShowRoundsPicker">{{maxRounds}}</text>
       </view>
-      <view class="game-mode-selector">
-        <picker bindchange="onGameModeChange" value="{{gameModeIndex}}" range="{{gameModeOptions}}" range-key="text">
-          <view class="mode-picker">
-            <text class="mode-icon">📋</text>
-            <text class="mode-text">{{gameModeText}}</text>
-            <text class="mode-arrow">▼</text>
-          </view>
-        </picker>
-      </view>
+    </radio-group>
+  </view>
+
+  <!-- 顶部标题栏 -->
+  <view class="room-header">
+    <!-- 用户信息 -->
+    <view class="user-info" bindtap="onUserInfoClick"
+      style="width: 142rpx; display: flex; box-sizing: border-box; height: 37rpx; position: relative; left: 23rpx; top: -2rpx">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar"
+        style="width: 50rpx; display: flex; box-sizing: border-box; left: -21rpx; top: 0rpx; position: relative; height: 48rpx">
+        <image
+          style="width: 38rpx; display: block; box-sizing: border-box; height: 38rpx; position: ; left: -8rpx; top: 1rpx"
+          wx:if="{{userAvatar}}" src="{{userAvatar}}" class="user-avatar" />
+        <text wx:else class="default-user-avatar">👤</text>
+      </button>
+      <input class="nickname-input" value="{{userNickname}}" bindchange="onNicknameChange" placeholder="点击设置昵称"
+        style="margin-left: -12rpx !important; position: relative; left: -18rpx; width: 67rpx; display: block; box-sizing: border-box; top: 1rpx" />
+    </view>
+
+    <!-- 品牌标识 -->
+    <view class="brand-header">
+      <image class="main-logo" src="/images/GD.png" mode="aspectFit" />
+      <text class="gd-text">GD</text>
+      <text class="other-text">双上计分</text>
+    </view>
+
+    <!-- 房间信息 -->
+    <view class="room-info-header">
+      <text class="room-title">🏠 {{roomId}}</text>
     </view>
   </view>
-  
-  <!-- 中间牌桌块 -->
-  <view class="center-table-block">
-    <!-- 座位布局：东南西北 + 中央牌桌 -->
-    <view class="seats-layout">
-      <!-- 北座 -->
-      <view class="seat-container north-container">
-        <view class="player-seat north-seat {{seats.north.isClickable ? 'clickable' : 'disabled'}}" 
-              bindtap="onSeatClick" data-seat="north">
-          <view class="seat-avatar">
-            <image wx:if="{{seats.north.avatar}}" src="{{seats.north.avatar}}" />
-            <text wx:else class="default-avatar">{{seats.north.playerName ? seats.north.playerName.charAt(0) : '北'}}</text>
+
+  <!-- 主要内容区域 -->
+  <view class="room-content"
+    style="width: 562rpx; display: flex; box-sizing: border-box; left: 143rpx; top: 18rpx; position: relative; height: 224rpx">
+    <!-- 左侧信息块 -->
+
+
+    <!-- 中间牌桌块 -->
+    <view class="center-table-block"
+      style="height: 171rpx; display: flex; box-sizing: border-box; left: -2rpx; top: 8rpx; position: relative; width: 458rpx">
+      <!-- 二维码容器 -->
+      <view class="qr-code-container">
+        <view class="qr-title">扫码加入</view>
+        <view class="qr-code">
+          <image
+            style="position: relative; left: -32rpx; top: -18rpx; width: -13rpx; display: inline-block; box-sizing: border-box"
+            src="{{qrCodeUrl}}" mode="aspectFit" class="qr-image" />
+        </view>
+
+      </view>
+
+      <!-- 用户进入信息 -->
+      <view class="user-entry-info"
+        style="width: 94rpx; display: block; box-sizing: border-box; left: 354rpx; top: 18rpx; position: absolute">
+        <view class="entry-title">玩家动态</view>
+        <view class="entry-list">
+          <view wx:for="{{userEntries}}" wx:key="index" class="entry-item">
+            <text class="entry-text">{{item}}</text>
           </view>
         </view>
+      </view>
+
+      <!-- 北座 -->
+      <view class="seat-container north-container">
         <view class="seat-label north-label">
           <text class="player-name">{{seats.north.playerName || seats.north.seatName}}</text>
           <text wx:if="{{seats.north.isHost}}" class="host-badge">房主</text>
         </view>
+        <view class="seat-toggle-icon">
+          <image class="seat-icon" src="/images/man.png" mode="aspectFit" />
+        </view>
       </view>
-      
+
       <!-- 西座 -->
       <view class="seat-container west-container">
-        <view class="player-seat west-seat {{seats.west.isClickable ? 'clickable' : 'disabled'}}" 
-              bindtap="onSeatClick" data-seat="west">
-          <view class="seat-avatar">
-            <image wx:if="{{seats.west.avatar}}" src="{{seats.west.avatar}}" />
-            <text wx:else class="default-avatar">{{seats.west.playerName ? seats.west.playerName.charAt(0) : '西'}}</text>
-          </view>
-        </view>
         <view class="seat-label west-label">
           <text class="player-name">{{seats.west.playerName || seats.west.seatName}}</text>
           <text wx:if="{{seats.west.isHost}}" class="host-badge">房主</text>
         </view>
+        <view class="seat-toggle-icon">
+          <image class="seat-icon" src="/images/man.png" mode="aspectFit" />
+        </view>
       </view>
-      
+
       <!-- 中央牌桌 -->
-      <view class="poker-table">
-        <image class="qr-image" src="{{qrCodeUrl}}" />
-        <text class="qr-tip">扫码加入</text>
+      <view class="poker-table"
+        style="position: absolute; left: 233rpx; top: 83rpx; width: 84rpx; height: 86rpx; display: flex; box-sizing: border-box">
       </view>
-      
+
       <!-- 东座 -->
       <view class="seat-container east-container">
-        <view class="player-seat east-seat {{seats.east.isClickable ? 'clickable' : 'disabled'}}" 
-              bindtap="onSeatClick" data-seat="east">
-          <view class="seat-avatar">
-            <image wx:if="{{seats.east.avatar}}" src="{{seats.east.avatar}}" />
-            <text wx:else class="default-avatar">{{seats.east.playerName ? seats.east.playerName.charAt(0) : '东'}}</text>
-          </view>
-        </view>
         <view class="seat-label east-label">
           <text class="player-name">{{seats.east.playerName || seats.east.seatName}}</text>
           <text wx:if="{{seats.east.isHost}}" class="host-badge">房主</text>
         </view>
+        <view class="seat-toggle-icon">
+          <image class="seat-icon" src="/images/man.png" mode="aspectFit" />
+        </view>
       </view>
-      
+
       <!-- 南座 -->
       <view class="seat-container south-container">
-        <view class="player-seat south-seat {{seats.south.isClickable ? 'clickable' : 'disabled'}}" 
-              bindtap="onSeatClick" data-seat="south">
-          <view class="seat-avatar">
-            <image wx:if="{{seats.south.avatar}}" src="{{seats.south.avatar}}" />
-            <text wx:else class="default-avatar">{{seats.south.playerName ? seats.south.playerName.charAt(0) : '南'}}</text>
-          </view>
-        </view>
         <view class="seat-label south-label">
           <text class="player-name">{{seats.south.playerName || seats.south.seatName}}</text>
           <text wx:if="{{seats.south.isHost}}" class="host-badge">房主</text>
         </view>
+        <view class="seat-toggle-icon">
+          <image class="seat-icon" src="/images/man.png" mode="aspectFit" />
+        </view>
       </view>
     </view>
-  </view>
-  
-  <!-- 右侧按钮块 -->
-  <view class="right-buttons-block">
-    <!-- 操作按钮区域 -->
-    <view class="action-buttons">
-      <button class="create-btn" bindtap="onStartGame" disabled="{{!canStartGame}}">创建</button>
-      <button class="share-btn" bindtap="onShareRoom">分享房间</button>
+
+    <!-- 右侧按钮块 -->
+    <view class="right-buttons-block">
+      <button class="create-btn" bindtap="onStartGame" disabled="{{!canStartGame}}"
+        style="height: 28rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">创建</button>
+      <button class="share-btn" bindtap="onShareRoom">分享</button>
       <button class="close-btn" bindtap="onLeaveRoom">离开</button>
+    </view>
+  </view>
+
+  <!-- 把数选择弹窗 -->
+  <view class="rounds-picker-modal" wx:if="{{showRoundsPicker}}">
+    <view class="rounds-picker-overlay" bindtap="onCloseRoundsPicker"></view>
+    <view class="rounds-picker-content">
+      <view class="rounds-picker-header">
+        <text class="rounds-picker-title">选择最大把数</text>
+      </view>
+      <view class="rounds-picker-grid">
+        <view class="rounds-picker-item {{tempMaxRounds === 7 ? 'selected' : ''}}" data-value="7"
+          bindtap="onSelectRounds">7把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 8 ? 'selected' : ''}}" data-value="8"
+          bindtap="onSelectRounds">8把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 9 ? 'selected' : ''}}" data-value="9"
+          bindtap="onSelectRounds">9把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 10 ? 'selected' : ''}}" data-value="10"
+          bindtap="onSelectRounds">10把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 11 ? 'selected' : ''}}" data-value="11"
+          bindtap="onSelectRounds">11把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 12 ? 'selected' : ''}}" data-value="12"
+          bindtap="onSelectRounds">12把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 13 ? 'selected' : ''}}" data-value="13"
+          bindtap="onSelectRounds">13把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 14 ? 'selected' : ''}}" data-value="14"
+          bindtap="onSelectRounds">14把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 15 ? 'selected' : ''}}" data-value="15"
+          bindtap="onSelectRounds">15把</view>
+      </view>
+      <view class="rounds-picker-footer">
+        <button class="rounds-picker-confirm" bindtap="onConfirmRounds">确定</button>
+        <button class="rounds-picker-cancel" bindtap="onCloseRoundsPicker">取消</button>
+      </view>
     </view>
   </view>
 </view>

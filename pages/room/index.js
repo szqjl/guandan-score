@@ -6,18 +6,63 @@ Page({
     gameMode: 'guoA',
     gameModeText: '过A制',
     qrCodeUrl: '',
-    
+
+    // 比赛模式相关
+    rule: 'by-rounds',
+    maxRounds: 10,
+    showRoundsPicker: false,
+    tempMaxRounds: 10,
+
     // 用户信息
     userNickname: '',
     userAvatar: '',
+    currentUserId: '', // 当前用户ID
 
     // 玩家座位（按方向组织）
     seats: {
-      north: { playerName: '', avatar: '', isHost: false, seatName: '北', userId: '', isOccupied: false, isClickable: true },
-      east: { playerName: '', avatar: '', isHost: false, seatName: '东', userId: '', isOccupied: false, isClickable: true },
-      west: { playerName: '', avatar: '', isHost: false, seatName: '西', userId: '', isOccupied: false, isClickable: true },
-      south: { playerName: '', avatar: '', isHost: false, seatName: '南', userId: '', isOccupied: false, isClickable: true },
+      north: {
+        playerName: '',
+        avatar: '',
+        isHost: false,
+        seatName: '北',
+        userId: '',
+        isOccupied: false,
+        isClickable: true,
+      },
+      east: {
+        playerName: '',
+        avatar: '',
+        isHost: false,
+        seatName: '东',
+        userId: '',
+        isOccupied: false,
+        isClickable: true,
+      },
+      west: {
+        playerName: '',
+        avatar: '',
+        isHost: false,
+        seatName: '西',
+        userId: '',
+        isOccupied: false,
+        isClickable: true,
+      },
+      south: {
+        playerName: '',
+        avatar: '',
+        isHost: false,
+        seatName: '南',
+        userId: '',
+        isOccupied: false,
+        isClickable: true,
+      },
     },
+
+    // 玩家列表
+    playersList: [],
+
+    // 观战模式
+    isSpectator: false,
 
     // 房主信息
     isHost: true,
@@ -31,24 +76,33 @@ Page({
 
     // 游戏状态
     canStartGame: false,
-    
+
     // 游戏模式选择器
     gameModeIndex: 0,
     gameModeOptions: [
       { value: 'guoA', text: '过A制' },
-      { value: 'baShu', text: '把数制' }
+      { value: 'baShu', text: '把数制' },
     ],
   },
 
   onLoad(options) {
     const { roomId, isHost, hostSeat, entryType } = options
 
+    // 生成默认房间ID（如果没有传递）
+    const defaultRoomId =
+      roomId || Math.floor(1000 + Math.random() * 9000).toString()
+
     this.setData({
-      roomId: roomId || '123456',
+      roomId: defaultRoomId,
       isHost: isHost === 'true',
       hostSeat: hostSeat || 'east',
       entryType: entryType || 'unknown', // 进入方式：create/share/scan/unknown
+      currentUserId:
+        'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
     })
+
+    // 初始化玩家列表
+    this.updatePlayersList()
 
     // 检查用户身份（所有进入房间的用户都需要检查）
     this.checkUserIdentity()
@@ -119,10 +173,22 @@ Page({
     const seats = this.data.seats
     const updatedSeats = {
       ...seats,
-      east: { ...seats.east, playerName: seats.east.playerName || seats.east.seatName },
-      west: { ...seats.west, playerName: seats.west.playerName || seats.west.seatName },
-      south: { ...seats.south, playerName: seats.south.playerName || seats.south.seatName },
-      north: { ...seats.north, playerName: seats.north.playerName || seats.north.seatName },
+      east: {
+        ...seats.east,
+        playerName: seats.east.playerName || seats.east.seatName,
+      },
+      west: {
+        ...seats.west,
+        playerName: seats.west.playerName || seats.west.seatName,
+      },
+      south: {
+        ...seats.south,
+        playerName: seats.south.playerName || seats.south.seatName,
+      },
+      north: {
+        ...seats.north,
+        playerName: seats.north.playerName || seats.north.seatName,
+      },
     }
 
     this.setData({
@@ -140,17 +206,17 @@ Page({
     const seat = e.currentTarget.dataset.seat
     const seatData = this.data.seats[seat]
     const currentUserId = wx.getStorageSync('userId')
-    
+
     if (!seatData.isClickable) {
       // 座位不可点击，显示提示
       wx.showToast({
         title: '该座位已被占用',
         icon: 'none',
-        duration: 1500
+        duration: 1500,
       })
       return
     }
-    
+
     if (seatData.isOccupied) {
       // 座位已占用
       if (seatData.userId === currentUserId) {
@@ -161,7 +227,7 @@ Page({
         wx.showToast({
           title: '该座位已被其他玩家占用',
           icon: 'none',
-          duration: 1500
+          duration: 1500,
         })
       }
     } else {
@@ -382,10 +448,12 @@ Page({
     const teamInfo = this.getTeamInfo()
     console.log('获取队伍信息:', teamInfo)
 
-    // 跳转到主页，传递队伍信息
+    // 跳转到主页，传递队伍信息和比赛模式
     const navigateUrl = `/pages/index/index?roomId=${
       this.data.roomId
-    }&teams=${JSON.stringify(teamInfo)}&isMultiMode=true`
+    }&teams=${JSON.stringify(teamInfo)}&isMultiMode=true&rule=${
+      this.data.rule
+    }&maxRounds=${this.data.maxRounds}`
     console.log('准备跳转到主页:', navigateUrl)
 
     wx.navigateTo({
@@ -409,10 +477,10 @@ Page({
     if (!userId || !userNickname) {
       // 首次登录，根据进入方式生成不同的提示
       this.generateRandomNickname()
-      
+
       // 根据进入方式显示不同提示
       let welcomeMsg = ''
-      switch(entryType) {
+      switch (entryType) {
         case 'create':
           welcomeMsg = '欢迎创建房间！'
           break
@@ -428,26 +496,26 @@ Page({
         default:
           welcomeMsg = '欢迎进入房间！'
       }
-      
+
       setTimeout(() => {
         wx.showToast({
           title: welcomeMsg,
           icon: 'success',
-          duration: 2000
+          duration: 2000,
         })
       }, 1000)
     } else {
       // 已有用户信息，更新页面显示
       this.setData({
         userNickname: userNickname,
-        userAvatar: userAvatar || ''
+        userAvatar: userAvatar || '',
       })
-      
+
       // 显示欢迎信息
       wx.showToast({
         title: `欢迎回来，${userNickname}！`,
         icon: 'success',
-        duration: 2000
+        duration: 2000,
       })
     }
   },
@@ -467,7 +535,7 @@ Page({
           // 用户选择使用随机昵称
           this.generateRandomNickname()
         }
-      }
+      },
     })
   },
 
@@ -487,7 +555,7 @@ Page({
           // 用户选择随机生成
           this.generateRandomNickname()
         }
-      }
+      },
     })
   },
 
@@ -504,39 +572,41 @@ Page({
         console.log('获取微信用户信息成功:', res)
         console.log('用户昵称:', res.userInfo.nickName)
         console.log('用户头像:', res.userInfo.avatarUrl)
-        
+
         // 根据官方文档，使用正确的字段名
-        const nickname = res.userInfo.nickName || '微信用户' + Math.floor(Math.random() * 9999)
-        
+        const nickname =
+          res.userInfo.nickName || '微信用户' + Math.floor(Math.random() * 9999)
+
         console.log('最终使用的昵称:', nickname)
-        
+
         // 获取微信昵称时生成唯一ID
-        const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
-        
+        const userId =
+          'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+
         // 保存用户信息
         wx.setStorageSync('userId', userId)
         wx.setStorageSync('userNickname', nickname)
         wx.setStorageSync('userAvatar', res.userInfo.avatarUrl || '')
-        
+
         // 更新页面显示
         this.setData({
           userNickname: nickname,
-          userAvatar: res.userInfo.avatarUrl || ''
+          userAvatar: res.userInfo.avatarUrl || '',
         })
-        
+
         wx.showToast({
           title: `欢迎，${nickname}！`,
           icon: 'success',
-          duration: 2000
+          duration: 2000,
         })
       },
       fail: (err) => {
         wx.hideLoading()
         console.log('获取用户信息失败:', err)
-        
+
         // 获取失败，使用随机昵称
         this.generateRandomNickname()
-      }
+      },
     })
   },
 
@@ -554,7 +624,7 @@ Page({
           // 用户取消或输入为空，使用随机昵称
           this.generateRandomNickname()
         }
-      }
+      },
     })
   },
 
@@ -562,59 +632,79 @@ Page({
   setUserNickname(nickname) {
     // 手动设置昵称不生成ID，只更新昵称
     wx.setStorageSync('userNickname', nickname)
-    
+
     // 检查是否有ID，如果有则记录用户档案
     const userId = wx.getStorageSync('userId')
     if (userId) {
       this.recordUserEntry(userId, nickname)
     }
-    
+
     // 更新页面显示
     this.setData({
-      userNickname: nickname
+      userNickname: nickname,
     })
-    
+
     wx.showToast({
       title: `欢迎，${nickname}！`,
       icon: 'success',
-      duration: 2000
+      duration: 2000,
     })
   },
 
   // 生成随机个人昵称
   generateRandomNickname() {
-    const adjectives = ['聪明', '勇敢', '机智', '灵活', '沉稳', '果断', '敏锐', '精准']
-    const nouns = ['玩家', '高手', '大师', '达人', '专家', '能手', '精英', '冠军']
-    
-    const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)]
+    const adjectives = [
+      '聪明',
+      '勇敢',
+      '机智',
+      '灵活',
+      '沉稳',
+      '果断',
+      '敏锐',
+      '精准',
+    ]
+    const nouns = [
+      '玩家',
+      '高手',
+      '大师',
+      '达人',
+      '专家',
+      '能手',
+      '精英',
+      '冠军',
+    ]
+
+    const randomAdjective =
+      adjectives[Math.floor(Math.random() * adjectives.length)]
     const randomNoun = nouns[Math.floor(Math.random() * nouns.length)]
     const randomNum = Math.floor(Math.random() * 999) + 1
-    
+
     const nickname = randomAdjective + randomNoun + randomNum
-    
+
     // 根据进入方式决定是否生成ID
     const entryType = this.data.entryType
     if (entryType === 'scan' || entryType === 'share') {
       // 扫码和分享登录时生成唯一ID
-      const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+      const userId =
+        'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
       wx.setStorageSync('userId', userId)
-      
+
       // 记录用户进入方式和个人档案
       this.recordUserEntry(userId, nickname)
     }
-    
+
     // 保存昵称
     wx.setStorageSync('userNickname', nickname)
-    
+
     // 更新页面显示
     this.setData({
-      userNickname: nickname
+      userNickname: nickname,
     })
-    
+
     wx.showToast({
       title: `欢迎，${nickname}！`,
       icon: 'success',
-      duration: 2000
+      duration: 2000,
     })
   },
 
@@ -661,34 +751,34 @@ Page({
   selectSeat(seat) {
     const userId = wx.getStorageSync('userId')
     const userNickname = wx.getStorageSync('userNickname')
-    
+
     if (!userId || !userNickname) {
       this.checkUserIdentity()
       return
     }
-    
+
     // 检查用户是否已经占用其他座位
     const currentSeat = this.getUserCurrentSeat(userId)
     if (currentSeat) {
       // 用户已经占用其他座位，先释放原座位
       this.releaseSeat(currentSeat)
     }
-    
+
     // 占用新座位
     this.setData({
       [`seats.${seat}.playerName`]: userNickname,
       [`seats.${seat}.userId`]: userId,
       [`seats.${seat}.isOccupied`]: true,
-      [`seats.${seat}.isClickable`]: false
+      [`seats.${seat}.isClickable`]: false,
     })
-    
+
     // 同步到云端
     this.updateSeatToCloud(seat, userId, userNickname)
-    
+
     wx.showToast({
       title: `已选择${this.data.seats[seat].seatName}`,
       icon: 'success',
-      duration: 1500
+      duration: 1500,
     })
   },
 
@@ -698,9 +788,9 @@ Page({
       [`seats.${seat}.playerName`]: '',
       [`seats.${seat}.userId`]: '',
       [`seats.${seat}.isOccupied`]: false,
-      [`seats.${seat}.isClickable`]: true
+      [`seats.${seat}.isClickable`]: true,
     })
-    
+
     // 同步到云端
     this.releaseSeatToCloud(seat)
   },
@@ -728,14 +818,14 @@ Page({
           // 显示可用座位选择
           this.showAvailableSeats()
         }
-      }
+      },
     })
   },
 
   // 显示可用座位选择
   showAvailableSeats() {
     const availableSeats = []
-    
+
     Object.keys(this.data.seats).forEach((seat) => {
       if (!this.data.seats[seat].isOccupied) {
         availableSeats.push({
@@ -766,74 +856,78 @@ Page({
   onGameModeChange(e) {
     const index = e.detail.value
     const selectedMode = this.data.gameModeOptions[index]
-    
+
     this.setData({
       gameModeIndex: index,
       gameMode: selectedMode.value,
-      gameModeText: selectedMode.text
+      gameModeText: selectedMode.text,
     })
-    
+
     // 保存用户设置
     wx.setStorageSync('gameMode', selectedMode.value)
-    
+
     wx.showToast({
       title: `已选择${selectedMode.text}`,
       icon: 'success',
-      duration: 1500
+      duration: 1500,
     })
   },
 
   // 更新座位到云端
   updateSeatToCloud(seat, userId, userNickname) {
-    wx.cloud.callFunction({
-      name: 'roomManager',
-      data: {
-        action: 'updateSeat',
+    wx.cloud
+      .callFunction({
+        name: 'roomManager',
         data: {
-          roomId: this.data.roomId,
-          seat: seat,
-          userId: userId,
-          userNickname: userNickname
-        }
-      }
-    }).catch(err => {
-      console.error('更新座位失败:', err)
-    })
+          action: 'updateSeat',
+          data: {
+            roomId: this.data.roomId,
+            seat: seat,
+            userId: userId,
+            userNickname: userNickname,
+          },
+        },
+      })
+      .catch((err) => {
+        console.error('更新座位失败:', err)
+      })
   },
 
   // 释放座位到云端
   releaseSeatToCloud(seat) {
-    wx.cloud.callFunction({
-      name: 'roomManager',
-      data: {
-        action: 'releaseSeat',
+    wx.cloud
+      .callFunction({
+        name: 'roomManager',
         data: {
-          roomId: this.data.roomId,
-          seat: seat
-        }
-      }
-    }).catch(err => {
-      console.error('释放座位失败:', err)
-    })
+          action: 'releaseSeat',
+          data: {
+            roomId: this.data.roomId,
+            seat: seat,
+          },
+        },
+      })
+      .catch((err) => {
+        console.error('释放座位失败:', err)
+      })
   },
 
   // 选择头像事件
   onChooseAvatar(e) {
     console.log('选择头像:', e.detail)
     const { avatarUrl } = e.detail
-    
+
     // 更新页面显示
     this.setData({
-      userAvatar: avatarUrl
+      userAvatar: avatarUrl,
     })
-    
+
     // 保存到本地存储
     wx.setStorageSync('userAvatar', avatarUrl)
-    
+
     wx.showToast({
       title: '头像设置成功',
       icon: 'success',
-      duration: 1500
+      duration: 1500,
     })
   },
 
@@ -841,21 +935,21 @@ Page({
   onNicknameChange(e) {
     console.log('昵称输入:', e.detail.value)
     const nickname = e.detail.value.trim()
-    
+
     if (nickname && nickname.length > 0) {
       // 更新页面显示
       this.setData({
-        userNickname: nickname
+        userNickname: nickname,
       })
-      
+
       // 保存昵称到本地存储
       wx.setStorageSync('userNickname', nickname)
-      
+
       // 昵称修改不影响ID，只更新昵称
       wx.showToast({
         title: `欢迎，${nickname}！`,
         icon: 'success',
-        duration: 1500
+        duration: 1500,
       })
     }
   },
@@ -863,12 +957,16 @@ Page({
   // 记录用户进入方式和个人档案
   recordUserEntry(userId, nickname) {
     const entryType = this.data.entryType
-    
+
     // 只有主动创建、扫码和分享进入才记录个人中心
-    if (entryType === 'create' || entryType === 'share' || entryType === 'scan') {
+    if (
+      entryType === 'create' ||
+      entryType === 'share' ||
+      entryType === 'scan'
+    ) {
       const roomId = this.data.roomId
       const isHost = this.data.isHost
-      
+
       // 构建用户档案数据
       const userProfile = {
         userId: userId,
@@ -876,15 +974,15 @@ Page({
         entryType: entryType, // 仅作为代码内部标记使用
         totalRooms: 1,
         hostRooms: isHost ? 1 : 0,
-        joinRooms: isHost ? 0 : 1
+        joinRooms: isHost ? 0 : 1,
       }
-      
+
       // 保存到本地存储
       wx.setStorageSync('userProfile', userProfile)
-      
+
       // 同步到云端（如果网络可用）
       this.syncUserProfileToCloud(userProfile)
-      
+
       console.log('用户档案已记录:', userProfile)
     } else {
       console.log('手动进入，不记录个人中心')
@@ -893,27 +991,201 @@ Page({
 
   // 同步用户档案到云端
   syncUserProfileToCloud(userProfile) {
-    wx.cloud.callFunction({
-      name: 'userManager',
-      data: {
-        action: 'createOrUpdateUser',
-        data: userProfile
+    wx.cloud
+      .callFunction({
+        name: 'userManager',
+        data: {
+          action: 'createOrUpdateUser',
+          data: userProfile,
+        },
+      })
+      .then((res) => {
+        console.log('用户档案同步成功:', res)
+      })
+      .catch((err) => {
+        console.error('用户档案同步失败:', err)
+        // 失败不影响用户体验，数据已保存在本地
+      })
+  },
+
+  // 更新玩家列表
+  updatePlayersList() {
+    const playersList = []
+    const seats = this.data.seats
+
+    // 遍历所有座位，收集玩家信息
+    Object.keys(seats).forEach((seatKey) => {
+      const seat = seats[seatKey]
+      if (seat.isOccupied || seat.isHost) {
+        playersList.push({
+          userId: seat.userId || `seat_${seatKey}`,
+          nickname: seat.playerName || seat.seatName,
+          avatar: seat.avatar,
+          seatName: seat.seatName,
+          isHost: seat.isHost,
+          seatKey: seatKey,
+        })
       }
-    }).then(res => {
-      console.log('用户档案同步成功:', res)
-    }).catch(err => {
-      console.error('用户档案同步失败:', err)
-      // 失败不影响用户体验，数据已保存在本地
+    })
+
+    this.setData({
+      playersList: playersList,
     })
   },
 
-  // 用户信息点击事件
-  onUserInfoClick() {
-    // 提示用户如何设置头像和昵称
+  // 踢出玩家
+  onKickPlayer(e) {
+    const { userId, nickname } = e.currentTarget.dataset
+
+    wx.showModal({
+      title: '确认踢出',
+      content: `确定要踢出玩家"${nickname}"吗？`,
+      success: (res) => {
+        if (res.confirm) {
+          this.kickPlayer(userId)
+        }
+      },
+    })
+  },
+
+  // 执行踢出玩家
+  kickPlayer(userId) {
+    // 找到对应的座位
+    const seats = this.data.seats
+    let targetSeat = null
+
+    Object.keys(seats).forEach((seatKey) => {
+      if (seats[seatKey].userId === userId) {
+        targetSeat = seatKey
+      }
+    })
+
+    if (targetSeat) {
+      // 清空座位
+      this.setData({
+        [`seats.${targetSeat}.playerName`]: '',
+        [`seats.${targetSeat}.avatar`]: '',
+        [`seats.${targetSeat}.userId`]: '',
+        [`seats.${targetSeat}.isOccupied`]: false,
+        [`seats.${targetSeat}.isHost`]: false,
+      })
+
+      // 更新玩家列表
+      this.updatePlayersList()
+
+      // 检查是否可以开始游戏
+      this.checkCanStartGame()
+
+      wx.showToast({
+        title: '玩家已踢出',
+        icon: 'success',
+      })
+    }
+  },
+
+  // 切换观战模式
+  onToggleSpectator() {
+    const isSpectator = !this.data.isSpectator
+
+    this.setData({
+      isSpectator: isSpectator,
+    })
+
+    if (isSpectator) {
+      // 进入观战模式，清空当前座位
+      const currentSeat = this.getCurrentUserSeat()
+      if (currentSeat) {
+        this.leaveSeat(currentSeat)
+      }
+
+      wx.showToast({
+        title: '已进入观战模式',
+        icon: 'success',
+      })
+    } else {
+      wx.showToast({
+        title: '已退出观战模式',
+        icon: 'success',
+      })
+    }
+  },
+
+  // 获取当前用户座位
+  getCurrentUserSeat() {
+    const seats = this.data.seats
+    const currentUserId = this.data.currentUserId
+
+    for (let seatKey in seats) {
+      if (seats[seatKey].userId === currentUserId) {
+        return seatKey
+      }
+    }
+    return null
+  },
+
+  // 离开座位
+  leaveSeat(seatKey) {
+    this.setData({
+      [`seats.${seatKey}.playerName`]: '',
+      [`seats.${seatKey}.avatar`]: '',
+      [`seats.${seatKey}.userId`]: '',
+      [`seats.${seatKey}.isOccupied`]: false,
+      [`seats.${seatKey}.isHost`]: false,
+    })
+
+    this.updatePlayersList()
+    this.checkCanStartGame()
+  },
+
+  // 处理规则选择
+  onRuleChange(e) {
+    const newRule = e.detail.value
+    this.setData({
+      rule: newRule,
+    })
+
     wx.showToast({
-      title: '点击头像选择头像，点击输入框设置昵称',
-      icon: 'none',
-      duration: 2000
+      title: newRule === 'by-A' ? '已选择过A制' : '已选择把数制',
+      icon: 'success',
+      duration: 1500,
+    })
+  },
+
+  // 显示把数选择弹窗
+  onShowRoundsPicker() {
+    this.setData({
+      showRoundsPicker: true,
+      tempMaxRounds: this.data.maxRounds,
+    })
+  },
+
+  // 关闭把数选择弹窗
+  onCloseRoundsPicker() {
+    this.setData({
+      showRoundsPicker: false,
+      tempMaxRounds: this.data.maxRounds,
+    })
+  },
+
+  // 选择把数
+  onSelectRounds(e) {
+    const value = parseInt(e.currentTarget.dataset.value)
+    this.setData({
+      tempMaxRounds: value,
+    })
+  },
+
+  // 确认选择把数
+  onConfirmRounds() {
+    this.setData({
+      maxRounds: this.data.tempMaxRounds,
+      showRoundsPicker: false,
+    })
+
+    wx.showToast({
+      title: `已设置为${this.data.tempMaxRounds}把`,
+      icon: 'success',
+      duration: 1500,
     })
   },
 })
