@@ -561,51 +561,21 @@ Page({
 
   // 获取用户个人昵称
   getUserNickname() {
-    wx.showLoading({
-      title: '获取昵称中...',
-    })
-
-    wx.getUserProfile({
-      desc: '用于建立您的个人战绩档案',
+    // 不再使用已回收的wx.getUserProfile接口
+    // 改为使用新的头像昵称填写能力方案
+    wx.showModal({
+      title: '设置个人信息',
+      content: '请设置您的昵称和头像',
+      confirmText: '去设置',
+      cancelText: '稍后设置',
       success: (res) => {
-        wx.hideLoading()
-        console.log('获取微信用户信息成功:', res)
-        console.log('用户昵称:', res.userInfo.nickName)
-        console.log('用户头像:', res.userInfo.avatarUrl)
-
-        // 根据官方文档，使用正确的字段名
-        const nickname =
-          res.userInfo.nickName || '微信用户' + Math.floor(Math.random() * 9999)
-
-        console.log('最终使用的昵称:', nickname)
-
-        // 获取微信昵称时生成唯一ID
-        const userId =
-          'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
-
-        // 保存用户信息
-        wx.setStorageSync('userId', userId)
-        wx.setStorageSync('userNickname', nickname)
-        wx.setStorageSync('userAvatar', res.userInfo.avatarUrl || '')
-
-        // 更新页面显示
-        this.setData({
-          userNickname: nickname,
-          userAvatar: res.userInfo.avatarUrl || '',
-        })
-
-        wx.showToast({
-          title: `欢迎，${nickname}！`,
-          icon: 'success',
-          duration: 2000,
-        })
-      },
-      fail: (err) => {
-        wx.hideLoading()
-        console.log('获取用户信息失败:', err)
-
-        // 获取失败，使用随机昵称
-        this.generateRandomNickname()
+        if (res.confirm) {
+          // 用户选择去设置，显示昵称设置弹窗
+          this.showNicknameConfirmModal()
+        } else {
+          // 用户选择稍后设置，生成随机昵称
+          this.generateRandomNickname()
+        }
       },
     })
   },

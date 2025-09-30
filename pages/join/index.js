@@ -129,18 +129,10 @@ Page({
       title: '加入中...',
     })
 
-    // 获取用户昵称
-    wx.getUserProfile({
-      desc: '用于显示您的昵称',
-      success: (res) => {
-        this.joinRoomWithNickname(roomId, res.userInfo.nickName)
-      },
-      fail: (err) => {
-        console.log('获取用户信息失败:', err)
-        // 使用默认昵称
-        this.joinRoomWithNickname(roomId, '玩家')
-      },
-    })
+    // 不再使用已回收的wx.getUserProfile接口
+    // 改为使用随机昵称直接加入房间
+    const randomNickname = '玩家' + Math.floor(Math.random() * 9999)
+    this.joinRoomWithNickname(roomId, randomNickname)
   },
 
   // 使用昵称加入房间

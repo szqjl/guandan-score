@@ -869,37 +869,21 @@ Page({
 
   // 获取用户个人昵称（用于个人中心和历史记录）
   getUserNickname() {
-    wx.showLoading({
-      title: '获取昵称中...',
-    })
-
-    wx.getUserProfile({
-      desc: '用于建立您的个人战绩档案，需要您授权获取微信昵称',
+    // 不再使用已回收的wx.getUserProfile接口
+    // 改为使用新的头像昵称填写能力方案
+    wx.showModal({
+      title: '设置个人信息',
+      content: '请设置您的昵称和头像',
+      confirmText: '去设置',
+      cancelText: '稍后设置',
       success: (res) => {
-        wx.hideLoading()
-        const nickname = res.userInfo.nickName || this.generateRandomNickname()
-
-        // 获取微信昵称时生成唯一ID
-        const userId =
-          'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
-        wx.setStorageSync('userId', userId)
-        wx.setStorageSync('userNickname', nickname)
-
-        wx.showToast({
-          title: `欢迎，${nickname}！`,
-          icon: 'success',
-          duration: 2000,
-        })
-
-        // 创建房间（使用个人昵称作为房主昵称）
-        this.createRoomWithNickname(nickname, userId)
-      },
-      fail: (err) => {
-        wx.hideLoading()
-        console.log('获取用户信息失败:', err)
-
-        // 获取失败，使用随机昵称
-        this.generateRandomNickname()
+        if (res.confirm) {
+          // 用户选择去设置，显示昵称设置弹窗
+          this.showNicknameInput()
+        } else {
+          // 用户选择稍后设置，生成随机昵称
+          this.generateRandomNickname()
+        }
       },
     })
   },
