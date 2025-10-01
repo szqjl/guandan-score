@@ -81,11 +81,27 @@ async function createUser(data, openid) {
     console.log('检查现有用户:', existingUser);
     
     if (existingUser.data) {
-      console.log('用户已存在，返回现有用户信息');
+      console.log('用户已存在，更新用户信息');
+      
+      // 更新用户信息（特别是头像）
+      const updatedData = {
+        nickName: nickName || existingUser.data.nickName,
+        avatar: avatar || existingUser.data.avatar,
+        updatedAt: new Date()
+      };
+      
+      await db.collection('users').doc(openid).update({
+        data: updatedData
+      });
+      
       return {
         success: true,
-        message: '用户已存在',
-        data: existingUser.data
+        message: '用户信息已更新',
+        data: {
+          ...existingUser.data,
+          ...updatedData,
+          _openid: openid
+        }
       };
     }
   } catch (error) {

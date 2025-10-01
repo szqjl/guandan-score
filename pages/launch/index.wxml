@@ -276,31 +276,110 @@
     <view class="user-info-modal-content" catchtap="stopPropagation">
       <view class="user-info-modal-title-section">
         <text class="user-info-modal-title">扑克双上计分申请</text>
-        <text class="user-info-modal-subtitle">获取你的头像、昵称</text>
+        <view class="user-info-modal-subtitle">
+          <text>获取你的头像 昵称</text>
+          <text class="privacy-icon-sup" bindtap="openPrivacyPolicy">ⓘ</text>
+        </view>
       </view>
       
       <view class="user-info-modal-body">
         <form bindsubmit="onFormSubmit">
           <view class="avatar-row">
-            <text class="section-label">头像：</text>
+            <text class="section-label">头像</text>
             <view class="avatar-select-btn">
               <image wx:if="{{userAvatar}}" src="{{userAvatar}}" class="selected-avatar" />
               <text wx:else class="default-avatar">👤</text>
               <button class="avatar-button-cover" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar"></button>
             </view>
-            <text class="avatar-hint">点击选择头像</text>
+            <text class="avatar-hint">点击选择</text>
           </view>
           
           <view class="nickname-row">
-            <text class="section-label">昵称：</text>
-            <input class="nickname-input-field" type="nickname" name="nickname" value="{{userNickname}}" bindchange="onNicknameChange" bindfocus="onNicknameFocus" placeholder="输入昵称" />
+            <text class="section-label">昵称</text>
+            <view class="nickname-input-wrapper">
+              <input class="nickname-input-field" type="nickname" name="nickname" value="{{userNickname}}" bindchange="onNicknameChange" bindfocus="onNicknameFocus" placeholder="输入昵称" />
+            </view>
           </view>
           
           <view class="user-info-actions">
-            <button class="user-info-cancel-btn" bindtap="hideUserInfoModal">取消</button>
-            <button class="user-info-confirm-btn" form-type="submit">允许</button>
+            <view class="btn-wrapper">
+              <button class="user-info-cancel-btn" bindtap="hideUserInfoModal">取消</button>
+            </view>
+            <view class="btn-wrapper">
+              <button class="user-info-confirm-btn" form-type="submit">允许</button>
+            </view>
           </view>
         </form>
+      </view>
+    </view>
+  </view>
+
+  <!-- 隐私政策弹窗 -->
+  <view class="privacy-modal" wx:if="{{showPrivacyModal}}" catchtap="closePrivacyModal">
+    <view class="privacy-modal-content" catchtap="stopPropagation">
+      <view class="privacy-modal-header">
+        <text class="privacy-modal-title">隐私政策</text>
+        <view class="privacy-close-btn" bindtap="closePrivacyModal">
+          <text class="close-icon">×</text>
+        </view>
+      </view>
+      
+      <scroll-view class="privacy-modal-body" scroll-y>
+        <view class="privacy-section">
+          <text class="privacy-section-title">一、信息收集</text>
+          <text class="privacy-section-content">1. 头像信息：您主动选择头像时，我们会上传到云端存储，用于在多人房间中展示您的个人形象。
+
+2. 昵称信息：用于在房间内显示您的身份，帮助其他玩家识别您。</text>
+        </view>
+        
+        <view class="privacy-section">
+          <text class="privacy-section-title">二、信息使用</text>
+          <text class="privacy-section-content">• 您的头像和昵称仅用于在多人房间中向其他玩家展示
+
+• 不会用于任何商业推广或与第三方共享
+
+• 仅限本小程序内使用，不会跨平台传播</text>
+        </view>
+        
+        <view class="privacy-section">
+          <text class="privacy-section-title">三、信息存储</text>
+          <text class="privacy-section-content">• 存储位置：微信云存储服务
+
+• 加密方式：传输和存储全程采用SSL/TLS加密
+
+• 保存时长：您可随时删除或更换
+
+• 数据安全：符合微信小程序数据安全规范</text>
+        </view>
+        
+        <view class="privacy-section">
+          <text class="privacy-section-title">四、您的权利</text>
+          <text class="privacy-section-content">• 随时更换头像和昵称
+
+• 选择不上传头像（将使用默认头像）
+
+• 要求删除已上传的个人信息
+
+• 撤回授权并停止使用多人功能</text>
+        </view>
+
+        <view class="privacy-section">
+          <text class="privacy-section-title">五、联系我们</text>
+          <text class="privacy-section-content">如有任何隐私相关问题或建议，请通过小程序内的"个人中心"联系我们。
+
+我们将在收到您的请求后24小时内响应。</text>
+        </view>
+
+        <view class="privacy-section privacy-footer-section">
+          <text class="privacy-section-content privacy-date-info">生效日期：2025年10月5日
+最后更新：2025年10月5日
+
+版本：v1.0</text>
+        </view>
+      </scroll-view>
+      
+      <view class="privacy-modal-footer">
+        <button class="privacy-confirm-btn" bindtap="closePrivacyModal">我知道了</button>
       </view>
     </view>
   </view>

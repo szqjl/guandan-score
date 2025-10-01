@@ -5,8 +5,13 @@ Page({
     showHelpModal: false,
     scrollTop: 0,
     showUserInfoModal: false, // 控制用户信息设置弹窗
+    showPrivacyModal: false, // 控制隐私政策弹窗
     userAvatar: '', // 用户头像
+    cloudAvatarId: '', // 云文件ID
     userNickname: '', // 用户昵称
+    isUploading: false, // 头像上传状态
+    uploadRetryCount: 0, // 上传重试次数
+    uploadTask: null, // 上传任务
   },
 
   onLoad(options) {
@@ -169,8 +174,29 @@ Page({
 
   // 隐藏用户信息设置弹窗
   hideUserInfoModal() {
+    // 取消正在进行的上传
+    if (this.data.uploadTask) {
+      this.data.uploadTask.abort()
+    }
     this.setData({
-      showUserInfoModal: false
+      showUserInfoModal: false,
+      isUploading: false
+    })
+  },
+
+  // 打开隐私政策
+  openPrivacyPolicy() {
+    console.log('打开隐私政策')
+    this.setData({
+      showPrivacyModal: true
+    })
+  },
+
+  // 关闭隐私政策
+  closePrivacyModal() {
+    console.log('关闭隐私政策')
+    this.setData({
+      showPrivacyModal: false
     })
   },
 
@@ -227,74 +253,79 @@ Page({
     console.log('选择头像:', e.detail)
     const { avatarUrl } = e.detail
 
-    // 尝试保存到私有目录
-    this.saveAvatarToPrivateDir(avatarUrl)
+    // 立即显示预览
+    this.setData({ userAvatar: avatarUrl })
+
+    // 压缩并上传
+    this.uploadAvatar(avatarUrl)
   },
 
-  // 上传头像到云存储
-  uploadAvatarToCloud(tempFilePath) {
-    console.log('开始上传头像到云存储:', tempFilePath)
+  // 上传头像
+  uploadAvatar(avatarUrl) {
+    console.log('压缩并上传头像')
     
-    // 生成唯一的文件名
-    const fileName = `avatar_${Date.now()}_${Math.random().toString(36).substr(2, 5)}.jpg`
-    const cloudPath = `avatars/${fileName}`
-
-
-    // 上传到云存储
-    wx.cloud.uploadFile({
-      cloudPath: cloudPath,
-      filePath: tempFilePath,
+    // 压缩图片
+    wx.compressImage({
+      src: avatarUrl,
+      quality: 80,
       success: (res) => {
-        console.log('头像上传成功:', res)
-        
-        // 获取文件的永久访问链接
-        wx.cloud.getTempFileURL({
-          fileList: [res.fileID],
-          success: (urlRes) => {
-            console.log('获取永久链接成功:', urlRes)
-            
-            const permanentUrl = urlRes.fileList[0].tempFileURL
-            
-            // 更新页面显示
-            this.setData({
-              userAvatar: permanentUrl
-            })
-
-            wx.showToast({
-              title: '头像上传成功',
-              icon: 'success',
-              duration: 1500,
-            })
-          },
-          fail: (err) => {
-            console.error('获取永久链接失败:', err)
-            
-            // 即使获取永久链接失败，也使用云文件ID
-            this.setData({
-              userAvatar: res.fileID
-            })
-
-            wx.showToast({
-              title: '头像上传成功',
-              icon: 'success',
-              duration: 1500,
-            })
-          }
-        })
+        console.log('压缩成功')
+        this.uploadToCloud(res.tempFilePath)
       },
       fail: (err) => {
-        console.error('头像上传失败:', err)
-        
-        // 上传失败时，使用本地保存方案
-        this.saveAvatarToPrivateDir(tempFilePath)
-        
-        wx.showToast({
-          title: '头像上传失败，已保存到本地',
-          icon: 'none',
-          duration: 2000,
-        })
+        console.log('压缩失败，上传原图:', err)
+        this.uploadToCloud(avatarUrl)
       }
     })
+  },
+
+  // 上传到云存储（支持重试）
+  uploadToCloud(filePath, retryCount = 0) {
+    console.log(`开始上传头像（第${retryCount + 1}次）`)
+    
+    this.setData({ 
+      isUploading: true,
+      uploadRetryCount: retryCount
+    })
+    
+    const fileName = `avatar_${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`
+    const cloudPath = `avatars/${fileName}`
+
+    const uploadTask = wx.cloud.uploadFile({
+      cloudPath: cloudPath,
+      filePath: filePath,
+      
+      success: (res) => {
+        console.log('上传成功，云文件ID:', res.fileID)
+        
+        this.setData({
+          cloudAvatarId: res.fileID,
+          isUploading: false,
+          uploadRetryCount: 0
+        })
+      },
+      
+      fail: (err) => {
+        console.error(`上传失败（第${retryCount + 1}次）:`, err)
+        
+        // 判断是否需要重试
+        if (retryCount < 1) {
+          console.log('1秒后自动重试')
+          setTimeout(() => {
+            this.uploadToCloud(filePath, retryCount + 1)
+          }, 1000)
+        } else {
+          console.log('重试失败，将使用默认头像')
+          this.setData({ 
+            isUploading: false,
+            uploadRetryCount: 0,
+            cloudAvatarId: ''
+          })
+        }
+      }
+    })
+    
+    this.setData({ uploadTask })
   },
 
   // 保存头像到私有目录
@@ -364,9 +395,9 @@ Page({
     })
   },
 
-  // 表单提交处理（官方推荐方式）
+  // 表单提交处理
   onFormSubmit(e) {
-    const { userAvatar } = this.data
+    const { cloudAvatarId, isUploading } = this.data
     const nickname = e.detail.value.nickname
     
     // 验证昵称
@@ -379,19 +410,67 @@ Page({
       return
     }
 
-    // 调用云函数创建用户并保存到用户表
+    // 检查头像上传状态
+    if (isUploading) {
+      console.log('头像正在上传，等待中')
+      wx.showLoading({ title: ' ', mask: true })
+      
+      this.waitForUpload().then(() => {
+        wx.hideLoading()
+        this.submitUserInfo(nickname, this.data.cloudAvatarId)
+      }).catch(() => {
+        wx.hideLoading()
+        this.submitUserInfo(nickname, '')
+      })
+      return
+    }
+
+    // 直接提交
+    this.submitUserInfo(nickname, cloudAvatarId)
+  },
+
+  // 等待上传完成
+  waitForUpload() {
+    return new Promise((resolve, reject) => {
+      let checkCount = 0
+      const maxChecks = 50
+      
+      const timer = setInterval(() => {
+        checkCount++
+        
+        if (!this.data.isUploading) {
+          clearInterval(timer)
+          if (this.data.cloudAvatarId) {
+            console.log('上传完成')
+            resolve()
+          } else {
+            console.log('上传失败')
+            reject()
+          }
+        } else if (checkCount >= maxChecks) {
+          clearInterval(timer)
+          console.log('等待超时')
+          reject()
+        }
+      }, 200)
+    })
+  },
+
+  // 提交用户信息
+  submitUserInfo(nickname, avatar) {
+    wx.showLoading({ title: ' ', mask: true })
+    
     wx.cloud.callFunction({
       name: 'userManager',
       data: {
         action: 'createUser',
         data: {
           nickName: nickname.trim(),
-          avatar: userAvatar
+          avatar: avatar || ''
         }
       },
       success: (res) => {
-        console.log('云函数调用成功，完整响应:', res)
-        console.log('云函数返回结果:', res.result)
+        console.log('用户创建成功:', res.result)
         
         if (res.result.success) {
           // 保存用户信息到本地存储
@@ -399,26 +478,27 @@ Page({
           wx.setStorageSync('userNickname', res.result.data.nickName)
           wx.setStorageSync('userAvatar', res.result.data.avatar)
           
-          console.log('启动页面 - 保存到本地存储的用户信息:', {
+          console.log('保存到本地存储的用户信息:', {
             userId: res.result.data._openid,
             userNickname: res.result.data.nickName,
             userAvatar: res.result.data.avatar
           })
           
-          // 隐藏弹窗
+          wx.hideLoading()
           this.hideUserInfoModal()
           
           wx.showToast({
-            title: `欢迎，${nickname.trim()}！`,
+            title: '欢迎进入房间',
             icon: 'success',
-            duration: 2000,
+            duration: 1000,
           })
 
           setTimeout(() => {
             this.navigateToCreateRoom()
-          }, 2000)
+          }, 1000)
         } else {
-          console.error('用户创建失败:', res.result);
+          console.error('用户创建失败:', res.result)
+          wx.hideLoading()
           wx.showToast({
             title: res.result.message || '用户创建失败',
             icon: 'none',
@@ -428,6 +508,7 @@ Page({
       },
       fail: (err) => {
         console.error('调用云函数失败:', err)
+        wx.hideLoading()
         wx.showToast({
           title: '网络错误，请重试',
           icon: 'none',

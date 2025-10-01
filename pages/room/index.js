@@ -496,6 +496,11 @@ Page({
       console.log('房间页面 - 设置用户头像:', userAvatar)
       console.log('房间页面 - 当前页面数据:', this.data.userAvatar)
 
+      // 如果是云文件ID，获取临时访问链接
+      if (userAvatar && userAvatar.startsWith('cloud://')) {
+        this.loadAvatarTempUrl(userAvatar)
+      }
+
       // 模拟加载过程，然后显示完成
       setTimeout(() => {
         this.hideLoadingProgress()
@@ -522,7 +527,7 @@ Page({
     let welcomeMsg = ''
     switch (entryType) {
       case 'create':
-        welcomeMsg = '房间已创建，开始计分吧！'
+        welcomeMsg = '先选座位哦'
         break
       case 'share':
         welcomeMsg = '欢迎通过分享加入！'
@@ -1019,8 +1024,8 @@ Page({
     console.log('选择头像:', e.detail)
     const { avatarUrl } = e.detail
 
-    // 直接保存到本地，用户无感知
-    this.saveAvatarToPrivateDir(avatarUrl)
+    // 上传到云存储，保存cloudFileId
+    this.uploadAvatarToCloud(avatarUrl)
   },
 
   // 上传头像到云存储
@@ -1039,21 +1044,23 @@ Page({
       success: (res) => {
         console.log('头像上传成功:', res)
         
-        // 获取文件的永久访问链接
+        const cloudFileId = res.fileID
+        
+        // 保存cloudFileId到本地存储（永久有效）
+        wx.setStorageSync('userAvatar', cloudFileId)
+        
+        // 获取临时URL用于显示
         wx.cloud.getTempFileURL({
-          fileList: [res.fileID],
+          fileList: [cloudFileId],
           success: (urlRes) => {
-            console.log('获取永久链接成功:', urlRes)
+            console.log('获取临时URL成功:', urlRes)
             
-            const permanentUrl = urlRes.fileList[0].tempFileURL
+            const tempUrl = urlRes.fileList[0].tempFileURL
             
-            // 更新页面显示
+            // 更新页面显示（仅显示，不保存）
             this.setData({
-              userAvatar: permanentUrl,
+              userAvatar: tempUrl,
             })
-
-            // 保存到本地存储
-            wx.setStorageSync('userAvatar', permanentUrl)
             
             // 如果没有用户ID，生成一个
             const userId = wx.getStorageSync('userId')
@@ -1434,6 +1441,32 @@ Page({
       title: `已设置为${this.data.tempMaxRounds}把`,
       icon: 'success',
       duration: 1500,
+    })
+  },
+
+  // 获取云文件临时访问链接
+  loadAvatarTempUrl(cloudFileId) {
+    console.log('获取云文件临时链接:', cloudFileId)
+    
+    wx.cloud.getTempFileURL({
+      fileList: [cloudFileId],
+      success: (res) => {
+        if (res.fileList && res.fileList[0] && res.fileList[0].tempFileURL) {
+          const tempUrl = res.fileList[0].tempFileURL
+          console.log('获取临时URL成功:', tempUrl)
+          
+          this.setData({
+            userAvatar: tempUrl
+          })
+        }
+      },
+      fail: (err) => {
+        console.error('获取临时URL失败:', err)
+        // 失败则使用默认头像
+        this.setData({
+          userAvatar: ''
+        })
+      }
     })
   },
 })

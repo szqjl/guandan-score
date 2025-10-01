@@ -406,16 +406,15 @@
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 15rpx;
+  align-items: center;
   z-index: 1000;
 }
 
 .user-info-modal-content {
   background: white;
-  border-radius: 20rpx;
-  width: 300rpx;
-  max-height: 80vh;
+  border-radius: 16rpx;
+  width: 400rpx;
+  max-height: 75vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 20rpx 40rpx rgba(0, 0, 0, 0.3);
@@ -425,7 +424,8 @@
   display: flex;
   flex-direction: column;
   gap: 4rpx;
-  padding: 20rpx 40rpx 0 40rpx;
+  padding: 20rpx 20rpx 4rpx;
+  border-bottom: 1rpx solid #f0f0f0;
 }
 
 .user-info-modal-title {
@@ -435,49 +435,68 @@
 }
 
 .user-info-modal-subtitle {
-  font-size: 15rpx;
-  color: #666;
+  font-size: 14rpx;
+  color: #999;
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+
+/* 问号上标图标 */
+.privacy-icon-sup {
+  font-size: 12rpx;
+  color: #576B95;
+  vertical-align: super;
+  padding: 0 3rpx;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.privacy-icon-sup:active {
+  background: rgba(87, 107, 149, 0.15);
+  transform: scale(1.2);
 }
 
 .user-info-modal-body {
-  padding: 20rpx 20rpx 40rpx 20rpx;
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
+  padding: 12rpx 20rpx 40rpx;
+  flex: 1;
+  overflow-y: hidden;
 }
 
 .avatar-row {
   display: flex;
   align-items: center;
-  gap: 0rpx;
+  gap: 10rpx;
+  margin-bottom: 13rpx;
 }
 
 .nickname-row {
   display: flex;
   align-items: center;
-  gap: 0rpx;
-  margin-top: 10rpx;
+  gap: 10rpx;
+  margin-bottom: 20rpx;
+  justify-content: flex-start;
 }
 
 .section-label {
-  font-size: 20rpx;
+  font-size: 17rpx;
   color: #333;
   font-weight: bold;
-  min-width: 80rpx;
+  min-width: 60rpx;
+  flex-shrink: 0;
 }
 
-.avatar-row .avatar-select-btn {
+.avatar-select-btn {
   width: 40rpx;
-  height: 35rpx;
+  height: 40rpx;
   border-radius: 50%;
-  background: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 8rpx;
-  box-sizing: border-box;
-  margin-left: -3rpx;
+  justify-content: center;
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.3);
 }
 
 .avatar-button-cover {
@@ -490,77 +509,246 @@
   border: none;
   padding: 0;
   margin: 0;
-  border-radius: 50%;
+  opacity: 0;
+}
+
+.avatar-button-cover::after {
+  border: none;
 }
 
 .selected-avatar {
-  width: 20rpx;
-  height: 20rpx;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
 }
 
 .default-avatar {
-  font-size: 15rpx;
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.avatar-hint {
+  font-size: 14rpx;
   color: #999;
 }
 
-.avatar-row .avatar-hint {
-  font-size: 12rpx;
-  color: #666;
-  margin-left: 6rpx;
+.nickname-input-wrapper {
+  width: 210rpx;
+  flex-shrink: 0;
 }
 
 .nickname-input-field {
-  flex: 0.4;
-  height: 31rpx;
-  border: 2rpx solid #ddd;
-  border-radius: 10rpx;
-  padding: 0 20rpx;
-  font-size: 15rpx;
+  width: 100% !important;
+  height: 30rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  padding: 0 12rpx;
+  font-size: 16rpx;
   background: #f9f9f9;
   box-sizing: border-box;
-  margin-left: -8rpx;
+  transition: all 0.3s;
 }
 
 .nickname-input-field:focus {
   border-color: #667eea;
   background: white;
+  box-shadow: 0 0 0 2rpx rgba(102, 126, 234, 0.1);
 }
 
 .user-info-actions {
   display: flex;
-  gap: -20rpx;
-  margin-top: 28rpx;
-  margin-left: 0rpx;
-  justify-content: flex-start;
+  gap: 20rpx;
+  justify-content: center;
+  padding: 0;
 }
 
-.user-info-confirm-btn {
-  width: 72rpx !important;
-  height: 30rpx !important;
-  background: #ff4444 !important;
-  color: white !important;
-  border: none !important;
-  border-radius: 10rpx !important;
-  font-size: 15rpx !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-width: 72rpx !important;
-  margin-left: 13rpx !important;
+.btn-wrapper {
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.user-info-confirm-btn,
+.user-info-cancel-btn {
+  width: 55rpx !important;
+  height: 35rpx !important;
+  padding: 0 !important;
+  border-radius: 8rpx;
+  font-size: 14rpx;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 !important;
+  box-sizing: border-box;
+  min-width: 55rpx;
+  max-width: 55rpx;
+  line-height: 1;
 }
 
 .user-info-cancel-btn {
-  width: 77rpx !important;
-  height: 30rpx !important;
-  background: #d0d0d0 !important;
-  color: #666 !important;
-  border: none !important;
-  border-radius: 10rpx !important;
-  font-size: 15rpx !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-width: 77rpx !important;
-  margin-left: 50rpx !important;
+  background: #f0f0f0;
+  color: #666;
+}
+
+.user-info-confirm-btn {
+  background: #ff4444;
+  color: white;
+}
+
+.user-info-confirm-btn::after,
+.user-info-cancel-btn::after {
+  border: none;
+}
+
+/* 隐私政策按钮样式 */
+.privacy-footer {
+  padding: 20rpx 0 16rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.privacy-link {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+  transition: all 0.3s;
+}
+
+.privacy-link:active {
+  background: rgba(87, 107, 149, 0.1);
+}
+
+.privacy-icon {
+  font-size: 24rpx;
+  opacity: 0.7;
+}
+
+.privacy-text {
+  font-size: 24rpx;
+  color: #576B95;
+  text-decoration: none;
+}
+
+/* 隐私政策弹窗样式 */
+.privacy-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.privacy-modal-content {
+  width: 90%;
+  max-width: 600rpx;
+  max-height: 80vh;
+  background: white;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20rpx 40rpx rgba(0, 0, 0, 0.3);
+}
+
+.privacy-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx 32rpx 20rpx;
+  border-bottom: 1rpx solid #e0e0e0;
+}
+
+.privacy-modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.privacy-close-btn {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.privacy-close-btn:active {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.close-icon {
+  font-size: 40rpx;
+  color: #666;
+  line-height: 1;
+}
+
+.privacy-modal-body {
+  flex: 1;
+  padding: 32rpx;
+  overflow-y: auto;
+}
+
+.privacy-section {
+  margin-bottom: 32rpx;
+}
+
+.privacy-section-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.privacy-section-content {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.privacy-footer-section {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #e0e0e0;
+}
+
+.privacy-date-info {
+  font-size: 22rpx;
+  color: #999;
+  text-align: center;
+}
+
+.privacy-modal-footer {
+  padding: 20rpx 32rpx 32rpx;
+  border-top: 1rpx solid #e0e0e0;
+}
+
+.privacy-confirm-btn {
+  width: 100%;
+  height: 80rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.privacy-confirm-btn::after {
+  border: none;
 }
