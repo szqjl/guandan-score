@@ -1,0 +1,14 @@
+{
+  "version": "v3.0.0",
+  "createdAt": "2025-10-03T02:42:33.619Z",
+  "author": "Jennifer",
+  "description": "3.0版本 - 多人实时计分功能完整版，集成launch page启动页面，支持创建房间、加入房间、实时同步等功能",
+  "features": [],
+  "dependencies": {
+    "微信小程序": ">= 8.0.0"
+  },
+  "changelog": [],
+  "status": "dev",
+  "rollbackSupported": true,
+  "backupCount": 12
+}

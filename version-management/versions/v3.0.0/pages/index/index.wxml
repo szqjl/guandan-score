@@ -1,0 +1,562 @@
+
+<view class="container cn-paper-bg">
+
+  <!-- 品牌标识和环境标识 -->
+  <view class="brand-section" style="width: 711rpx; display: flex; box-sizing: border-box; left: 20rpx; top: 3rpx; position: fixed; height: 25rpx">
+    <view class="brand-logo" style="height: 46rpx; display: flex; box-sizing: border-box">
+      <image class="main-logo" src="/images/GD.png" mode="aspectFit" style="width: 65rpx; display: block; box-sizing: border-box; height: 3rpx; position: relative; left: 0rpx; top: -7rpx"></image>
+      <text class="brand-text" style="width: 173rpx; display: block; box-sizing: border-box">掼蛋计分</text>
+    </view>
+    <view class="env-badge">
+      <text wx:if="{{isTrial}}" class="env-text trial">体验版</text>
+      <text wx:elif="{{isDevelop}}" class="env-text develop">开发版</text>
+    </view>
+  </view>
+
+  <!-- 左侧导航按钮组 -->
+  <view class="left-nav-panel">
+    <button class="nav-btn" bindtap="onShowHistory" style="width: 55rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
+      <text class="nav-icon-text">📊</text>
+      <text class="nav-text">历史记录</text>
+    </button>
+    <button class="nav-btn" bindtap="onShowHelp" style="width: 43rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
+      <text class="nav-icon-text">❓</text>
+      <text class="nav-text">说明文档</text>
+    </button>
+    <button class="nav-btn" bindtap="onShowFeedback">
+      <text class="nav-icon-text">💬</text>
+      <text class="nav-text">反馈</text>
+    </button>
+    <button class="nav-btn" bindtap="onShowSettings">
+      <text class="nav-icon-text">⚙️</text>
+      <text class="nav-text">设置</text>
+    </button>
+    <button class="nav-btn" bindtap="onShowJoinRoom">
+      <text class="nav-icon-text">🚪</text>
+      <text class="nav-text">加入房间</text>
+    </button>
+  </view>
+
+  <!-- 把数显示 - 移到体验版下方 -->
+  <view class="left-rounds-display">
+    <view class="rounds-clock">
+      <view class="rounds-number">
+        <text wx:if="{{rounds > 0}}" class="rounds-text-large">{{rounds}}</text>
+        <text wx:else class="rounds-text-small">VS</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 多人模式状态显示 -->
+  <view class="multi-mode-status" wx:if="{{isMultiMode}}">
+    <text class="mode-text">多人模式 {{roomId}}</text>
+    <button class="exit-multi-btn" bindtap="onExitMultiMode" size="mini">退出</button>
+  </view>
+
+  <!-- 东西方队 & 南北方队 并排 -->
+  <view class="main-layout">
+    <!-- 东西方队 -->
+    <view class="team red-team">
+      <view class="team-layout">
+        <!-- 东西方队独立升级按钮组 - 放在左侧 -->
+        <view class="team-buttons left-buttons">
+          <view class="team-btn team-btn-double {{buttonDisabledStates.red.double ? 'btn-disabled' : ''}}" data-team="red" data-value="3" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}" style="width: 51rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
+            <image src="../../images/arrow_up.svg" class="btn-icon"></image>
+            <text class="btn-number">3</text>
+          </view>
+          <view class="team-btn team-btn-two {{buttonDisabledStates.red.two ? 'btn-disabled' : ''}}" data-team="red" data-value="2" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
+            <image src="../../images/arrow_up.svg" class="btn-icon"></image>
+            <text class="btn-number">2</text>
+          </view>
+          <view class="team-btn team-btn-one {{buttonDisabledStates.red.one ? 'btn-disabled' : ''}}" data-team="red" data-value="1" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
+            <image src="../../images/arrow_up.svg" class="btn-icon"></image>
+            <text class="btn-number">1</text>
+          </view>
+        </view>
+        <view class="score-container">
+          <text class="team-label">东西方</text>
+          <view class="level-display">
+            <view class="level-display-content" style="height: 111rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
+              <text class="level-text">{{levelTexts.red}}</text>
+            </view>
+            <image wx:if="{{showRedIcon}}" src="../../images/victor.svg" class="score-icon" />
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 南北方队 -->
+    <view class="team blue-team">
+      <view class="team-layout">
+        <view class="score-container">
+          <text class="team-label">南北方</text>
+          <view class="level-display">
+            <view class="level-display-content">
+              <text class="level-text" style="position: relative; left: 1rpx; top: 0rpx">{{levelTexts.blue}}</text>
+            </view>
+            <image wx:if="{{showBlueIcon}}" src="../../images/victor.svg" class="score-icon" />
+          </view>
+        </view>
+        <!-- 南北方队独立升级按钮组 - 放在右侧 -->
+        <view class="team-buttons right-buttons">
+          <view class="team-btn team-btn-double {{buttonDisabledStates.blue.double ? 'btn-disabled' : ''}}" data-team="blue" data-value="3" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
+            <image src="../../images/arrow_up.svg" class="btn-icon"></image>
+            <text class="btn-number">3</text>
+          </view>
+          <view class="team-btn team-btn-two {{buttonDisabledStates.blue.two ? 'btn-disabled' : ''}}" data-team="blue" data-value="2" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}">
+            <image src="../../images/arrow_up.svg" class="btn-icon"></image>
+            <text class="btn-number">2</text>
+          </view>
+          <view class="team-btn team-btn-one {{buttonDisabledStates.blue.one ? 'btn-disabled' : ''}}" data-team="blue" data-value="1" bindtap="onLevelUpgrade" disabled="{{!gameStarted || gameEnded}}" style="left: 0rpx; top: -1rpx">
+            <image src="../../images/arrow_up.svg" class="btn-icon"></image>
+            <text class="btn-number">1</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+
+  <!-- 比分历史表格 - 可切换显示 -->
+  <view class="history-table-section" style="width: 450rpx; height: 88rpx; display: flex; box-sizing: border-box; left: 2rpx; top: -3rpx; position: relative">
+    <view class="history-header">
+      <text class="history-title">本局每把比分</text>
+      <button class="undo-btn" bindtap="undoLastStep" disabled="{{!canUndo}}">
+        <image src="../../images/CexiaoGrey.svg" class="undo-icon"></image>
+        <text class="undo-text">撤销上一把</text>
+      </button>
+      <button class="restore-btn" bindtap="restoreLastGame" disabled="{{!canRestore}}">
+        <text class="restore-text">恢复游戏</text>
+      </button>
+    </view>
+
+    <!-- 固定队伍列 -->
+    <view class="fixed-team-column">
+      <view class="fixed-team-cell header-cell">把数</view>
+      <view class="fixed-team-cell">东西方</view>
+      <view class="fixed-team-cell">南北方</view>
+    </view>
+
+    <!-- 可滚动的表格内容 -->
+    <view class="scrollable-table-container">
+      <!-- 表格头部 -->
+      <view class="table-row header-row">
+        <view class="table-cell">一</view>
+        <view class="table-cell">二</view>
+        <view class="table-cell">三</view>
+        <view class="table-cell">四</view>
+        <view class="table-cell">五</view>
+        <view class="table-cell">六</view>
+        <view class="table-cell">七</view>
+        <view class="table-cell">八</view>
+        <view class="table-cell">九</view>
+        <view class="table-cell">十</view>
+        <view class="table-cell">十一</view>
+        <view class="table-cell">十二</view>
+        <view class="table-cell">十三</view>
+        <view class="table-cell">十四</view>
+        <view class="table-cell">十五</view>
+        <view class="table-cell">十六</view>
+        <view class="table-cell">十七</view>
+        <view class="table-cell">十八</view>
+        <view class="table-cell">十九</view>
+        <view class="table-cell">二十</view>
+        <view class="table-cell">二一</view>
+        <view class="table-cell">二二</view>
+        <view class="table-cell">二三</view>
+        <view class="table-cell">二四</view>
+        <view class="table-cell">二五</view>
+      </view>
+
+      <!-- 红方行 -->
+      <view class="table-row">
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="0">{{historyScores[0] && historyScores[0].red ? historyScores[0].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="1">{{historyScores[1] && historyScores[1].red ? historyScores[1].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="2">{{historyScores[2] && historyScores[2].red ? historyScores[2].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="3">{{historyScores[3] && historyScores[3].red ? historyScores[3].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="4">{{historyScores[4] && historyScores[4].red ? historyScores[4].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="5">{{historyScores[5] && historyScores[5].red ? historyScores[5].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="6">{{historyScores[6] && historyScores[6].red ? historyScores[6].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="7">{{historyScores[7] && historyScores[7].red ? historyScores[7].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="8">{{historyScores[8] && historyScores[8].red ? historyScores[8].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="9">{{historyScores[9] && historyScores[9].red ? historyScores[9].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="10">{{historyScores[10] && historyScores[10].red ? historyScores[10].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="11">{{historyScores[11] && historyScores[11].red ? historyScores[11].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="12">{{historyScores[12] && historyScores[12].red ? historyScores[12].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="13">{{historyScores[13] && historyScores[13].red ? historyScores[13].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="14">{{historyScores[14] && historyScores[14].red ? historyScores[14].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="15">{{historyScores[15] && historyScores[15].red ? historyScores[15].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="16">{{historyScores[16] && historyScores[16].red ? historyScores[16].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="17">{{historyScores[17] && historyScores[17].red ? historyScores[17].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="18">{{historyScores[18] && historyScores[18].red ? historyScores[18].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="19">{{historyScores[19] && historyScores[19].red ? historyScores[19].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="20">{{historyScores[20] && historyScores[20].red ? historyScores[20].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="21">{{historyScores[21] && historyScores[21].red ? historyScores[21].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="22">{{historyScores[22] && historyScores[22].red ? historyScores[22].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="23">{{historyScores[23] && historyScores[23].red ? historyScores[23].red : '-'}}</view>
+        <view class="table-cell red-score" bindlongpress="onLongPressHistory" data-index="24">{{historyScores[24] && historyScores[24].red ? historyScores[24].red : '-'}}</view>
+      </view>
+
+      <!-- 蓝方行 -->
+      <view class="table-row">
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="0">{{historyScores[0] && historyScores[0].blue ? historyScores[0].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="1">{{historyScores[1] && historyScores[1].blue ? historyScores[1].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="2">{{historyScores[2] && historyScores[2].blue ? historyScores[2].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="3">{{historyScores[3] && historyScores[3].blue ? historyScores[3].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="4">{{historyScores[4] && historyScores[4].blue ? historyScores[4].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="5">{{historyScores[5] && historyScores[5].blue ? historyScores[5].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="6">{{historyScores[6] && historyScores[6].blue ? historyScores[6].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="7">{{historyScores[7] && historyScores[7].blue ? historyScores[7].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="8">{{historyScores[8] && historyScores[8].blue ? historyScores[8].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="9">{{historyScores[9] && historyScores[9].blue ? historyScores[9].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="10">{{historyScores[10] && historyScores[10].blue ? historyScores[10].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="11">{{historyScores[11] && historyScores[11].blue ? historyScores[11].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="12">{{historyScores[12] && historyScores[12].blue ? historyScores[12].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="13">{{historyScores[13] && historyScores[13].blue ? historyScores[13].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="14">{{historyScores[14] && historyScores[14].blue ? historyScores[14].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="15">{{historyScores[15] && historyScores[15].blue ? historyScores[15].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="16">{{historyScores[16] && historyScores[16].blue ? historyScores[16].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="17">{{historyScores[17] && historyScores[17].blue ? historyScores[17].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="18">{{historyScores[18] && historyScores[18].blue ? historyScores[18].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="19">{{historyScores[19] && historyScores[19].blue ? historyScores[19].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="20">{{historyScores[20] && historyScores[20].blue ? historyScores[20].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="21">{{historyScores[21] && historyScores[21].blue ? historyScores[21].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="22">{{historyScores[22] && historyScores[22].blue ? historyScores[22].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="23">{{historyScores[23] && historyScores[23].blue ? historyScores[23].blue : '-'}}</view>
+        <view class="table-cell blue-score" bindlongpress="onLongPressHistory" data-index="24">{{historyScores[24] && historyScores[24].blue ? historyScores[24].blue : '-'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 右侧控制面板 -->
+  <view class="right-control-panel">
+    <!-- 创建比赛按钮 -->
+    <button class="create-btn" bindtap="onCreateMatch" style="left: -1rpx; top: -22rpx; position: relative; z-index: 999;">
+      创建比赛
+    </button>
+    
+    <!-- 开始游戏按钮 -->
+    <button class="start-btn" bindtap="onStartGame" disabled="{{gameStarted && !gameEnded}}" style="left: 0rpx; top: -5rpx; position: relative">
+      {{gameStarted && !gameEnded ? '游戏进行中' : '开始游戏'}}
+    </button>
+
+    <!-- 规则选择 - 暂时隐藏 -->
+    <!-- <view class="rule-section {{gameStarted ? 'disabled' : ''}}" disabled="{{gameStarted}}">
+      <text>比赛模式:</text>
+      <radio-group bindchange="onRuleChange">
+        <label>
+          <radio value="by-A" checked="{{rule === 'by-A'}}" />过A
+        </label>
+        <label>
+          <radio value="by-rounds" checked="{{rule === 'by-rounds'}}" />把数
+          <view wx:if="{{rule === 'by-rounds'}}" class="rounds-selector">
+            <text class="rounds-display-text" bindtap="onShowRoundsPicker">{{maxRounds}}</text>
+          </view>
+        </label>
+      </radio-group>
+    </view> -->
+
+
+    <!-- 结束本局按钮 -->
+    <button class="end-btn" bindtap="onEndGame">结束</button>
+  </view>
+
+  <!-- 把数选择弹窗 -->
+  <view class="rounds-picker-modal" wx:if="{{showRoundsPicker}}">
+    <view class="rounds-picker-overlay" bindtap="onCloseRoundsPicker"></view>
+    <view class="rounds-picker-content">
+      <view class="rounds-picker-header">
+        <text class="rounds-picker-title">选择最大把数</text>
+      </view>
+      <view class="rounds-picker-grid">
+        <view class="rounds-picker-item {{tempMaxRounds === 7 ? 'selected' : ''}}" data-value="7" bindtap="onSelectRounds">7把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 8 ? 'selected' : ''}}" data-value="8" bindtap="onSelectRounds">8把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 9 ? 'selected' : ''}}" data-value="9" bindtap="onSelectRounds">9把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 10 ? 'selected' : ''}}" data-value="10" bindtap="onSelectRounds">10把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 11 ? 'selected' : ''}}" data-value="11" bindtap="onSelectRounds">11把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 12 ? 'selected' : ''}}" data-value="12" bindtap="onSelectRounds">12把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 13 ? 'selected' : ''}}" data-value="13" bindtap="onSelectRounds">13把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 14 ? 'selected' : ''}}" data-value="14" bindtap="onSelectRounds">14把</view>
+        <view class="rounds-picker-item {{tempMaxRounds === 15 ? 'selected' : ''}}" data-value="15" bindtap="onSelectRounds">15把</view>
+      </view>
+      <view class="rounds-picker-footer">
+        <button class="rounds-picker-confirm" bindtap="onConfirmRounds">确定</button>
+        <button class="rounds-picker-cancel" bindtap="onCloseRoundsPicker">取消</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 胜利动画弹窗 -->
+  <view class="victory-animation-modal" wx:if="{{showVictoryAnimation}}">
+    <view class="victory-overlay"></view>
+    <view class="victory-content">
+      <view class="victory-icon">🏆</view>
+      <view class="victory-title">{{victoryTeam === 'red' ? '红方胜利!' : '蓝方胜利!'}}</view>
+      <view class="victory-message">{{victoryMessage}}</view>
+      <view class="victory-confetti">
+        <view class="confetti-piece" wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 文档说明弹窗 -->
+  <view class="help-modal-overlay" wx:if="{{showHelpModal}}" bindtap="onCloseHelpModal">
+    <view class="help-modal-content" catchtap="stopPropagation">
+      <view class="help-modal-header">
+        <view class="help-modal-title">
+          <image class="help-icon" src="/images/GD.png" mode="aspectFit" binderror="onImageError" bindload="onImageLoad"></image>
+          <text class="help-title">掼蛋计分使用指南</text>
+        </view>
+        <view class="header-buttons">
+          <view class="back-to-top-btn" bindtap="scrollToTop">
+            <text class="back-icon">⬆</text>
+          </view>
+          <view class="help-close-btn" bindtap="onCloseHelpModal">
+            <text>×</text>
+          </view>
+        </view>
+      </view>
+      
+      <scroll-view class="help-modal-body" scroll-y="{{true}}" scroll-top="{{scrollTop}}" id="helpScrollView">
+        <!-- 目录导航 -->
+        <view class="help-toc">
+          <view class="toc-title">📋 目录</view>
+          <view class="toc-list">
+            <view class="toc-item" bindtap="scrollToSection" data-section="version">🏷️ 版本信息</view>
+            <view class="toc-item" bindtap="scrollToSection" data-section="intro">🎯 游戏简介</view>
+            <view class="toc-item" bindtap="scrollToSection" data-section="modes">🎮 比赛模式</view>
+            <view class="toc-item" bindtap="scrollToSection" data-section="rules">📊 计分规则</view>
+            <view class="toc-item" bindtap="scrollToSection" data-section="features">🔧 功能特色</view>
+            <view class="toc-item" bindtap="scrollToSection" data-section="tips">💡 使用提示</view>
+          </view>
+        </view>
+
+        <!-- 版本信息 -->
+        <view class="help-section" id="version">
+          <view class="help-section-title">
+            <text class="section-icon">🏷️</text>
+            <text class="section-title">版本信息</text>
+          </view>
+          <view class="help-section-content">
+            <text class="version-info">掼蛋计分小程序 v2.0.6-stable</text>
+            <text class="version-desc">专为掼蛋游戏设计的专业计分工具</text>
+          </view>
+        </view>
+
+        <!-- 游戏简介 -->
+        <view class="help-section" id="intro">
+          <view class="help-section-title">
+            <text class="section-icon">🎯</text>
+            <text class="section-title">游戏简介</text>
+          </view>
+          <view class="help-section-content">
+            <text class="help-text">掼蛋是一款流行于江苏地区的扑克牌游戏，本小程序为掼蛋比赛提供专业的计分服务，支持实时计分、历史记录和数据分析。</text>
+          </view>
+        </view>
+
+        <!-- 比赛模式 -->
+        <view class="help-section" id="modes">
+          <view class="help-section-title">
+            <text class="section-icon">🎮</text>
+            <text class="section-title">比赛模式</text>
+          </view>
+          <view class="help-section-content">
+            <view class="mode-item">
+              <text class="mode-title">过A制</text>
+              <text class="mode-desc">从2到A的升级路径，A必打，有3次机会（A→A1→A2→A3）</text>
+            </view>
+            <view class="mode-item">
+              <text class="mode-title">把数制</text>
+              <text class="mode-desc">设置最大把数，支持"追不上"机制，在固定把数内获得更高分数的队伍获胜</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 计分规则 -->
+        <view class="help-section" id="rules">
+          <view class="help-section-title">
+            <text class="section-icon">📊</text>
+            <text class="section-title">计分规则</text>
+          </view>
+          <view class="help-section-content">
+            <view class="score-rule-item">
+              <text class="score-btn">双上</text>
+              <text class="score-value">+3分，升3级</text>
+            </view>
+            <view class="score-rule-item">
+              <text class="score-btn">1游3游</text>
+              <text class="score-value">+2分，升2级</text>
+            </view>
+            <view class="score-rule-item">
+              <text class="score-btn">1游末游</text>
+              <text class="score-value">+1分，升1级</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 功能特色 -->
+        <view class="help-section" id="features">
+          <view class="help-section-title">
+            <text class="section-icon">🔧</text>
+            <text class="section-title">功能特色</text>
+          </view>
+          <view class="help-section-content">
+            <view class="feature-grid">
+              <view class="feature-item">
+                <text class="feature-icon">⚡</text>
+                <text class="feature-text">实时比分记录</text>
+              </view>
+              <view class="feature-item">
+                <text class="feature-icon">📈</text>
+                <text class="feature-text">历史记录查看</text>
+              </view>
+              <view class="feature-item">
+                <text class="feature-icon">🔍</text>
+                <text class="feature-text">多种筛选方式</text>
+              </view>
+              <view class="feature-item">
+                <text class="feature-icon">📊</text>
+                <text class="feature-text">详细比分统计</text>
+              </view>
+              <view class="feature-item">
+                <text class="feature-icon">📱</text>
+                <text class="feature-text">支持横屏显示</text>
+              </view>
+              <view class="feature-item">
+                <text class="feature-icon">💾</text>
+                <text class="feature-text">自动保存进度</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 使用提示 -->
+        <view class="help-section" id="tips">
+          <view class="help-section-title">
+            <text class="section-icon">💡</text>
+            <text class="section-title">使用提示</text>
+          </view>
+          <view class="help-section-content">
+            <view class="tip-list">
+              <view class="tip-item">
+                <text class="tip-bullet">•</text>
+                <text class="tip-text">游戏开始前可自由切换比赛模式</text>
+              </view>
+              <view class="tip-item">
+                <text class="tip-bullet">•</text>
+                <text class="tip-text">长按历史比分可修改指定把数</text>
+              </view>
+              <view class="tip-item">
+                <text class="tip-bullet">•</text>
+                <text class="tip-text">支持撤销上一步操作</text>
+              </view>
+              <view class="tip-item">
+                <text class="tip-bullet">•</text>
+                <text class="tip-text">自动保存游戏进度，支持恢复</text>
+              </view>
+              <view class="tip-item">
+                <text class="tip-bullet">•</text>
+                <text class="tip-text">点击左侧导航按钮快速访问功能</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 开发团队 -->
+        <view class="help-section help-footer">
+          <view class="help-section-content">
+            <view class="footer-content">
+              <image class="gd-logo" src="/images/GD.png" mode="aspectFit"></image>
+              <view class="footer-text">
+                <text class="team-info">掼蛋计分开发团队并由AI协助</text>
+                <text class="copyright">© 2025 掼蛋计分小程序</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+      
+      <view class="help-modal-footer">
+        <button class="help-confirm-btn" bindtap="onCloseHelpModal">知道了</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 设置弹窗 -->
+  <view class="settings-modal" wx:if="{{showSettings}}">
+    <view class="settings-overlay" bindtap="onCloseSettings"></view>
+    <view class="settings-content">
+      <!-- 弹窗标题 -->
+      <view class="settings-header">
+        <text class="settings-title">设置</text>
+        <view class="close-btn" bindtap="onCloseSettings">
+          <text class="close-icon">×</text>
+        </view>
+      </view>
+
+      <!-- 设置选项 -->
+      <view class="settings-options">
+        <!-- 游戏设置 -->
+        <view class="settings-section">
+          <text class="section-title">游戏设置</text>
+
+          <view class="option-item">
+            <text class="option-label">默认计分规则</text>
+            <view class="option-value">
+              <picker bindchange="onRuleChange" value="{{ruleIndex}}" range="{{ruleOptions}}">
+                <view class="picker-text">{{ruleOptions[ruleIndex]}}</view>
+              </picker>
+            </view>
+          </view>
+
+          <view class="option-item">
+            <text class="option-label">最大把数</text>
+            <view class="option-value">
+              <picker bindchange="onMaxRoundsChange" value="{{maxRoundsIndex}}" range="{{maxRoundsOptions}}">
+                <view class="picker-text">{{maxRoundsOptions[maxRoundsIndex]}}</view>
+              </picker>
+            </view>
+          </view>
+        </view>
+
+        <!-- 显示设置 -->
+        <view class="settings-section">
+          <text class="section-title">显示设置</text>
+
+          <view class="option-item">
+            <text class="option-label">显示环境标识</text>
+            <switch checked="{{showEnvBadge}}" bindchange="onEnvBadgeChange" color="#EE1967" />
+          </view>
+
+          <view class="option-item">
+            <text class="option-label">显示点击提示</text>
+            <switch checked="{{showClickToast}}" bindchange="onClickToastChange" color="#EE1967" />
+          </view>
+        </view>
+
+        <!-- 数据设置 -->
+        <view class="settings-section">
+          <text class="section-title">数据设置</text>
+
+          <view class="option-item">
+            <text class="option-label">自动保存</text>
+            <switch checked="{{autoSave}}" bindchange="onAutoSaveChange" color="#EE1967" />
+          </view>
+
+          <view class="option-item">
+            <text class="option-label">清空历史记录</text>
+            <view class="option-value">
+              <button class="clear-btn" bindtap="onClearHistory">清空</button>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 弹窗底部按钮 -->
+      <view class="settings-footer">
+        <button class="settings-btn cancel-btn" bindtap="onCloseSettings">取消</button>
+        <button class="settings-btn confirm-btn" bindtap="onSaveSettings">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

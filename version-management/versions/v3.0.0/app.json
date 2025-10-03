@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/launch/index",
+    "pages/index/index",
+    "pages/history/index",
+    "pages/team-setting/index",
+    "pages/room/index",
+    "pages/join/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "扑克双上计分",
+    "navigationBarBackgroundColor": "#0B1557",
+    "navigationBarTextStyle": "white",
+    "pageOrientation": "landscape"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

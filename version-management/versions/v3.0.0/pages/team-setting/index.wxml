@@ -1,0 +1,84 @@
+<!--pages/team-setting/index.wxml-->
+<view class="team-registration-container">
+
+  <!-- 默认比赛模式设置 -->
+  <view class="game-mode-section">
+    <text class="section-title">默认比赛模式</text>
+    <view class="mode-options">
+      <view class="mode-option {{defaultGameMode === 'guoA' ? 'selected' : ''}}" 
+            data-mode="guoA" bindtap="onGameModeChange" style="height: 94rpx; display: block; box-sizing: border-box">
+        <text class="mode-text">过A制</text>
+        <text class="mode-desc" style="width: 218rpx; height: 13rpx; display: block; box-sizing: border-box">从2到A的升级路径</text>
+      </view>
+      <view class="mode-option {{defaultGameMode === 'baShu' ? 'selected' : ''}}" 
+            data-mode="baShu" bindtap="onGameModeChange">
+        <text class="mode-text">把数制</text>
+        <text class="mode-desc">固定把数内计分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 队伍信息容器 -->
+  <view class="teams-container">
+    <!-- 红队 -->
+    <view class="red-team">
+      <text class="team-name">东西方</text>
+
+      <!-- 红队队员1 -->
+      <view class="player-input-group">
+        <view class="player-icon-container">
+          <text class="player-icon">👤</text>
+        </view>
+        <view class="input-field">
+          <input class="input-placeholder" placeholder="队员1姓名" value="{{redPlayers[0]}}" bindinput="onRedPlayer1Input" maxlength="10" />
+        </view>
+      </view>
+
+      <!-- 红队队员2 -->
+      <view class="player-input-group">
+        <view class="player-icon-container">
+          <text class="player-icon">👤</text>
+        </view>
+        <view class="input-field">
+          <input class="input-placeholder" placeholder="队员2姓名" value="{{redPlayers[1]}}" bindinput="onRedPlayer2Input" maxlength="10" />
+        </view>
+      </view>
+    </view>
+
+    <!-- VS标志 -->
+    <view class="vs-badge">
+      <text class="vs-text">VS</text>
+    </view>
+
+    <!-- 蓝队 -->
+    <view class="blue-team">
+      <text class="team-name">南北方</text>
+
+      <!-- 蓝队队员1 -->
+      <view class="player-input-group">
+        <view class="player-icon-container">
+          <text class="player-icon">👤</text>
+        </view>
+        <view class="input-field">
+          <input class="input-placeholder" placeholder="队员1姓名" value="{{bluePlayers[0]}}" bindinput="onBluePlayer1Input" maxlength="10" />
+        </view>
+      </view>
+
+      <!-- 蓝队队员2 -->
+      <view class="player-input-group">
+        <view class="player-icon-container">
+          <text class="player-icon">👤</text>
+        </view>
+        <view class="input-field">
+          <input class="input-placeholder" placeholder="队员2姓名" value="{{bluePlayers[1]}}" bindinput="onBluePlayer2Input" maxlength="10" />
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="reset-button" bindtap="onReset">重置</button>
+    <button class="submit-button" bindtap="onSaveSettings">保存设置</button>
+  </view>
+</view>
